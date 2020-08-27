@@ -1,0 +1,13 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-opt"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Nandor Licker", "Chris Lattner", "Vikram Adve"]
+license: "apache"
+build: [
+  []
+]
+depends: []
+synopsis: "clang and LLVM with LLIR patches"
+description: "This package install the clang and llvm system with LLIR patches"
+
