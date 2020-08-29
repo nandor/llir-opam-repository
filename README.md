@@ -6,7 +6,7 @@ Opam repository for Duplo-Optimised OCaml
 
 ```
 opam switch create llir \
-  --repositories=llir=https://github.com/nandor/llir-opam-repository \
+  --repositories=llir=git+https://github.com/nandor/llir-opam-repository \
   --empty
 opam update
 opam install ocaml-variants.4.07.1+llir
