@@ -2,6 +2,10 @@
 
 Opam repository for Duplo-Optimised OCaml
 
+## Note
+
+This repository is experimental - the 0.0.1 tag is not stable.
+
 ## Setup
 
 ```
