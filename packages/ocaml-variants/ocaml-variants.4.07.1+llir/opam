@@ -10,6 +10,7 @@ depends: [
   "base-bigarray" {post}
   "base-threads" {post}
   "llir-opt" {= "0.0.1"}
+  "llir-musl" {= "0.0.1"}
 ]
 conflict-class: "ocaml-core-compiler"
 flags: compiler
