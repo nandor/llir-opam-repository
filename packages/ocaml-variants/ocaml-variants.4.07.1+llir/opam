@@ -1,0 +1,37 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/ocaml-llir"
+bug-reports: "https://github.com/nandor/ocaml-llir/issues"
+synopsis: "4.07.01 with the LLIR backend"
+dev-repo: "https://github.com/nandor/llir-ocaml"
+depends: [
+  "ocaml" {= "4.07.1" & post }
+  "base-unix" {post}
+  "base-bigarray" {post}
+  "base-threads" {post}
+  "llir-opt" {= "0.0.1"}
+]
+conflict-class: "ocaml-core-compiler"
+flags: compiler
+build: [
+  [
+    "./configure"
+      "--prefix" prefix
+      "-no-debugger"
+      "-no-instrumented-runtime"
+      "-no-cfi"
+      "-no-debug-runtime"
+      "-no-graph"
+      "-no-ocamldoc"
+      "-flambda"
+      "--with-llir" "O2"
+  ]
+  [ make "world" "-j%{jobs}%"]
+  [ make "world.opt" "-j%{jobs}%"]
+]
+install: [make "install"]
+url {
+  src: "https://github.com/nandor/llir-ocaml/archive/0.0.1.zip"
+  checksum: [ "md5=fd48f8318d769502d7d9de2de8b960cb" ]
+}
+

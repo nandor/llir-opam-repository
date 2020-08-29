@@ -1,0 +1,43 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-llvm"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Chris Lattner" "Vikram Adve"]
+license: "apache"
+build: [
+  [ "mkdir" "Release" ]
+  [
+    "cmake" "llvm"
+    "-B" "Release"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_INSTALL_PREFIX=%{prefix}%/llvm"
+    "-DLLVM_TARGETS_TO_BUILD='X86;LLIR'"
+    "-DLLVM_ENABLE_DUMP=ON"
+    "-DLLVM_ENABLE_BINDINGS=OFF"
+    "-DLLVM_ENABLE_OCAMLDOC=OFF"
+    "-DDEFAULT_SYSROOT=%{prefix}%"
+    "-DLLVM_ENABLE_PROJECTS=clang"
+  ]
+  [ make "-j" jobs "-C" "Release" ]
+]
+install: [
+  [ "mkdir" "-p" "%{prefix}%/llvm/bin" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir-clang" ]
+  [ "mkdir" "-p" "%{prefix}%/llvm/include" ]
+  [ "mkdir" "-p" "%{prefix}%/llvm/lib" ]
+  [ "mkdir" "-p" "%{prefix}%/llvm/libexec" ]
+  [ "mkdir" "-p" "%{prefix}%/llvm/share" ]
+  [ make "-j" jobs "-C" "Release" "install" ]
+]
+depends: [
+  "conf-cmake" {build}
+]
+synopsis: "clang and LLVM with LLIR patches"
+description: "This package install the clang and llvm system with LLIR patches"
+url {
+  src: "https://github.com/nandor/llir-llvm-clang/archive/0.0.1.zip"
+  checksum: [ "md5=7b6c521e3f21b63c269f2f9cfd768689" ]
+}
+
