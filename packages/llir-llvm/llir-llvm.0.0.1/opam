@@ -17,14 +17,12 @@ build: [
     "-DLLVM_ENABLE_OCAMLDOC=OFF"
     "-DDEFAULT_SYSROOT=%{prefix}%"
     "-DLLVM_ENABLE_PROJECTS=clang"
+    "-DCLANG_LINKS_TO_CREATE=llir-gcc;llir-g++;llir-clang"
   ]
   [ make "-j" jobs "-C" "Release" ]
 ]
 install: [
   [ "mkdir" "-p" "%{prefix}%/llvm/bin" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir-gcc" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir-g++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir-clang" ]
   [ "mkdir" "-p" "%{prefix}%/llvm/include" ]
   [ "mkdir" "-p" "%{prefix}%/llvm/lib" ]
   [ "mkdir" "-p" "%{prefix}%/llvm/libexec" ]
