@@ -1,0 +1,25 @@
+opam-version: "2.0"
+maintainer: "tim@gfxmonk.net"
+homepage: "http://www.zlib.net/"
+bug-reports: "https://github.com/ocaml/opam-repository/issues"
+authors: ["Jean-loup Gailly" "Mark Adler"]
+license: "zlib"
+build: [
+  [ "sh" "-x" "configure-x86_64-pc-linux-gnu.sh" "--prefix=%{prefix}%" ]
+  [ make "-j%{jobs}%" ]
+  [ make "test" ] {with-test}
+]
+install: [
+  [ make "install" ]
+]
+extra-files: [
+  [ "configure-x86_64-pc-linux-gnu.sh" "md5=bedfbb7ca00a2d3fd3236111f4788428" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "zlib compiled for LLIR"
+url {
+  src: "https://zlib.net/zlib-1.2.11.tar.gz"
+  checksum: "sha256=c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1"
+}

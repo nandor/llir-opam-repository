@@ -1,0 +1,26 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://www.musl-libc.org/"
+bug-reports: "https://github.com/nandor/llir-musl/issues"
+authors: ["Rich Felker"]
+license: "MIT"
+build: [
+  [
+    "./configure"
+      "--prefix=%{prefix}%"
+  ]
+  [ make "-j" jobs ]
+]
+install: [
+  [ make "install" ]
+  [ "ln" "-s" "%{lib}%/libc.so" "%{lib}%/ld-musl-llir_x86_64.so.1" ]
+]
+depends: [
+  "llir-llvm" { = "master" }
+  "llir-opt" { = "master" }
+]
+synopsis: "LLIR port of the musl C standard library"
+description: "This package install the llir-musl C standard library"
+url {
+  src: "git+https://github.com/nandor/llir-musl#master"
+}

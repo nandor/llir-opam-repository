@@ -31,14 +31,8 @@ install: [
   [ make "-j" jobs "-C" "Release" "install" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/g++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/clang" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/clang++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-gcc" ] { arch = "x86_64" }
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-g++" ] { arch = "x86_64" }
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-clang" ]{ arch = "x86_64" }
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-gcc" ] { arch = "arm64" }
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-g++" ] { arch = "arm64" }
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-clang" ]{ arch = "arm64" }
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-gnu-gcc" ] { arch = "x86_64" & os = "linux" }
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-gnu-g++" ] { arch = "x86_64" & os = "linux" }
 ]
 depends: [
   "conf-cmake" {build}
@@ -46,7 +40,6 @@ depends: [
 synopsis: "clang and LLVM with LLIR patches"
 description: "This package install the clang and llvm system with LLIR patches"
 url {
-  src: "https://github.com/nandor/llir-llvm/archive/0.0.1.zip"
-  checksum: [ "md5=727e1c80fc7b308ed6966e17923cf600" ]
+  src: "git+https://github.com/nandor/llir-llvm#master"
 }
 
