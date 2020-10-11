@@ -1,0 +1,17 @@
+opam-version: "2.0"
+name: "nbcodec"
+version: "1.0"
+maintainer: "Vincent Bernardoff <vb@luminar.eu.org>"
+authors: "Daniel Bünzli <daniel.b uenlzi@erratique.ch>"
+homepage: "http://github.com/dbuenzli/nbcodec"
+dev-repo: "git://github.com/dbuenzli/nbcodec"
+bug-reports: "http://github.com/dbuenzli/nbcodec/issues"
+license: "BSD3"
+build: [
+  [ "./build" "setrip.native" ]
+]
+depends: ["ocaml" "ocamlfind" "ocamlbuild"]
+flags: light-uninstall
+url {
+  src: "git+https://github.com/dbuenzli/nbcodec"
+}
