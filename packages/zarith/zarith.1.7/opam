@@ -10,11 +10,8 @@ bug-reports: "https://github.com/ocaml/Zarith/issues"
 dev-repo: "git+https://github.com/ocaml/Zarith.git"
 build: [
   [
-    "sh"
-    "-exc"
-    "CC=llir_x86_64-pc-linux-gnu-gcc ./configure -noasm" { arch="x86_64" }
-    "CC=llir_aarch64-pc-linux-gnu-gcc ./configure -noasm" { arch="x86_64" }
-  ] { os = "linux"}
+    "sh" "-exc"
+    "CFLAGS=\"-I%{prefix}%/include\" LDFLAGS=\"-L%{lib}%\" ./configure -noasm"] { os = "linux"}
   [make]
 ]
 install: [

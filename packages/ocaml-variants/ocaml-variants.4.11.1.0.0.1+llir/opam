@@ -6,14 +6,15 @@ synopsis: "4.11.0 with the LLIR backend"
 dev-repo: "https://github.com/nandor/llir-ocaml"
 setenv: [
   [ CAML_LD_LIBRARY_PATH = "%{lib}%/stublibs" ]
+  [ LD_LIBRARY_PATH = "%{lib}%/lib" ]
 ]
 depends: [
   "ocaml" {= "4.11.1" & post }
   "base-unix" {post}
   "base-bigarray" {post}
   "base-threads" {post}
-  "llir-opt" {= "master"}
-  "llir-musl" {= "master"}
+  "llir-opt" {= "0.0.1+llir"}
+  "llir-musl" {= "0.0.1+llir"}
 ]
 conflict-class: "ocaml-core-compiler"
 flags: compiler
@@ -32,6 +33,7 @@ build: [
 ]
 install: [make "install"]
 url {
-  src: "git+https://github.com/nandor/llir-ocaml#master"
+  src: "https://github.com/nandor/llir-ocaml/archive/0.0.1.tar.gz"
+  checksum: "md5=bf4b256c3e934c9d857f891fb523d3d6"
 }
 

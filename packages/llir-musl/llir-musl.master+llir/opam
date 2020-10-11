@@ -5,18 +5,22 @@ bug-reports: "https://github.com/nandor/llir-musl/issues"
 authors: ["Rich Felker"]
 license: "MIT"
 build: [
-  [ "./configure" "--enable-wrapper=gcc" "--prefix=%{prefix}%" ]
+  [
+    "./configure"
+      "--prefix=%{prefix}%"
+      "--target=llir_x86_64-pc-linux-gnu" { os="linux" & arch="x86_64" }
+  ]
   [ make "-j" jobs ]
 ]
 install: [
   [ make "install" ]
 ]
-setenv: [
-  [ CC = "musl-gcc" ]
+depends: [
+  "llir-llvm" { = version }
+  "llir-opt" { = version }
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"
 url {
-  src: "https://github.com/nandor/llir-musl/archive/0.0.1.tar.gz"
-  checksum: "md5=1fc7c47b2c429d5136adf1f928909c73"
+  src: "git+https://github.com/nandor/llir-musl#master"
 }

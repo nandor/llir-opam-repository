@@ -11,7 +11,7 @@ build: [
       "--prefix" prefix
   ]
   [ make "-j%{jobs}%" ]
-  [ make "-j%{jobs}%" check ] {with-test}
+  [ make "-j%{jobs}%" "check" ] {with-test}
 ]
 install: [
   [ make "install" ]
@@ -22,5 +22,5 @@ depends: [
 synopsis: "gmp compiled for LLIR"
 url {
   src: "https://github.com/nandor/llir-gmp/archive/0.0.1.tar.gz"
-  checksum: "md5=1ee056869edd6cc3af7f414b4e2189ca"
+  checksum: "md5=d11f05e7ec0b14a333225c57c278edf6"
 }
