@@ -1,0 +1,29 @@
+opam-version: "2.0"
+maintainer: "nil@nil"
+authors: "Compcert Authors"
+homepage: ""
+bug-reports: "https://github.com/AbsInt/CompCert/issues"
+dev-repo: "git+https://github.com/AbsInt/CompCert.git"
+license: "LGPL-2.1-only"
+synopsis: "Formal proof management system"
+description: """
+"""
+
+depends: [
+  "coq"
+  "menhir"
+]
+build: [
+  [
+    "./configure"
+    "x86_64-linux"
+    "-prefix" prefix
+  ]
+  [make "-j%{jobs}%"]
+]
+install: [
+  [make "install"]
+]
+url {
+  src: "git+https://github.com/AbsInt/CompCert.git#26ddb90280b45e92d90eead89edb237f2922824a"
+}
