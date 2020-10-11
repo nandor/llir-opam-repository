@@ -12,8 +12,8 @@ depends: [
   "base-unix" {post}
   "base-bigarray" {post}
   "base-threads" {post}
-  "llir-opt" {= version}
-  "llir-musl" {= version}
+  "llir-opt" {= "master"}
+  "llir-musl" {= "master"}
 ]
 conflict-class: "ocaml-core-compiler"
 flags: compiler
