@@ -9,17 +9,12 @@ homepage: "https://github.com/ocaml/Zarith"
 bug-reports: "https://github.com/ocaml/Zarith/issues"
 dev-repo: "git+https://github.com/ocaml/Zarith.git"
 build: [
-  ["./configure" "-noasm"] {os != "openbsd" & os != "freebsd" & os != "macos"}
   [
     "sh"
     "-exc"
-    "LDFLAGS=\"$LDFLAGS -L/usr/local/lib\" CFLAGS=\"$CFLAGS -I/usr/local/include\" ./configure"
-  ] {os = "openbsd" | os = "freebsd"}
-  [
-    "sh"
-    "-exc"
-    "LDFLAGS=\"$LDFLAGS -L/opt/local/lib -L/usr/local/lib\" CFLAGS=\"$CFLAGS -I/opt/local/include -I/usr/local/include\" ./configure"
-  ] {os = "macos"}
+    "CC=llir_x86_64-pc-linux-gnu-gcc ./configure -noasm" { arch="x86_64" }
+    "CC=llir_aarch64-pc-linux-gnu-gcc ./configure -noasm" { arch="x86_64" }
+  ] { os = "linux"}
   [make]
 ]
 install: [

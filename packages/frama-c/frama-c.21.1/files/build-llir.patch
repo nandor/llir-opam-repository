@@ -1,0 +1,48 @@
+diff --git a/configure.in b/configure.in
+index 271ec09..52e18a8 100644
+--- a/configure.in
++++ b/configure.in
+@@ -441,6 +441,8 @@ AC_LANG([C])
+ AC_ARG_WITH(cc,[specifies a custom C compiler and pre-processor],[CC=$withval])
+ 
+ AC_PROG_CC
++AC_CHECK_TOOL([RANLIB],[RANLIB])
++AC_CHECK_TOOL([AR],[AR])
+ 
+ AC_CHECK_HEADERS(stdlib.h)
+ AC_CHECK_HEADERS(assert.h)
+@@ -1012,6 +1014,8 @@ AC_SUBST(DEFAULT_CPP_SUPPORTED_ARCH_OPTS)
+ AC_SUBST(FRAMAC_GNU_CPP)
+ AC_SUBST(DEFAULT_CPP_KEEP_COMMENTS)
+ AC_SUBST(CC)
++AC_SUBST(AR)
++AC_SUBST(RANLIB)
+ 
+ AC_SUBST(EXTERNAL_PLUGINS)
+ 
+diff --git a/share/Makefile.config.in b/share/Makefile.config.in
+index 89352cd..8f341dd 100644
+--- a/share/Makefile.config.in
++++ b/share/Makefile.config.in
+@@ -53,6 +53,8 @@ FRAMAC_GNU_CPP ?=@FRAMAC_GNU_CPP@
+ DEFAULT_CPP_KEEP_COMMENTS?=@DEFAULT_CPP_KEEP_COMMENTS@
+ DEFAULT_CPP_SUPPORTED_ARCH_OPTS?=@DEFAULT_CPP_SUPPORTED_ARCH_OPTS@
+ CC =@CC@
++AR =@AR@
++RANLIB =@RANLIB@
+ 
+ ###############
+ # Ocaml stuff #
+diff --git a/src/plugins/e-acsl/Makefile.in b/src/plugins/e-acsl/Makefile.in
+index 3a372cf..2076b6c 100644
+--- a/src/plugins/e-acsl/Makefile.in
++++ b/src/plugins/e-acsl/Makefile.in
+@@ -241,7 +241,7 @@ $(EACSL_DLMALLOC_LIB): $(EACSL_DLMALLOC_SRC)
+ 	echo 'AR           $@'
+ 	$(AR) crus $@ $(EACSL_DLMALLOC_OBJ)
+ 	echo 'RANLIB       $@'
+-	ranlib $@
++	$(RANLIB) $@
+ 
+ all:: $(EACSL_DLMALLOC_LIB)
+ 

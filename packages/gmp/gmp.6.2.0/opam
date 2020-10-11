@@ -4,12 +4,19 @@ homepage: "http://gmplib.org/"
 bug-reports: "https://github.com/ocaml/opam-repository/issues"
 license: "GPL-1.0-or-later"
 build: [
-  [ "./configure" "--host" "llir_x86_64-pc-linux-gnu" "--prefix" prefix ]
+  [ "./configure" "--host" "x86_64-pc-linux-gnu" "--prefix" prefix ]
   [ make "-j%{jobs}%" ]
   [ make "-j%{jobs}%" check ] {with-test}
 ]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+  "llir-opt"
+  "llir-llvm"
+]
 synopsis: "gmp compiled for LLIR"
 url {
-  src: "https://gmplib.org/download/gmp/gmp-6.2.0.tar.lz"
-  checksum: "md5=e3e08ac185842a882204ba3c37985127"
+  src: "git+https://github.com/nandor/llir-gmp"
 }

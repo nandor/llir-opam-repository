@@ -28,7 +28,7 @@ build: [
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]
-  [ make "tests" ] {with-test}
+  [ make "-C" "testsuite" "parallel" ] {with-test}
 ]
 install: [make "install"]
 url {

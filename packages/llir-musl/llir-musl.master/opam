@@ -8,12 +8,12 @@ build: [
   [
     "./configure"
       "--prefix=%{prefix}%"
+      "--target=llir_x86_64-pc-linux-gnu" { os="linux" & arch="x86_64" }
   ]
   [ make "-j" jobs ]
 ]
 install: [
   [ make "install" ]
-  [ "ln" "-s" "%{lib}%/libc.so" "%{lib}%/ld-musl-llir_x86_64.so.1" ]
 ]
 depends: [
   "llir-llvm" { = "master" }
