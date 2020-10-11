@@ -18,7 +18,7 @@ dev-repo: "git+https://github.com/ocaml/odoc.git"
 synopsis: "OCaml documentation generator"
 description: """
 Odoc is a documentation generator for OCaml. It reads doc comments,
-delimited with `(** ... *)`, and outputs HTML. 
+delimited with `(** ... *)`, and outputs HTML.
 """
 
 depends: [
@@ -35,8 +35,6 @@ depends: [
   "markup" {dev & >= "0.8.0"}
   "ocamlfind" {dev}
   "sexplib" {dev & >= "113.33.00"}
-
-  "bisect_ppx" {with-test & >= "1.3.0"}
 ]
 
 build: [
