@@ -27,6 +27,7 @@ depends: [
 synopsis: "LLIR Optimiser and Code Generator"
 description: "This package install the llir-opt optimiser and associated tools"
 url {
-  src: "git+https://github.com/nandor/llir-opt#master"
+  src: "https://github.com/nandor/llir-opt/archive/0.0.1.tar.gz"
+  checksum: "md5=a813cd12e337e8b95ae3115e0f337530"
 }
 
