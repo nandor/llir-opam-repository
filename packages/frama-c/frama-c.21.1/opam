@@ -87,9 +87,6 @@ build: [
   ["autoconf"]
   [
     "./configure"
-      "CC=llir_x86_64-pc-linux-gnu-gcc" { os="linux" & arch="x86_64" }
-      "AR=llir_x86_64-pc-linux-gnu-ar" { os="linux" & arch="x86_64" }
-      "RANLIB=llir_x86_64-pc-linux-gnu-ranlib" { os="linux" & arch="x86_64" }
       "--prefix" prefix
       "--mandir" man
       "--disable-gui"

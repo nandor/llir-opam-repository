@@ -13,6 +13,9 @@ install: [
 ]
 setenv: [
   [ CC = "musl-gcc" ]
+  [ AR = "ar" ]
+  [ RANLIB = "ranlib" ]
+  [ LD = "ld" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

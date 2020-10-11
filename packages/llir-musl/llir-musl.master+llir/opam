@@ -16,8 +16,8 @@ install: [
   [ make "install" ]
 ]
 depends: [
-  "llir-llvm" { = version }
-  "llir-opt" { = version }
+  "llir-llvm" { ="master" }
+  "llir-opt" { ="master" }
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

@@ -35,7 +35,7 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-gnu-g++" ] { arch = "x86_64" & os = "linux" }
 ]
 setenv: [
-  [ CC = "llir_x86_64-pc-linux-gnu-gcc" ] { arch = "x86_64" & os = "linux" }
+  [ CC = "llir_%{arch}%-pc-%{os}%-gnu-gcc" ]
 ]
 depends: [
   "conf-cmake" {build}

@@ -13,7 +13,7 @@ depends: [
   "base-unix" {post}
   "base-bigarray" {post}
   "base-threads" {post}
-  "llir-opt" {= "0.0.1+llir"}
+  "llir-opt" {= "0.0.1"}
   "llir-musl" {= "0.0.1+llir"}
 ]
 conflict-class: "ocaml-core-compiler"

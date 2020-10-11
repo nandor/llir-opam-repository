@@ -20,6 +20,11 @@ install: [
   [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_x86_64-pc-linux-gnu-as" ] { arch = "x86_64" & os = "linux" }
   [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_x86_64-pc-linux-gnu-ranlib" ] { arch = "x86_64" & os = "linux" }
 ]
+setenv: [
+  [ AR = "%{arch}%-pc-%{os}%-gnu-ar" ]
+  [ RANLIB = "%{arch}%-pc-%{os}%-gnu-ralib" ]
+  [ LD = "%{arch}%-pc-%{os}%-gnu-ld" ]
+]
 depends: [
   "conf-cmake" {build}
   "llir-llvm" {= version}
