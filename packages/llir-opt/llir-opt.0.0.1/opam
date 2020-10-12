@@ -32,6 +32,7 @@ depends: [
   "conf-cmake" {build}
   "llir-llvm" {= version}
 ]
+depopts: [ "llir-config" ]
 synopsis: "LLIR Optimiser and Code Generator"
 description: "This package install the llir-opt optimiser and associated tools"
 url {
