@@ -1,0 +1,141 @@
+diff --git a/Makefile b/Makefile
+index e589f1e..3c68c5e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -8,8 +8,8 @@ OCAMLOPT = ocamlopt.opt
+ OCAMLFLAGS = -dtypes
+ endif
+ 
+-CC = gcc
+-CFLAGS = -g -Wall 
++CC ?= gcc
++CFLAGS = -g -Wall
+ 
+ export V ?= 0
+ export TESTS ?=
+@@ -22,7 +22,7 @@ all:debug-code $(RESULT) lib
+ debug-check:all do-test
+ 
+ do-test: $(RESULT) lib
+-	make -C test 
++	make -C test
+ 
+ full-test: debug-code $(RESULT) lib
+ 	make -C test full-test
+@@ -36,7 +36,7 @@ clean-lib:
+ clean-example:
+ 	make -C example clean
+ 
+-lib: 
++lib:
+ 	make -C lib
+ 
+ example: $(RESULT)
+diff --git a/example/Makefile b/example/Makefile
+index 8609a32..6194601 100644
+--- a/example/Makefile
++++ b/example/Makefile
+@@ -6,7 +6,7 @@ PROGRAM = ../ucaml
+ ifeq ($(V), 1)
+ OPTIONS := -v
+ else
+-OPTIONS := 
++OPTIONS :=
+ endif
+ SRCS = $(shell ls *.ml)
+ CFILES = $(patsubst %.ml, %.c, $(SRCS))
+@@ -34,19 +34,19 @@ endif
+ .PHONY:all clean
+ .PRECIOUS: $(CFILES)
+ 
+-all: $(PROGRAM) $(SRCS:%.ml=%.c) 
++all: $(PROGRAM) $(SRCS:%.ml=%.c)
+ 
+ %.c: %.ml
+-	$(PROGRAM) $*.ml $(OPTIONS) -o $*.c 
++	$(PROGRAM) $*.ml $(OPTIONS) -o $*.c
+ 
+ %.o: %.c
+-	gcc $*.c -c -o $*.o $(CFLAGS)
++	$(CC) $*.c -c -o $*.o $(CFLAGS)
+ 
+ %.out: %.o
+-	gcc -o $*.out $*.o $(LDFLAGS) 
++	$(CC) -o $*.out $*.o $(LDFLAGS)
+ 
+ clean:
+ 	rm -f $(TRASH)
+ 
+ %.d: %.c
+-	gcc -M $(CFLAGS) $<  >  $@
++	$(CC) -M $(CFLAGS) $<  >  $@
+diff --git a/lib/src/Makefile b/lib/src/Makefile
+index 846a052..f0e2831 100644
+--- a/lib/src/Makefile
++++ b/lib/src/Makefile
+@@ -19,7 +19,7 @@ RESULT = $(LIB).$(SHLIB_EXT)
+ MAJOR = 0
+ MINOR = 0
+ 
+-CC = gcc
++CC ?= gcc
+ CFLAGS = -g -Wall -fPIC -I../include
+ TRASH = *.o *.so *.dylib
+ 
+@@ -28,7 +28,7 @@ all:$(RESULT)
+ clean:
+ 	rm -f $(TRASH)
+ 
+-$(RESULT): $(SOURCES:%.c=%.o) 
++$(RESULT): $(SOURCES:%.c=%.o)
+ 	$(CC) -g $(SHLIB_FLAGS) -o $(LIB).$(MAJOR).$(MINOR).$(SHLIB_EXT) $<
+ 	ln -sf $(LIB).$(MAJOR).$(SHLIB_EXT) $(RESULT)
+ 	ln -sf $(LIB).$(MAJOR).$(MINOR).$(SHLIB_EXT) $(LIB).$(MAJOR).$(SHLIB_EXT)
+diff --git a/test/Makefile b/test/Makefile
+index c28f57b..37e6e02 100644
+--- a/test/Makefile
++++ b/test/Makefile
+@@ -6,7 +6,7 @@ PROGRAM = ../ucaml
+ ifeq ($(V), 1)
+ OPTIONS := -v
+ else
+-OPTIONS := 
++OPTIONS :=
+ endif
+ TESTS = $(shell ls *.ml)
+ DEFFILES = $(patsubst %.ml, %.d, $(TESTS))
+@@ -37,7 +37,7 @@ endif
+ 
+ all: do-test
+ 
+-do-test: clean_c $(TESTS:%.ml=%.diff) 
++do-test: clean_c $(TESTS:%.ml=%.diff)
+ 
+ full-test: do-full-test clean
+ 
+@@ -52,13 +52,13 @@ clean_test: clean
+ 	make do-test
+ 
+ %.c: $(PROGRAM) %.ml
+-	$(PROGRAM) $*.ml $(OPTIONS) -o $*.c 
++	$(PROGRAM) $*.ml $(OPTIONS) -o $*.c
+ 
+ %.o: %.c
+-	gcc $*.c -c -o $*.o $(CFLAGS)
++	$(CC) $*.c -c -o $*.o $(CFLAGS)
+ 
+ %.out: %.o
+-	gcc -o $*.out $*.o $(LDFLAGS) 
++	$(CC) -o $*.out $*.o $(LDFLAGS)
+ 
+ %.log: %.out
+ ifeq ($(UNAME), Darwin)
+@@ -80,7 +80,7 @@ clean:
+ 	rm -f $(TRASH)
+ 
+ %.d: %.c
+-	gcc -M $(CFLAGS) $<  >  $@
++	$(CC) -M $(CFLAGS) $<  >  $@
+ 
+ #depend: $(DEFFILES)
+ 
