@@ -25,7 +25,7 @@ install: [
 setenv: [
   [ CC = "llir_%{arch}%-pc-%{os}%-gnu-gcc" ]
   [ AR = "llir_%{arch}%-pc-%{os}%-gnu-ar" ]
-  [ RANLIB = "llir_%{arch}%-pc-%{os}%-gnu-ralib" ]
+  [ RANLIB = "llir_%{arch}%-pc-%{os}%-gnu-ranlib" ]
   [ LD = "llir_%{arch}%-pc-%{os}%-gnu-ld" ]
 ]
 depends: [
