@@ -46,3 +46,49 @@ index 3a372cf..2076b6c 100644
  
  all:: $(EACSL_DLMALLOC_LIB)
  
+diff --git a/ptests/ptests.ml b/ptests/ptests.ml
+index aa521c4..ad8f70e 100644
+--- a/ptests/ptests.ml
++++ b/ptests/ptests.ml
+@@ -24,13 +24,24 @@
+      annotated with test options *)
+ let default_options = "-journal-disable -check"
+ 
+-let system =
++let system command =
++  let tokens = String.split_on_char ' ' command in
++  let subst_tokens =
++      List.map
++        (fun s ->
++          try
++            if s.[0] = '$' then
++              Unix.getenv (String.sub s 1 (String.length s - 1))
++            else
++              s
++          with Invalid_argument _ -> s)
++        tokens
++  in
++  let command = String.concat " " subst_tokens in
+   if Sys.os_type = "Win32" then
+-    fun f ->
+-      Unix.system (Format.sprintf "bash -c %S" f)
++    Unix.system (Format.sprintf "bash -c %S" command)
+   else
+-    fun f ->
+-      Unix.system f
++    Unix.system command
+ 
+ module Filename = struct
+   include Filename
+diff --git a/tests/libc/runtime.c b/tests/libc/runtime.c
+index 69ea8ad..545fb77 100644
+--- a/tests/libc/runtime.c
++++ b/tests/libc/runtime.c
+@@ -1,6 +1,6 @@
+ /* run.config*
+    COMMENT: tests that the runtime can compile without errors (for PathCrawler, E-ACSL, ...)
+-   CMD: gcc -D__FC_MACHDEP_X86_64 share/libc/__fc_runtime.c -Wno-attributes -std=c99 -o /dev/null
++   CMD: $CC -D__FC_MACHDEP_X86_64 share/libc/__fc_runtime.c -Wno-attributes -std=c99 -o /dev/null
+    OPT:
+  */
+ 

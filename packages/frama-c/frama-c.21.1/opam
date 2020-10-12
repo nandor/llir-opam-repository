@@ -101,8 +101,7 @@ install: [
 ]
 
 run-test: [
-  # Test disabled since libc fails due to hardcoded GCC
-  #[make "-j%{jobs}%" "PTESTS_OPTS=-error-code" "tests"]
+  [make "-j%{jobs}%" "PTESTS_OPTS=-error-code" "tests"]
 ]
 
 depends: [
@@ -146,7 +145,7 @@ messages: [
 ]
 
 extra-files: [
-  [ "build-llir.patch" "md5=547913ed6c5dbd73cc85764df1156f81" ]
+  [ "build-llir.patch" "md5=afa1f22ff5e62dc66daa50a450a1f988" ]
 ]
 
 patches: [ "build-llir.patch" ]
