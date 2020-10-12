@@ -10,6 +10,8 @@ build: [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_DIR=%{prefix}/llvm/lib/cmake/llvm"
     "-DCMAKE_INSTALL_PREFIX=%{prefix}%"
+    "-DCMAKE_C_COMPILER=gcc"
+    "-DCMAKE_CXX_COMPILER=g++"
   ]
   [ make "-j" jobs ]
 ]
@@ -21,9 +23,10 @@ install: [
   [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_x86_64-pc-linux-gnu-ranlib" ] { arch = "x86_64" & os = "linux" }
 ]
 setenv: [
-  [ AR = "%{arch}%-pc-%{os}%-gnu-ar" ]
-  [ RANLIB = "%{arch}%-pc-%{os}%-gnu-ralib" ]
-  [ LD = "%{arch}%-pc-%{os}%-gnu-ld" ]
+  [ CC = "llir_%{arch}%-pc-%{os}%-gnu-gcc" ]
+  [ AR = "llir_%{arch}%-pc-%{os}%-gnu-ar" ]
+  [ RANLIB = "llir_%{arch}%-pc-%{os}%-gnu-ralib" ]
+  [ LD = "llir_%{arch}%-pc-%{os}%-gnu-ld" ]
 ]
 depends: [
   "conf-cmake" {build}
