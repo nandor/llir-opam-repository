@@ -9,7 +9,7 @@ build: [
     "./configure"
       "--enable-wrapper=gcc"
       "--prefix=%{prefix}%"
-      "--target=llir_x86_64-pc-linux-gnu" { os="linux" & arch="x86_64" }
+      "--target=llir_%{arch}%-pc-%{os}-gnu"
   ]
   [ make "-j" jobs ]
 ]

@@ -11,8 +11,7 @@ build: [
     "-B" "Release"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_INSTALL_PREFIX=%{prefix}%/llvm"
-    "-DLLVM_TARGETS_TO_BUILD='X86;LLIR'"     { arch = "x86_64" }
-    "-DLLVM_TARGETS_TO_BUILD='AArch64;LLIR'" { arch = "arm64" }
+    "-DLLVM_TARGETS_TO_BUILD='AArch64;X86;LLIR'"
     "-DLLVM_ENABLE_DUMP=ON"
     "-DLLVM_ENABLE_BINDINGS=OFF"
     "-DLLVM_ENABLE_OCAMLDOC=OFF"
@@ -31,8 +30,8 @@ install: [
   [ make "-j" jobs "-C" "Release" "install" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/g++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-gnu-gcc" ] { arch = "x86_64" & os = "linux" }
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-gnu-g++" ] { arch = "x86_64" & os = "linux" }
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_%{arch}%-pc-%{os}%-gnu-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_%{arch}%-pc-%{os}%-gnu-g++" ]
 ]
 depends: [
   "conf-cmake" {build}

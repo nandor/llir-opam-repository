@@ -25,7 +25,7 @@ build: [
       "--enable-flambda"
       "--enable-llir"
       "--enable-ocamltest" {with-test}
-      "--host=x86_64-pc-linux-gnu" { arch = "x86_64" & os = "linux" }
+      "--host=%{arch}%-pc-%{os}-gnu"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]
