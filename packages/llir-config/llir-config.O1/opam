@@ -5,7 +5,7 @@ bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
 authors: ["Nandor Licker" "Timothy M. Jones"]
 license: "MIT"
 setenv: [
-  [ LLIR_OPT_O = "O1" ]
+  [ LLIR_OPT_O = "-O1" ]
 ]
 synopsis: "LLIR Configuration"
 description: "This package overrides configuration options for llir-opt"
