@@ -32,6 +32,6 @@ build: [
 install: [make "install"]
 url {
   src: "https://github.com/nandor/llir-ocaml/archive/0.0.1.tar.gz"
-  checksum: "md5=f04b02982ecc5cbca9c23b6b6b04d949"
+  checksum: "md5=39cb9ae881256b0df0c717de998aae36"
 }
 
