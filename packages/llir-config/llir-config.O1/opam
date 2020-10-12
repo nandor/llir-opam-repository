@@ -4,13 +4,10 @@ homepage: "https://github.com/nandor/llir-opt"
 bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
 authors: ["Nandor Licker" "Timothy M. Jones"]
 license: "MIT"
-build: []
 setenv: [
   [ LLIR_OPT_O = "O1" ]
 ]
 synopsis: "LLIR Configuration"
 description: "This package overrides configuration options for llir-opt"
-url {
-  src: "git+https://github.com/nandor/llir-opt#master"
-}
+flags: conf
 
