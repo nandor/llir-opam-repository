@@ -11,8 +11,8 @@ build: [
     "--pkgdir=%{lib}%"
   ]
   [make "clean"]
-  [make "all"] {ocaml:native-dynlink}
-  [make "byte"] {!ocaml:native-dynlink}
+  [make "all" "-j%{jobs}%"] {ocaml:native-dynlink}
+  [make "byte" "-j%{jobs}%"] {!ocaml:native-dynlink}
 ]
 depends: [
   "ocaml" {>= "4.11" & < "4.12"}
