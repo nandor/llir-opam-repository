@@ -21,5 +21,5 @@ synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"
 url {
   src: "https://github.com/nandor/llir-musl/archive/0.0.1.tar.gz"
-  checksum: "md5=1fc7c47b2c429d5136adf1f928909c73"
+  checksum: "md5=968b44a15760a806c2af856838212cee"
 }

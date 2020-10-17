@@ -38,6 +38,6 @@ synopsis: "LLIR Optimiser and Code Generator"
 description: "This package install the llir-opt optimiser and associated tools"
 url {
   src: "https://github.com/nandor/llir-opt/archive/0.0.1.tar.gz"
-  checksum: "md5=a813cd12e337e8b95ae3115e0f337530"
+  checksum: "md5=52e2cdd29cded4733fe81db1a013a5b2"
 }
 
