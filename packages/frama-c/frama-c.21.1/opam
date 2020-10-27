@@ -90,6 +90,7 @@ build: [
       "--prefix" prefix
       "--mandir" man
       "--disable-gui"
+      "--disable-metrics"
     ]
   [make "-j%{jobs}%"]
   [make "-C" "doc" "download"] {with-doc}
