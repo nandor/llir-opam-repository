@@ -1,5 +1,5 @@
 diff --git a/src-c/native/bitfn.h b/src-c/native/bitfn.h
-index 8ce6216..6bb4746 100644
+index 8ce6216..88ae2ee 100644
 --- a/src-c/native/bitfn.h
 +++ b/src-c/native/bitfn.h
 @@ -46,18 +46,41 @@ static __INLINE void secure_zero_memory(void *v, size_t n)
@@ -46,14 +46,14 @@ index 8ce6216..6bb4746 100644
  static __INLINE uint32_t bitfn_swap32(uint32_t a)
  {
  	uint32_t tmp = a;
-@@ -68,21 +91,28 @@ static __INLINE uint32_t bitfn_swap32(uint32_t a)
+@@ -68,21 +91,26 @@ static __INLINE uint32_t bitfn_swap32(uint32_t a)
  	                  : "=r" (a), "=r" (tmp) : "0" (a), "1" (tmp));
  	return a;
  }
 +#endif
  /**********************************************************/
  # elif defined(__x86_64__)
- #  define ARCH_HAS_SWAP32
+-#  define ARCH_HAS_SWAP32
 -#  define ARCH_HAS_SWAP64
 +#  ifndef ARCH_HAS_SWAP32
 +#   define ARCH_HAS_SWAP32
@@ -64,7 +64,6 @@ index 8ce6216..6bb4746 100644
  }
 +#endif
  
-+#  define ARCH_HAS_SWAP64
 +#  ifndef ARCH_HAS_SWAP64
 +#   define ARCH_HAS_SWAP64
  static __INLINE uint64_t bitfn_swap64(uint64_t a)
