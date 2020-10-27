@@ -92,3 +92,34 @@ index 69ea8ad..545fb77 100644
     OPT:
   */
  
+diff --git a/tests/metrics/test_config b/tests/metrics/test_config
+index de6ff00..db5c84e 100644
+--- a/tests/metrics/test_config
++++ b/tests/metrics/test_config
+@@ -1 +1 @@
+-OPT: -no-autoload-plugins -load-module metrics,scope -metrics
++OPT: -no-autoload-plugins -load-module frama-c-metrics,scope -metrics
+diff --git a/tests/libc/coverage.c b/tests/libc/coverage.c
+index 2fa988b..2fba8db 100644
+--- a/tests/libc/coverage.c
++++ b/tests/libc/coverage.c
+@@ -1,5 +1,5 @@
+ /* run.config*
+-   OPT: -eva-no-builtins-auto @EVA_OPTIONS@ share/libc/string.c -eva -slevel 6 -metrics-eva-cover -then -metrics-libc
++   OPT: -eva-no-builtins-auto @EVA_OPTIONS@ share/libc/string.c -eva -slevel 6 -load-module frama-c-metrics -metrics-eva-cover -then -metrics-libc
+ */
+ 
+ #include "string.h"
+diff --git a/tests/libc/fc_libc.c b/tests/libc/fc_libc.c
+index fc52ca5..b6a1c81 100644
+--- a/tests/libc/fc_libc.c
++++ b/tests/libc/fc_libc.c
+@@ -4,7 +4,7 @@
+    EXECNOW: make -s @PTEST_DIR@/check_parsing_individual_headers.cmxs
+    EXECNOW: make -s @PTEST_DIR@/check_libc_anonymous_tags.cmxs
+    EXECNOW: make -s @PTEST_DIR@/check_compliance.cmxs
+-   OPT: -load-module @PTEST_DIR@/check_libc_naming_conventions -print -cpp-extra-args='-nostdinc -Ishare/libc' -metrics -metrics-libc -load-module @PTEST_DIR@/check_const -load-module metrics -eva @EVA_CONFIG@ -then -lib-entry -no-print -metrics-no-libc
++   OPT: -load-module @PTEST_DIR@/check_libc_naming_conventions -print -cpp-extra-args='-nostdinc -Ishare/libc' -metrics -metrics-libc -load-module @PTEST_DIR@/check_const -load-module frama-c-metrics -eva @EVA_CONFIG@ -then -lib-entry -no-print -metrics-no-libc
+    OPT: -print -print-libc
+    OPT: -load-module @PTEST_DIR@/check_parsing_individual_headers
+    OPT: -load-module @PTEST_DIR@/check_libc_anonymous_tags

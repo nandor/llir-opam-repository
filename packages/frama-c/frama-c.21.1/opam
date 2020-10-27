@@ -90,7 +90,6 @@ build: [
       "--prefix" prefix
       "--mandir" man
       "--disable-gui"
-      "--disable-metrics"
     ]
   [make "-j%{jobs}%"]
   [make "-C" "doc" "download"] {with-doc}
@@ -146,7 +145,7 @@ messages: [
 ]
 
 extra-files: [
-  [ "build-llir.patch" "md5=afa1f22ff5e62dc66daa50a450a1f988" ]
+  [ "build-llir.patch" "md5=fb8a56d5761583a9633c641b7dbfc617" ]
 ]
 
 patches: [ "build-llir.patch" ]
