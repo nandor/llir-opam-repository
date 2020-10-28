@@ -7,7 +7,6 @@ license: "MIT"
 build: [
   [
     "./configure"
-      "--enable-wrapper=gcc"
       "--prefix=%{prefix}%"
       "--target=llir_%{arch}%-pc-%{os}-gnu"
   ]

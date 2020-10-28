@@ -14,6 +14,7 @@ depends: [
   "base-bigarray" {post}
   "base-threads" {post}
   "llir-musl" {= "master"}
+  "llir-llvm" {= "master"}
 ]
 conflict-class: "ocaml-core-compiler"
 flags: compiler
@@ -23,7 +24,7 @@ build: [
       "--prefix" prefix
       "--enable-flambda"
       "--enable-ocamltest" {with-test}
-      "CC=musl-gcc"
+      "CC=musl-clang"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]

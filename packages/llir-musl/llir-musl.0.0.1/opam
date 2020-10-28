@@ -5,11 +5,14 @@ bug-reports: "https://github.com/nandor/llir-musl/issues"
 authors: ["Rich Felker"]
 license: "MIT"
 build: [
-  [ "./configure" "--enable-wrapper=gcc" "--prefix=%{prefix}%" ]
+  [ "./configure" "--enable-wrapper=clang" "--prefix=%{prefix}%" "CC=clang" ]
   [ make "-j" jobs ]
 ]
 install: [
   [ make "install" ]
+]
+depends: [
+  "llir-llvm" { ="0.0.1" }
 ]
 setenv: [
   [ CC = "musl-gcc" ]

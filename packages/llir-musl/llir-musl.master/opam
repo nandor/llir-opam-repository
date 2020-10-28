@@ -5,7 +5,7 @@ bug-reports: "https://github.com/nandor/llir-musl/issues"
 authors: ["Rich Felker"]
 license: "MIT"
 build: [
-  [ "./configure" "--prefix=%{prefix}%" ]
+  [ "./configure" "--enable-wrapper=clang" "--prefix=%{prefix}%" "CC=clang" ]
   [ make "-j" jobs ]
 ]
 install: [
