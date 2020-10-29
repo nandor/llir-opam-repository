@@ -20,7 +20,7 @@ depends: [
   "llir-llvm" { ="0.0.1" }
 ]
 setenv: [
-  [ CC = "musl-gcc" ]
+  [ CC = "musl-clang" ]
   [ AR = "ar" ]
   [ RANLIB = "ranlib" ]
   [ LD = "ld" ]
