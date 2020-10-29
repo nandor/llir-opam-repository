@@ -25,6 +25,7 @@ build: [
       "--enable-flambda"
       "--enable-ocamltest" {with-test}
       "CC=musl-clang"
+      "CFLAGS=-fno-stack-protector"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]
