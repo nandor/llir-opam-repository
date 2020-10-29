@@ -6,7 +6,6 @@ synopsis: "4.11.0 with the LLIR backend"
 dev-repo: "https://github.com/nandor/llir-ocaml"
 setenv: [
   [ CAML_LD_LIBRARY_PATH = "%{lib}%/stublibs" ]
-  [ LD_LIBRARY_PATH = "%{lib}%" ]
 ]
 depends: [
   "ocaml" {= "4.11.1" & post }
