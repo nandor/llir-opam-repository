@@ -14,6 +14,7 @@ build: [
     "-DCMAKE_CXX_COMPILER=g++"
   ]
   [ make "-j" jobs ]
+  [ "./test.py" ] { with-test }
 ]
 install: [
   [ make "install" ]

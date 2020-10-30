@@ -12,6 +12,7 @@ build: [
     "-DCMAKE_INSTALL_PREFIX=%{prefix}%"
   ]
   [ make "-j" jobs ]
+  [ "./test.py" ] { with-test }
 ]
 install: [
   [ make "install" ]
