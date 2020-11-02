@@ -10,6 +10,7 @@ build: [
       "--enable-wrapper=clang"
       "--prefix=%{prefix}%"
       "CC=clang"
+      "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-%{arch}%.a"
   ]
   [ make "-j" jobs ]
 ]
@@ -17,7 +18,7 @@ install: [
   [ make "install" ]
 ]
 depends: [
-  "llir-llvm" { ="0.0.1" }
+  "llir-llvm" {= version}
 ]
 setenv: [
   [ CC = "musl-clang" ]

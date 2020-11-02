@@ -12,8 +12,9 @@ depends: [
   "base-unix" {post}
   "base-bigarray" {post}
   "base-threads" {post}
-  "llir-opt" {= "0.0.1"}
+  "llir-opt" {= "0.0.1+llir"}
   "llir-musl" {= "0.0.1+llir"}
+  "llir-compiler-rt" {= "0.0.1+llir"}
 ]
 conflict-class: "ocaml-core-compiler"
 flags: compiler
@@ -24,7 +25,7 @@ build: [
       "--enable-flambda"
       "--enable-llir"
       "--enable-ocamltest" {with-test}
-      "--host=%{arch}-pc-%{os}%-gnu"
+      "--host=%{arch}-pc-%{os}%-musl"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]

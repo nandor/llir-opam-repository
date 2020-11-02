@@ -8,7 +8,7 @@ build: [
   [
     "./configure"
       "--prefix=%{prefix}%"
-      "--target=llir_%{arch}%-pc-%{os}-gnu"
+      "--target=llir_%{arch}%-pc-%{os}-musl"
   ]
   [ make "-j" jobs ]
 ]
@@ -16,8 +16,9 @@ install: [
   [ make "install" ]
 ]
 depends: [
-  "llir-llvm" { ="0.0.1" }
-  "llir-opt" { ="0.0.1" }
+  "llir-llvm" {= version}
+  "llir-opt" {= version}
+  "llir-compiler-rt" {= version}
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

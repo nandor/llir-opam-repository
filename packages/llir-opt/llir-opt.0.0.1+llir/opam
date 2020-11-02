@@ -10,25 +10,23 @@ build: [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_DIR=%{prefix}/llvm/lib/cmake/llvm"
     "-DCMAKE_INSTALL_PREFIX=%{prefix}%"
-    "-DCMAKE_C_COMPILER=gcc"
-    "-DCMAKE_CXX_COMPILER=g++"
   ]
   [ make "-j" jobs ]
   [ "./test.py" ] { with-test }
 ]
 install: [
   [ make "install" ]
-  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_%{arch}%-pc-%{os}%-gnu-ar" ]
-  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_%{arch}%-pc-%{os}%-gnu-ld" ]
-  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_%{arch}%-pc-%{os}%-gnu-as" ]
-  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_%{arch}%-pc-%{os}%-gnu-ranlib" ]
-  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_%{arch}%-pc-%{os}%-gnu-opt" ]
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_%{arch}%-pc-%{os}%-musl-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_%{arch}%-pc-%{os}%-musl-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_%{arch}%-pc-%{os}%-musl-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_%{arch}%-pc-%{os}%-musl-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_%{arch}%-pc-%{os}%-musl-opt" ]
 ]
 setenv: [
-  [ CC = "llir_%{arch}%-pc-%{os}%-gnu-gcc" ]
-  [ AR = "llir_%{arch}%-pc-%{os}%-gnu-ar" ]
-  [ RANLIB = "llir_%{arch}%-pc-%{os}%-gnu-ranlib" ]
-  [ LD = "llir_%{arch}%-pc-%{os}%-gnu-ld" ]
+  [ AR = "llir_%{arch}%-pc-%{os}%-musl-ar" ]
+  [ RANLIB = "llir_%{arch}%-pc-%{os}%-musl-ranlib" ]
+  [ LD = "llir_%{arch}%-pc-%{os}%-musl-ld" ]
+  [ CC = "llir_%{arch}%-pc-%{os}%-musl-gcc" ]
 ]
 depends: [
   "conf-cmake" {build}

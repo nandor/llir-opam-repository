@@ -7,7 +7,7 @@ build: [
   [
     "./configure"
       "--host"
-        "x86_64-pc-linux-gnu" { arch = "x86_64" & os = "linux" }
+        "x86_64-pc-linux-musl" { arch = "x86_64" & os = "linux" }
       "--prefix" prefix
   ]
   [ make "-j%{jobs}%" ]
