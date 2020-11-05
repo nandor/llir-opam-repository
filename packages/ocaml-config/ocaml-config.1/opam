@@ -10,7 +10,12 @@ authors: [
 homepage: "https://opam.ocaml.org/"
 bug-reports: "https://github.com/ocaml/opam/issues"
 depends: [
-  "ocaml-base-compiler" | "ocaml-variants" | "ocaml-system"
+  ( "ocaml-base-compiler"
+  | "ocaml-system"
+  | "ocaml-variants-x86_64"
+  | "ocaml-variants-arm64"
+  | "ocaml-variants-ppc64"
+  )
 ]
 substs: "gen_ocaml_config.ml"
 

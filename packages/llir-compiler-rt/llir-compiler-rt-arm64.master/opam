@@ -1,0 +1,27 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-llvm"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Chris Lattner" "Vikram Adve"]
+license: "apache"
+build: [
+  [ "mkdir" "Release" ]
+  [ "sh" "-x" "configure.sh" "aarch64" prefix ]
+  [ make "-j" jobs "-C" "Release" ]
+]
+install: [
+  [ make "-j" jobs "-C" "Release" "install" ]
+]
+depends: [
+  "conf-cmake" {build}
+  "llir-llvm" {= "master"}
+]
+synopsis: "compiler-rt for LLIR"
+description: "This package install compiler-rt for LLIR"
+extra-files: [
+  ["configure.sh" "md5=73cd69769dba3e95af738552dd344deb"]
+]
+url {
+  src: "git+https://github.com/nandor/llir-llvm#master"
+}
+

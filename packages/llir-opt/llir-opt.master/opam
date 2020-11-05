@@ -1,0 +1,63 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-opt"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Nandor Licker" "Timothy M. Jones"]
+license: "MIT"
+build: [
+  [
+    "cmake" "."
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DLLVM_DIR=%{prefix}/llvm/lib/cmake/llvm"
+    "-DCMAKE_INSTALL_PREFIX=%{prefix}%"
+  ]
+  [ make "-j" jobs ]
+  [ "./test.py" ] { with-test }
+]
+install: [
+  [ make "install" ]
+  # X86_64
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_x86_64-pc-linux-musl-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_x86_64-pc-linux-musl-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_x86_64-pc-linux-musl-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_x86_64-pc-linux-musl-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_x86_64-pc-linux-musl-opt" ]
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_x86_64-pc-linux-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_x86_64-pc-linux-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_x86_64-pc-linux-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_x86_64-pc-linux-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_x86_64-pc-linux-opt" ]
+  # AArch64
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_aarch64-pc-linux-musl-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_aarch64-pc-linux-musl-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_aarch64-pc-linux-musl-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_aarch64-pc-linux-musl-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_aarch64-pc-linux-musl-opt" ]
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_aarch64-pc-linux-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_aarch64-pc-linux-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_aarch64-pc-linux-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_aarch64-pc-linux-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_aarch64-pc-linux-opt" ]
+  # PowerPC
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_ppc64le-pc-linux-musl-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_ppc64le-pc-linux-musl-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_ppc64le-pc-linux-musl-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_ppc64le-pc-linux-musl-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_ppc64le-pc-linux-musl-opt" ]
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_ppc64le-pc-linux-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_ppc64le-pc-linux-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_ppc64le-pc-linux-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_ppc64le-pc-linux-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_ppc64le-pc-linux-opt" ]
+]
+depends: [
+  "conf-cmake" {build}
+  "llir-llvm" {= version}
+]
+depopts: [ "llir-config" ]
+synopsis: "LLIR Optimiser and Code Generator"
+description: "This package install the llir-opt optimiser and associated tools"
+url {
+  src: "git+https://github.com/nandor/llir-opt#master"
+}
+

@@ -17,14 +17,10 @@ build: [
     "-DLLVM_ENABLE_OCAMLDOC=OFF"
     "-DLLVM_ENABLE_TOOLS=ON"
     "-DDEFAULT_SYSROOT=%{prefix}%"
-    "-DLLVM_ENABLE_PROJECTS=clang;lld;compiler-rt"
+    "-DLLVM_ENABLE_PROJECTS=clang;lld"
     "-DCLANG_LINKS_TO_CREATE="
     "-DCLANG_RESOURCE_DIR=../lib/clang/12.0.0"
-    "-DCOMPILER_RT_BUILD_BUILTINS=ON"
-    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
-    "-DCOMPILER_RT_BUILD_XRAY=OFF"
-    "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
-    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+    "-DCLANG_DEFAULT_LINKER=lld"
   ]
   [ make "-j" jobs "-C" "Release" ]
 ]
@@ -35,14 +31,33 @@ install: [
   [ "mkdir" "-p" "%{prefix}%/llvm/libexec" ]
   [ "mkdir" "-p" "%{prefix}%/llvm/share" ]
   [ make "-j" jobs "-C" "Release" "install" ]
+  # Override system clang/gcc binaries.
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/clang++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/g++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_%{arch}%-pc-%{os}%-musl-gcc" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_%{arch}%-pc-%{os}%-musl-g++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/%{arch}%-pc-%{os}%-musl-lld" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llvm-config" "%{prefix}%/bin/llvm-config" ]
+  # X86_64 Linux
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-pc-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-pc-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-musl-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-musl-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/x86_64-pc-linux-musl-lld" ]
+  # AArch64 Linux
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-pc-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-pc-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-pc-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-pc-linux-musl-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-pc-linux-musl-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/aarch64-pc-linux-musl-lld" ]
+  # PowerPC Linux
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/ppc64le-pc-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/ppc64le-pc-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-musl-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-musl-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/ppc64le-pc-linux-musl-lld" ]
 ]
 depends: [
   "conf-cmake" {build}
