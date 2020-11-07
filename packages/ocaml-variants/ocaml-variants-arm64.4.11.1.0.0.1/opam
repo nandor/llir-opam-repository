@@ -29,7 +29,7 @@ build: [
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]
-  [ make "-C" "testsuite" "parallel" ] {with-test}
+  [ make "-C" "testsuite" "parallel" ] {with-test & arch="arm64"}
 ]
 install: [make "install"]
 url {
