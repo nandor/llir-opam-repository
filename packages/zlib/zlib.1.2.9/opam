@@ -6,10 +6,7 @@ authors: ["Jean-loup Gailly" "Mark Adler"]
 license: "zlib"
 build: [
   [
-    "sh" "-x" "configure.sh"
-      "--host"
-      "x86_64-pc-linux-musl" { arch = "x86_64" & os = "linux" }
-      "--prefix" prefix
+    "sh" "-x" "configure.sh" "--prefix" prefix
   ]
   [ make "-j%{jobs}%" ]
   [ make "test" ] {with-test}
@@ -18,7 +15,7 @@ install: [
   [ make "install" ]
 ]
 extra-files: [
-  [ "configure.sh" "md5=70922267cc654b06d4dce8e3d1300d05" ]
+  [ "configure.sh" "md5=2f7cdc78fdcf2c37d4ffed00163e2b8b" ]
 ]
 depends: [
   "ocaml"
