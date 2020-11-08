@@ -43,6 +43,8 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-musl-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-musl-clang" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-pc-linux-musl-clang++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/x86_64-pc-linux-musl-lld" ]
   # AArch64 Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-pc-linux-gcc" ]
@@ -50,6 +52,8 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-pc-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-pc-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-pc-linux-musl-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-pc-linux-musl-clang" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-pc-linux-musl-clang++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/aarch64-pc-linux-musl-lld" ]
   # PowerPC Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/ppc64le-pc-linux-gcc" ]
@@ -57,6 +61,8 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-musl-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-musl-clang" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-musl-clang++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/ppc64le-pc-linux-musl-lld" ]
 ]
 depends: [
