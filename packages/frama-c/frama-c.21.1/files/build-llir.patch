@@ -4,11 +4,11 @@ index 271ec09..52e18a8 100644
 +++ b/configure.in
 @@ -441,6 +441,8 @@ AC_LANG([C])
  AC_ARG_WITH(cc,[specifies a custom C compiler and pre-processor],[CC=$withval])
- 
+
  AC_PROG_CC
 +AC_CHECK_TOOL([RANLIB],[RANLIB])
 +AC_CHECK_TOOL([AR],[AR])
- 
+
  AC_CHECK_HEADERS(stdlib.h)
  AC_CHECK_HEADERS(assert.h)
 @@ -1012,6 +1014,8 @@ AC_SUBST(DEFAULT_CPP_SUPPORTED_ARCH_OPTS)
@@ -17,9 +17,9 @@ index 271ec09..52e18a8 100644
  AC_SUBST(CC)
 +AC_SUBST(AR)
 +AC_SUBST(RANLIB)
- 
+
  AC_SUBST(EXTERNAL_PLUGINS)
- 
+
 diff --git a/share/Makefile.config.in b/share/Makefile.config.in
 index 89352cd..8f341dd 100644
 --- a/share/Makefile.config.in
@@ -30,7 +30,7 @@ index 89352cd..8f341dd 100644
  CC =@CC@
 +AR =@AR@
 +RANLIB =@RANLIB@
- 
+
  ###############
  # Ocaml stuff #
 diff --git a/src/plugins/e-acsl/Makefile.in b/src/plugins/e-acsl/Makefile.in
@@ -43,9 +43,9 @@ index 3a372cf..2076b6c 100644
  	echo 'RANLIB       $@'
 -	ranlib $@
 +	$(RANLIB) $@
- 
+
  all:: $(EACSL_DLMALLOC_LIB)
- 
+
 diff --git a/ptests/ptests.ml b/ptests/ptests.ml
 index aa521c4..ad8f70e 100644
 --- a/ptests/ptests.ml
@@ -53,7 +53,7 @@ index aa521c4..ad8f70e 100644
 @@ -24,13 +24,24 @@
       annotated with test options *)
  let default_options = "-journal-disable -check"
- 
+
 -let system =
 +let system command =
 +  let tokens = String.split_on_char ' ' command in
@@ -77,7 +77,7 @@ index aa521c4..ad8f70e 100644
 -    fun f ->
 -      Unix.system f
 +    Unix.system command
- 
+
  module Filename = struct
    include Filename
 diff --git a/tests/libc/runtime.c b/tests/libc/runtime.c
@@ -88,10 +88,10 @@ index 69ea8ad..545fb77 100644
  /* run.config*
     COMMENT: tests that the runtime can compile without errors (for PathCrawler, E-ACSL, ...)
 -   CMD: gcc -D__FC_MACHDEP_X86_64 share/libc/__fc_runtime.c -Wno-attributes -std=c99 -o /dev/null
-+   CMD: $CC -D__FC_MACHDEP_X86_64 share/libc/__fc_runtime.c -Wno-attributes -std=c99 -o /dev/null
++   CMD: $CC -D__FC_MACHDEP_X86_64 share/libc/__fc_runtime.c -Wno-everything -std=c99 -o /dev/null
     OPT:
   */
- 
+
 diff --git a/tests/metrics/test_config b/tests/metrics/test_config
 index de6ff00..db5c84e 100644
 --- a/tests/metrics/test_config
@@ -108,7 +108,7 @@ index 2fa988b..2fba8db 100644
 -   OPT: -eva-no-builtins-auto @EVA_OPTIONS@ share/libc/string.c -eva -slevel 6 -metrics-eva-cover -then -metrics-libc
 +   OPT: -eva-no-builtins-auto @EVA_OPTIONS@ share/libc/string.c -eva -slevel 6 -load-module frama-c-metrics -metrics-eva-cover -then -metrics-libc
  */
- 
+
  #include "string.h"
 diff --git a/tests/libc/fc_libc.c b/tests/libc/fc_libc.c
 index fc52ca5..b6a1c81 100644
