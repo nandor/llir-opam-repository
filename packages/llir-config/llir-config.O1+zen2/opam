@@ -1,0 +1,14 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-opt"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Nandor Licker" "Timothy M. Jones"]
+license: "MIT"
+setenv: [
+  [ LLIR_OPT_O = "-O1" ]
+  [ LLIR_OPT_CPU = "zen2" ]
+]
+synopsis: "LLIR Configuration"
+description: "This package overrides configuration options for llir-opt"
+flags: conf
+
