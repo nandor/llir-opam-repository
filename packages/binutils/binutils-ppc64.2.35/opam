@@ -7,7 +7,7 @@ build: [
   [
     "./configure"
       "--prefix" prefix
-      "--target" "ppc64le-unknown-linux-gnu"
+      "--target" "powerpc64le-unknown-linux-gnu"
       "--disable-libstdcxx"
       "--disable-libquadmath"
       "--disable-elfcpp"

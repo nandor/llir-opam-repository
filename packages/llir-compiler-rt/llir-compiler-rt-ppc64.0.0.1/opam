@@ -6,7 +6,7 @@ authors: ["Chris Lattner" "Vikram Adve"]
 license: "apache"
 build: [
   [ "mkdir" "Release" ]
-  [ "sh" "-x" "configure.sh" "ppc64le" prefix ]
+  [ "sh" "-x" "configure.sh" "powerpc64le" prefix ]
   [ make "-j" jobs "-C" "Release" ]
 ]
 install: [

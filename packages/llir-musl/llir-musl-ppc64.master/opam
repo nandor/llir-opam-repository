@@ -9,25 +9,25 @@ build: [
     "./configure"
       "--enable-wrapper=clang"
       "--prefix=%{prefix}%"
-      "CC=ppc64le-unknown-linux-gcc"
-      "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-ppc64le.a"
-      "PARTIALLD=ppc64le-unknown-linux-lld"
+      "CC=powerpc64le-unknown-linux-gcc"
+      "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-powerpc64le.a"
+      "PARTIALLD=powerpc64le-unknown-linux-lld"
   ]
   [ make "-j" jobs ]
 ]
 install: [
   [ make "install" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/ppc64le-unknown-linux-musl-clang" ]
+  [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-clang" ]
 ]
 depends: [
   "llir-llvm" {= "master"}
   "llir-compiler-rt-ppc64" {= version}
 ]
 setenv: [
-  [ CC = "ppc64le-unknown-linux-musl-clang" ]
-  [ LD = "ppc64le-unknown-linux-musl-lld" ]
-  [ AR = "ppc64le-linux-gnu-ar" ]
-  [ RANLIB = "ppc64le-linux-gnu-ranlib" ]
+  [ CC = "powerpc64le-unknown-linux-musl-clang" ]
+  [ LD = "powerpc64le-unknown-linux-musl-lld" ]
+  [ AR = "powerpc64le-linux-gnu-ar" ]
+  [ RANLIB = "powerpc64le-linux-gnu-ranlib" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

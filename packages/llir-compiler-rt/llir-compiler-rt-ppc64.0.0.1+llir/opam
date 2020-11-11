@@ -11,13 +11,13 @@ build: [
       "-B" "Release"
       "-DCMAKE_BUILD_TYPE=Release"
       "-DLLVM_CONFIG_PATH=%{prefix}%/bin/llvm-config"
-      "-DCMAKE_C_COMPILER=%{prefix}%/bin/llir_ppc64le-unknown-linux-musl-gcc"
-      "-DCMAKE_ASM_COMPILER=%{prefix}%/bin/llir_ppc64le-unknown-linux-musl-gcc"
-      "-DCMAKE_AR=%{prefix}%/bin/llir_ppc64le-unknown-linux-musl-ar"
-      "-DCMAKE_NM=%{prefix}%/bin/llir_ppc64le-unknown-linux-musl-nm"
-      "-DCMAKE_RANLIB=%{prefix}%/bin/llir_ppc64le-unknown-linux-musl-ranlib"
-      "-DCMAKE_C_COMPILER_TARGET=llir_ppc64le-unknown-musl-linux"
-      "-DCMAKE_ASM_COMPILER_TARGET=llir_ppc64le-unknown-musl-linux"
+      "-DCMAKE_C_COMPILER=%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-gcc"
+      "-DCMAKE_ASM_COMPILER=%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-gcc"
+      "-DCMAKE_AR=%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-ar"
+      "-DCMAKE_NM=%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-nm"
+      "-DCMAKE_RANLIB=%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-ranlib"
+      "-DCMAKE_C_COMPILER_TARGET=llir_powerpc64le-unknown-musl-linux"
+      "-DCMAKE_ASM_COMPILER_TARGET=llir_powerpc64le-unknown-musl-linux"
       "-DCMAKE_C_FLAGS='-nostdlib -nostdinc -O2'"
       "-DCMAKE_CXX_FLAGS='-nostdlib -nostdinc -O2'"
       "-DCMAKE_ASM_FLAGS='-nostdlib -nostdinc'"
@@ -33,9 +33,9 @@ build: [
       "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
       "-DCOMPILER_RT_BUILD_XRAY_NO_PREINIT=OFF"
       "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
-      "-DCOMPILER_RT_EMULATOR='qemu-ppc64le'" {with-test}
+      "-DCOMPILER_RT_EMULATOR='qemu-powerpc64le'" {with-test}
       "-DCOMPILER_RT_INCLUDE_TESTS=ON" {with-test}
-      "-DCOMPILER_RT_TEST_COMPILER='$%{prefix}/bin/llir_ppc64le-unknown-linux-gcc'" {with-test}
+      "-DCOMPILER_RT_TEST_COMPILER='$%{prefix}/bin/llir_powerpc64le-unknown-linux-gcc'" {with-test}
       "-DCOMPILER_RT_TEST_COMPILER_CFLAGS='-O2'" {with-test}
   ]
   [ make "-j" jobs "-C" "Release" ]

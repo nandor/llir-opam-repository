@@ -23,9 +23,9 @@ build: [
       "--prefix" prefix
       "--enable-flambda"
       "--enable-ocamltest" {with-test}
-      "--host" "ppc64le-unknown-linux-musl"
-      "CC=ppc64le-unknown-linux-musl-clang"
-      "PARTIALLD=ppc64le-unknown-linux-musl-lld -r"
+      "--host" "powerpc64le-unknown-linux-musl"
+      "CC=powerpc64le-unknown-linux-musl-clang"
+      "PARTIALLD=powerpc64le-unknown-linux-musl-lld -r"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]

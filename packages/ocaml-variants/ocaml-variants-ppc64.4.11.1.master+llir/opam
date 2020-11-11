@@ -25,7 +25,7 @@ build: [
       "--enable-flambda"
       "--enable-llir"
       "--enable-ocamltest" {with-test}
-      "--host=ppc64le-unknown-linux-musl"
+      "--host=powerpc64le-unknown-linux-musl"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]
