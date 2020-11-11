@@ -1,0 +1,34 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://www.musl-libc.org/"
+bug-reports: "https://github.com/nandor/llir-musl/issues"
+authors: ["Rich Felker"]
+license: "MIT"
+build: [
+  [
+    "./configure"
+      "--prefix=%{prefix}%"
+      "--target=llir_riscv64-pc-linux-musl"
+  ]
+  [ make "-j" jobs ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-llvm" {= "0.0.1"}
+  "llir-opt" {= "0.0.1"}
+  "llir-compiler-rt-arm64" {= version}
+]
+setenv: [
+  [ AR = "llir_riscv64-pc-linux-musl-ar" ]
+  [ RANLIB = "llir_riscv64-pc-linux-musl-ranlib" ]
+  [ LD = "llir_riscv64-pc-linux-musl-ld" ]
+  [ CC = "llir_riscv64-pc-linux-musl-gcc" ]
+]
+synopsis: "LLIR port of the musl C standard library"
+description: "This package install the llir-musl C standard library"
+url {
+  src: "https://github.com/nandor/llir-musl/archive/0.0.1.tar.gz"
+  checksum: "md5=968b44a15760a806c2af856838212cee"
+}

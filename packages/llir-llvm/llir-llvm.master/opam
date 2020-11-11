@@ -64,6 +64,15 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-musl-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_ppc64le-pc-linux-musl-clang++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/ppc64le-pc-linux-musl-lld" ]
+  # RISC-V Linux
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-pc-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-pc-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-pc-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-pc-linux-musl-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-pc-linux-musl-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-pc-linux-musl-clang" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-pc-linux-musl-clang++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/riscv64-pc-linux-musl-lld" ]
 ]
 depends: [
   "conf-cmake" {build}

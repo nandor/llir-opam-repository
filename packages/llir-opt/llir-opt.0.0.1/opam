@@ -49,6 +49,17 @@ install: [
   [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_ppc64le-pc-linux-as" ]
   [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_ppc64le-pc-linux-ranlib" ]
   [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_ppc64le-pc-linux-opt" ]
+  # RISC-V
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_riscv64-pc-linux-musl-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_riscv64-pc-linux-musl-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_riscv64-pc-linux-musl-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_riscv64-pc-linux-musl-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_riscv64-pc-linux-musl-opt" ]
+  [ "ln" "-s" "%{bin}%/llir-ar" "%{bin}%/llir_riscv64-pc-linux-ar" ]
+  [ "ln" "-s" "%{bin}%/llir-ld" "%{bin}%/llir_riscv64-pc-linux-ld" ]
+  [ "ln" "-s" "%{bin}%/llir-as" "%{bin}%/llir_riscv64-pc-linux-as" ]
+  [ "ln" "-s" "%{bin}%/llir-ranlib" "%{bin}%/llir_riscv64-pc-linux-ranlib" ]
+  [ "ln" "-s" "%{bin}%/llir-opt" "%{bin}%/llir_riscv64-pc-linux-opt" ]
 ]
 depends: [
   "conf-cmake" {build}
