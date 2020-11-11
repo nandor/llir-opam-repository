@@ -27,7 +27,7 @@ build: [
       "CC=aarch64-unknown-linux-musl-clang"
       "AR=aarch64-unknown-linux-gnu-ar"
       "RANLIB=aarch64-unknown-linux-gnu-ranlib"
-      "PARTIALLD=aarch64-unknown-linux-musl-lld -r"
+      "PARTIALLD=aarch64-unknown-linux-gnu-ld -r"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]

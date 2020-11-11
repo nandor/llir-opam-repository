@@ -17,10 +17,9 @@ build: [
     "-DLLVM_ENABLE_OCAMLDOC=OFF"
     "-DLLVM_ENABLE_TOOLS=ON"
     "-DDEFAULT_SYSROOT=%{prefix}%"
-    "-DLLVM_ENABLE_PROJECTS=clang;lld"
+    "-DLLVM_ENABLE_PROJECTS=clang"
     "-DCLANG_LINKS_TO_CREATE="
     "-DCLANG_RESOURCE_DIR=../lib/clang/12.0.0"
-    "-DCLANG_DEFAULT_LINKER=lld"
   ]
   [ make "-j" jobs "-C" "Release" ]
 ]
@@ -41,7 +40,6 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-linux-musl-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-linux-musl-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-linux-musl-clang++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/x86_64-unknown-linux-musl-lld" ]
   # AArch64 Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-linux-g++" ]
@@ -50,7 +48,6 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-linux-musl-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-linux-musl-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-linux-musl-clang++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/aarch64-unknown-linux-musl-lld" ]
   # PowerPC Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-linux-g++" ]
@@ -59,7 +56,6 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-clang++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-lld" ]
   # RISC-V Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-linux-g++" ]
@@ -68,7 +64,6 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-linux-musl-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-linux-musl-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-linux-musl-clang++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/lld" "%{prefix}%/bin/riscv64-unknown-linux-musl-lld" ]
 ]
 depends: [
   "conf-cmake" {build}

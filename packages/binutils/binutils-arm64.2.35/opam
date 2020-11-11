@@ -21,7 +21,6 @@ build: [
       "--disable-libdecnumber"
       "--disable-zlib"
       "--disable-intl"
-      "--disable-ld"
   ]
   [
     make "-j%{jobs}%"
@@ -29,6 +28,7 @@ build: [
 ]
 install: [
   [ make "install" ]
+  [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-ld" "%{prefix}%/bin/aarch64-unknown-linux-musl-ld" ]
 ]
 synopsis: "GNU binutils"
 url {

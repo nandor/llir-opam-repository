@@ -15,7 +15,6 @@ cmake compiler-rt \
       -DCMAKE_C_FLAGS="-nostdlib -nostdinc -O2 -I$2/llvm/lib/clang/12.0.0/include" \
       -DCMAKE_CXX_FLAGS="-nostdlib -nostdinc -O2 -I$2/llvm/lib/clang/12.0.0/include" \
       -DCMAKE_ASM_FLAGS="-nostdlib -nostdinc" \
-      -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
       -DCMAKE_INSTALL_PREFIX=$2/llvm/lib/clang/12.0.0 \
       -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
       -DCOMPILER_RT_BUILD_BUILTINS=ON \

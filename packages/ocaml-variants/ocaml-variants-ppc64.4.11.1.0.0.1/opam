@@ -27,7 +27,7 @@ build: [
       "CC=powerpc64le-unknown-linux-musl-clang"
       "AR=powerpc64le-unknown-linux-gnu-ar"
       "RANLIB=powerpc64le-unknown-linux-gnu-ranlib"
-      "PARTIALLD=powerpc64le-unknown-linux-musl-lld -r"
+      "PARTIALLD=powerpc64le-unknown-linux-gnu-ld -r"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]

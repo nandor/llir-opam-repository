@@ -11,7 +11,7 @@ build: [
       "--prefix=%{prefix}%"
       "CC=aarch64-unknown-linux-gcc"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-aarch64.a"
-      "PARTIALLD=aarch64-unknown-linux-lld"
+      "PARTIALLD=aarch64-unknown-linux-gnu-ld"
   ]
   [ make "-j" jobs ]
 ]
@@ -26,7 +26,7 @@ depends: [
 ]
 setenv: [
   [ CC = "aarch64-unknown-linux-musl-clang" ]
-  [ LD = "aarch64-unknown-linux-musl-lld" ]
+  [ LD = "aarch64-unknown-linux-gnu-ld" ]
   [ AR = "aarch64-linux-gnu-ar" ]
   [ RANLIB = "aarch64-linux-gnu-ranlib" ]
 ]

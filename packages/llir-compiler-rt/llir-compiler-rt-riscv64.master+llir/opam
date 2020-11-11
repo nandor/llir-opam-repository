@@ -35,7 +35,7 @@ build: [
       "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
       "-DCOMPILER_RT_EMULATOR='qemu-riscv64'" {with-test}
       "-DCOMPILER_RT_INCLUDE_TESTS=ON" {with-test}
-      "-DCOMPILER_RT_TEST_COMPILER='$%{prefix}/bin/llir_riscv64-unknown-linux-gcc'" {with-test}
+      "-DCOMPILER_RT_TEST_COMPILER='%{prefix}%/bin/llir_riscv64-unknown-linux-gcc'" {with-test}
       "-DCOMPILER_RT_TEST_COMPILER_CFLAGS='-O2'" {with-test}
   ]
   [ make "-j" jobs "-C" "Release" ]
@@ -47,6 +47,7 @@ depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}
   "llir-opt" {= "master"}
+  "binutils-riscv64"
 ]
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"
