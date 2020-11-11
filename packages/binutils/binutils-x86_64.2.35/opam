@@ -21,6 +21,7 @@ build: [
       "--disable-libdecnumber"
       "--disable-zlib"
       "--disable-intl"
+      "--disable-ld"
   ]
   [
     make "-j%{jobs}%"
