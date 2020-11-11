@@ -12,9 +12,10 @@ cmake compiler-rt \
       -DCMAKE_RANLIB=$(which $1-unknown-linux-gnu-ranlib) \
       -DCMAKE_C_COMPILER_TARGET=$1-linux \
       -DCMAKE_ASM_COMPILER_TARGET=$1-linux \
-      -DCMAKE_C_FLAGS="-nostdlib -nostdinc -O2 -I$2/llvm/lib/clang/12.0.0/include" \
-      -DCMAKE_CXX_FLAGS="-nostdlib -nostdinc -O2 -I$2/llvm/lib/clang/12.0.0/include" \
-      -DCMAKE_ASM_FLAGS="-nostdlib -nostdinc" \
+      -DCMAKE_C_FLAGS="-nostdlib -nostdinc -O2 -I$2/llvm/lib/clang/12.0.0/include -Wno-everything" \
+      -DCMAKE_CXX_FLAGS="-nostdlib -nostdinc -O2 -I$2/llvm/lib/clang/12.0.0/include -Wno-everything" \
+      -DCMAKE_ASM_FLAGS="-nostdlib -nostdinc -Wno-everything" \
+      -DCMAKE_EXE_LINKER_FLAGS="--ld-path=$2/bin/$1-unknown-linux-gnu-ld" \
       -DCMAKE_INSTALL_PREFIX=$2/llvm/lib/clang/12.0.0 \
       -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
       -DCOMPILER_RT_BUILD_BUILTINS=ON \

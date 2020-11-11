@@ -12,6 +12,7 @@ build: [
       "CC=riscv64-unknown-linux-gcc"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-riscv64.a"
       "PARTIALLD=riscv64-unknown-linux-gnu-ld"
+      "LDFLAGS=--ld-path=%{prefix}%/bin/riscv64-unknown-linux-gnu-ld"
   ]
   [ make "-j" jobs ]
 ]

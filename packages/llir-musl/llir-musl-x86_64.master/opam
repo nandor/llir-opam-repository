@@ -12,6 +12,7 @@ build: [
       "CC=x86_64-unknown-linux-gcc"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-x86_64.a"
       "PARTIALLD=x86_64-unknown-linux-gnu-ld"
+      "LDFLAGS=--ld-path=%{prefix}%/bin/x86_64-unknown-linux-gnu-ld"
   ]
   [ make "-j" jobs ]
 ]

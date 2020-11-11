@@ -20,7 +20,7 @@ depends: [
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"
 extra-files: [
-  ["configure.sh" "md5=f6e6f6f3bab3577b5745765c2f9bcb46"]
+  ["configure.sh" "md5=9966856a5495d9abdba2c0d5e8c46c39"]
 ]
 url {
   src: "git+https://github.com/nandor/llir-llvm#master"

@@ -12,6 +12,7 @@ build: [
       "CC=powerpc64le-unknown-linux-gcc"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-powerpc64le.a"
       "PARTIALLD=powerpc64le-unknown-linux-gnu-ld"
+      "LDFLAGS=--ld-path=%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld"
   ]
   [ make "-j" jobs ]
 ]

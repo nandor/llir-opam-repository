@@ -28,6 +28,7 @@ build: [
       "AR=riscv64-unknown-linux-gnu-ar"
       "RANLIB=riscv64-unknown-linux-gnu-ranlib"
       "PARTIALLD=riscv64-unknown-linux-gnu-ld -r"
+      "OC_LDFLAGS=--ld-path=%{prefix}%/bin/riscv64-unknown-linux-gnu-ld"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]
