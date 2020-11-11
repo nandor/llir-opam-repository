@@ -11,11 +11,13 @@ build: [
       "--prefix=%{prefix}%"
       "CC=powerpc64le-unknown-linux-gcc"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-powerpc64le.a"
+      "PARTIALLD=powerpc64le-unknown-linux-lld"
   ]
   [ make "-j" jobs ]
 ]
 install: [
   [ make "install" ]
+  [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-clang" ]
 ]
 depends: [

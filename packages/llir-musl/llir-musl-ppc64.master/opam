@@ -17,6 +17,7 @@ build: [
 ]
 install: [
   [ make "install" ]
+  [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-clang" ]
 ]
 depends: [

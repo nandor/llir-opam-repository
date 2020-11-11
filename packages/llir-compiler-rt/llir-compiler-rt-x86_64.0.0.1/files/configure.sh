@@ -7,9 +7,9 @@ cmake compiler-rt \
       -DCMAKE_C_COMPILER=$2/bin/$1-unknown-linux-gcc \
       -DCMAKE_CXX_COMPILER=$2/bin/$1-unknown-linux-g++ \
       -DCMAKE_ASM_COMPILER=$2/bin/$1-unknown-linux-gcc \
-      -DCMAKE_AR=$(which $1-linux-gnu-ar) \
-      -DCMAKE_NM=$(which $1-linux-gnu-nm) \
-      -DCMAKE_RANLIB=$(which $1-linux-gnu-ranlib) \
+      -DCMAKE_AR=$(which $1-unknown-linux-gnu-ar) \
+      -DCMAKE_NM=$(which $1-unknown-linux-gnu-nm) \
+      -DCMAKE_RANLIB=$(which $1-unknown-linux-gnu-ranlib) \
       -DCMAKE_C_COMPILER_TARGET=$1-linux \
       -DCMAKE_ASM_COMPILER_TARGET=$1-linux \
       -DCMAKE_C_FLAGS="-nostdlib -nostdinc -O2 -I$2/llvm/lib/clang/12.0.0/include" \

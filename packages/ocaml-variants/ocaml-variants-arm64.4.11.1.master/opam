@@ -25,6 +25,8 @@ build: [
       "--enable-ocamltest" {with-test}
       "--host" "aarch64-unknown-linux-musl"
       "CC=aarch64-unknown-linux-musl-clang"
+      "AR=aarch64-unknown-linux-gnu-ar"
+      "RANLIB=aarch64-unknown-linux-gnu-ranlib"
       "PARTIALLD=aarch64-unknown-linux-musl-lld -r"
   ]
   [ make "world" "-j%{jobs}%"]
