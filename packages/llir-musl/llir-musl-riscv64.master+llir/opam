@@ -18,7 +18,7 @@ install: [
 depends: [
   "llir-llvm" {= "master"}
   "llir-opt" {= "master"}
-  "llir-compiler-rt-arm64" {= version}
+  "llir-compiler-rt-riscv64" {= version}
 ]
 setenv: [
   [ AR = "llir_riscv64-unknown-linux-musl-ar" ]

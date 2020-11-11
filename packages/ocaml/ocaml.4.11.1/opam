@@ -6,7 +6,11 @@ and polls it to initialise specific variables like `ocaml:native-dynlink`"""
 maintainer: "platform@lists.ocaml.org"
 depends: [
   "ocaml-config"
-  ("ocaml-variants-x86_64" | "ocaml-variants-arm64" | "ocaml-variants-ppc64")
+  ( "ocaml-variants-x86_64"
+  | "ocaml-variants-arm64"
+  | "ocaml-variants-ppc64"
+  | "ocaml-variants-riscv64"
+  )
 ]
 setenv: [
   [CAML_LD_LIBRARY_PATH = "%{_:stubsdir}%"]

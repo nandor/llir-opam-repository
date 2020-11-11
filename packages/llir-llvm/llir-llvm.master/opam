@@ -32,10 +32,6 @@ install: [
   [ "mkdir" "-p" "%{prefix}%/llvm/share" ]
   [ make "-j" jobs "-C" "Release" "install" ]
   # Override system clang/gcc binaries.
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/clang" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/clang++" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/gcc" ]
-  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llvm-config" "%{prefix}%/bin/llvm-config" ]
   # X86_64 Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-linux-gcc" ]
