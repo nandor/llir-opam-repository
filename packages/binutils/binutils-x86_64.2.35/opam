@@ -1,0 +1,37 @@
+opam-version: "2.0"
+maintainer: "nand"
+homepage: "https://www.gnu.org/software/binutils/"
+bug-reports: " https://sourceware.org/bugzilla"
+license: "GNU GPL v3"
+build: [
+  [
+    "sh" "-x" "configure"
+      "--prefix" prefix
+      "--target" "x86_64-unknown-linux-gnu"
+      "--disable-libstdcxx"
+      "--disable-libquadmath"
+      "--disable-elfcpp"
+      "--disable-gast"
+      "--disable-gdb"
+      "--disable-gdbserver"
+      "--disable-gdbsupport"
+      "--disable-gnulib"
+      "--disable-gold"
+      "--disable-gproc"
+      "--disable-ld"
+      "--disable-libdecnumber"
+      "--disable-zlib"
+      "--disable-intl"
+  ]
+  [
+    make "-j%{jobs}%"
+  ]
+]
+install: [
+  [ make "install" ]
+]
+synopsis: "GNU binutils"
+url {
+  src: "https://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.gz"
+  checksum: "md5=63c597bd52f978d964028b7c3213d22e"
+}

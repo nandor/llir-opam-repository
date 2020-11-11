@@ -15,6 +15,7 @@ install: [
 depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "0.0.1"}
+  "binutils-riscv64"
 ]
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"
