@@ -5,6 +5,7 @@ cmake compiler-rt \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_CONFIG_PATH=$2/bin/llvm-config \
       -DCMAKE_C_COMPILER=$2/bin/$1-unknown-linux-gcc \
+      -DCMAKE_CXX_COMPILER=$2/bin/$1-unknown-linux-g++ \
       -DCMAKE_ASM_COMPILER=$2/bin/$1-unknown-linux-gcc \
       -DCMAKE_AR=$(which $1-linux-gnu-ar) \
       -DCMAKE_NM=$(which $1-linux-gnu-nm) \
