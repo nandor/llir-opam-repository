@@ -9,23 +9,23 @@ build: [
     "./configure"
       "--enable-wrapper=clang"
       "--prefix=%{prefix}%"
-      "CC=riscv64-pc-linux-gcc"
+      "CC=riscv64-unknown-linux-gcc"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-riscv64.a"
-      "PARTIALLD=riscv64-pc-linux-lld"
+      "PARTIALLD=riscv64-unknown-linux-lld"
   ]
   [ make "-j" jobs ]
 ]
 install: [
   [ make "install" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/riscv64-pc-linux-musl-clang" ]
+  [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/riscv64-unknown-linux-musl-clang" ]
 ]
 depends: [
   "llir-llvm" {= "master"}
   "llir-compiler-rt-arm64" {= version}
 ]
 setenv: [
-  [ CC = "riscv64-pc-linux-musl-clang" ]
-  [ LD = "riscv64-pc-linux-musl-lld" ]
+  [ CC = "riscv64-unknown-linux-musl-clang" ]
+  [ LD = "riscv64-unknown-linux-musl-lld" ]
   [ AR = "riscv64-linux-gnu-ar" ]
   [ RANLIB = "riscv64-linux-gnu-ranlib" ]
 ]

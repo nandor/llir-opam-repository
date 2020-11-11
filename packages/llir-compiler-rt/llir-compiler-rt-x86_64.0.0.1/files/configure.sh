@@ -4,8 +4,8 @@ cmake compiler-rt \
       -B Release \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_CONFIG_PATH=$2/bin/llvm-config \
-      -DCMAKE_C_COMPILER=$2/bin/$1-pc-linux-gcc \
-      -DCMAKE_ASM_COMPILER=$2/bin/$1-pc-linux-gcc \
+      -DCMAKE_C_COMPILER=$2/bin/$1-unknown-linux-gcc \
+      -DCMAKE_ASM_COMPILER=$2/bin/$1-unknown-linux-gcc \
       -DCMAKE_AR=$(which $1-linux-gnu-ar) \
       -DCMAKE_NM=$(which $1-linux-gnu-nm) \
       -DCMAKE_RANLIB=$(which $1-linux-gnu-ranlib) \

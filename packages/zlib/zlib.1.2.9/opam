@@ -15,7 +15,7 @@ install: [
   [ make "install" ]
 ]
 extra-files: [
-  [ "configure.sh" "md5=2f7cdc78fdcf2c37d4ffed00163e2b8b" ]
+  [ "configure.sh" "md5=95d7263eca7d04d0fccdbbff7b315b8f" ]
 ]
 depends: [
   "ocaml"

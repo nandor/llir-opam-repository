@@ -8,7 +8,7 @@ build: [
   [
     "./configure"
       "--prefix=%{prefix}%"
-      "--target=llir_riscv64-pc-linux-musl"
+      "--target=llir_riscv64-unknown-linux-musl"
   ]
   [ make "-j" jobs ]
 ]
@@ -21,10 +21,10 @@ depends: [
   "llir-compiler-rt-arm64" {= version}
 ]
 setenv: [
-  [ AR = "llir_riscv64-pc-linux-musl-ar" ]
-  [ RANLIB = "llir_riscv64-pc-linux-musl-ranlib" ]
-  [ LD = "llir_riscv64-pc-linux-musl-ld" ]
-  [ CC = "llir_riscv64-pc-linux-musl-gcc" ]
+  [ AR = "llir_riscv64-unknown-linux-musl-ar" ]
+  [ RANLIB = "llir_riscv64-unknown-linux-musl-ranlib" ]
+  [ LD = "llir_riscv64-unknown-linux-musl-ld" ]
+  [ CC = "llir_riscv64-unknown-linux-musl-gcc" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

@@ -11,13 +11,13 @@ build: [
       "-B" "Release"
       "-DCMAKE_BUILD_TYPE=Release"
       "-DLLVM_CONFIG_PATH=%{prefix}%/bin/llvm-config"
-      "-DCMAKE_C_COMPILER=%{prefix}%/bin/llir_x86_64-pc-linux-musl-gcc"
-      "-DCMAKE_ASM_COMPILER=%{prefix}%/bin/llir_x86_64-pc-linux-musl-gcc"
-      "-DCMAKE_AR=%{prefix}%/bin/llir_x86_64-pc-linux-musl-ar"
-      "-DCMAKE_NM=%{prefix}%/bin/llir_x86_64-pc-linux-musl-nm"
-      "-DCMAKE_RANLIB=%{prefix}%/bin/llir_x86_64-pc-linux-musl-ranlib"
-      "-DCMAKE_C_COMPILER_TARGET=llir_x86_64-pc-musl-linux"
-      "-DCMAKE_ASM_COMPILER_TARGET=llir_x86_64-pc-musl-linux"
+      "-DCMAKE_C_COMPILER=%{prefix}%/bin/llir_x86_64-unknown-linux-musl-gcc"
+      "-DCMAKE_ASM_COMPILER=%{prefix}%/bin/llir_x86_64-unknown-linux-musl-gcc"
+      "-DCMAKE_AR=%{prefix}%/bin/llir_x86_64-unknown-linux-musl-ar"
+      "-DCMAKE_NM=%{prefix}%/bin/llir_x86_64-unknown-linux-musl-nm"
+      "-DCMAKE_RANLIB=%{prefix}%/bin/llir_x86_64-unknown-linux-musl-ranlib"
+      "-DCMAKE_C_COMPILER_TARGET=llir_x86_64-unknown-musl-linux"
+      "-DCMAKE_ASM_COMPILER_TARGET=llir_x86_64-unknown-musl-linux"
       "-DCMAKE_C_FLAGS='-nostdlib -nostdinc -O2'"
       "-DCMAKE_CXX_FLAGS='-nostdlib -nostdinc -O2'"
       "-DCMAKE_ASM_FLAGS='-nostdlib -nostdinc'"
@@ -35,7 +35,7 @@ build: [
       "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
       "-DCOMPILER_RT_EMULATOR='qemu-x86_64'" {with-test}
       "-DCOMPILER_RT_INCLUDE_TESTS=ON" {with-test}
-      "-DCOMPILER_RT_TEST_COMPILER='$%{prefix}/bin/llir_x86_64-pc-linux-gcc'" {with-test}
+      "-DCOMPILER_RT_TEST_COMPILER='$%{prefix}/bin/llir_x86_64-unknown-linux-gcc'" {with-test}
       "-DCOMPILER_RT_TEST_COMPILER_CFLAGS='-O2'" {with-test}
   ]
   [ make "-j" jobs "-C" "Release" ]

@@ -9,22 +9,22 @@ build: [
     "./configure"
       "--enable-wrapper=clang"
       "--prefix=%{prefix}%"
-      "CC=x86_64-pc-linux-gcc"
+      "CC=x86_64-unknown-linux-gcc"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-x86_64.a"
   ]
   [ make "-j" jobs ]
 ]
 install: [
   [ make "install" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/x86_64-pc-linux-musl-clang" ]
+  [ "ln" "-s" "%{prefix}%/bin/musl-clang" "%{prefix}%/bin/x86_64-unknown-linux-musl-clang" ]
 ]
 depends: [
   "llir-llvm" {= version}
   "llir-compiler-rt-x86_64" {= version}
 ]
 setenv: [
-  [ CC = "x86_64-pc-linux-musl-clang" ]
-  [ LD = "x86_64-pc-linux-musl-lld" ]
+  [ CC = "x86_64-unknown-linux-musl-clang" ]
+  [ LD = "x86_64-unknown-linux-musl-lld" ]
   [ AR = "x86_64-linux-gnu-ar" ]
   [ RANLIB = "x86_64-linux-gnu-ranlib" ]
 ]
