@@ -26,12 +26,13 @@ build: [
       "--host" "powerpc64le-unknown-linux-musl"
       "CC=powerpc64le-unknown-linux-musl-clang"
       "AR=powerpc64le-unknown-linux-gnu-ar"
+      "AS=powerpc64le-unknown-linux-gnu-as"
       "RANLIB=powerpc64le-unknown-linux-gnu-ranlib"
       "PARTIALLD=powerpc64le-unknown-linux-gnu-ld -r"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]
-  [ make "-C" "testsuite" "parallel" ] {with-test}
+  #[ make "-C" "testsuite" "parallel" ] {with-test}
 ]
 install: [make "install"]
 url {

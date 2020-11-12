@@ -26,6 +26,7 @@ build: [
       "--host" "x86_64-unknown-linux-musl"
       "CC=x86_64-unknown-linux-musl-clang"
       "AR=x86_64-unknown-linux-gnu-ar"
+      "AS=x86_64-unknown-linux-gnu-as"
       "RANLIB=x86_64-unknown-linux-gnu-ranlib"
       "PARTIALLD=x86_64-unknown-linux-gnu-ld -r"
   ]

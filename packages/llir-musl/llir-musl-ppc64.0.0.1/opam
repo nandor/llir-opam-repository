@@ -13,6 +13,7 @@ build: [
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-powerpc64le.a"
       "PARTIALLD=powerpc64le-unknown-linux-gnu-ld"
       "LDFLAGS=--ld-path=%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld"
+      "CFLAGS=-mlong-double-64"
   ]
   [ make "-j" jobs ]
 ]
@@ -27,6 +28,7 @@ depends: [
 ]
 setenv: [
   [ CC = "powerpc64le-unknown-linux-musl-clang" ]
+  [ CFLAGS = "-mlong-double-64" ]
   [ LD = "powerpc64le-unknown-linux-gnu-ld" ]
   [ AR = "powerpc64le-unknown-linux-gnu-ar" ]
   [ RANLIB = "powerpc64le-unknown-linux-gnu-ranlib" ]
