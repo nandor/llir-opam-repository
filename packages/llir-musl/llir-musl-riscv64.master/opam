@@ -28,8 +28,8 @@ depends: [
 setenv: [
   [ CC = "riscv64-unknown-linux-musl-clang" ]
   [ LD = "riscv64-unknown-linux-gnu-ld" ]
-  [ AR = "riscv64-linux-gnu-ar" ]
-  [ RANLIB = "riscv64-linux-gnu-ranlib" ]
+  [ AR = "riscv64-unknown-linux-gnu-ar" ]
+  [ RANLIB = "riscv64-unknown-linux-gnu-ranlib" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

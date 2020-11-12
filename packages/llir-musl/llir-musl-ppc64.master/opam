@@ -28,8 +28,8 @@ depends: [
 setenv: [
   [ CC = "powerpc64le-unknown-linux-musl-clang" ]
   [ LD = "powerpc64le-unknown-linux-gnu-ld" ]
-  [ AR = "powerpc64le-linux-gnu-ar" ]
-  [ RANLIB = "powerpc64le-linux-gnu-ranlib" ]
+  [ AR = "powerpc64le-unknown-linux-gnu-ar" ]
+  [ RANLIB = "powerpc64le-unknown-linux-gnu-ranlib" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

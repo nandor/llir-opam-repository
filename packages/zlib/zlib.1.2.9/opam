@@ -5,17 +5,12 @@ bug-reports: "https://github.com/ocaml/opam-repository/issues"
 authors: ["Jean-loup Gailly" "Mark Adler"]
 license: "zlib"
 build: [
-  [
-    "sh" "-x" "configure.sh" "--prefix" prefix
-  ]
+  ["./configure" "--prefix" prefix]
   [ make "-j%{jobs}%" ]
   [ make "test" ] {with-test}
 ]
 install: [
   [ make "install" ]
-]
-extra-files: [
-  [ "configure.sh" "md5=95d7263eca7d04d0fccdbbff7b315b8f" ]
 ]
 depends: [
   "ocaml"

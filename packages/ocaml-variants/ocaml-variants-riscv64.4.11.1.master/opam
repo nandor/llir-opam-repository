@@ -26,9 +26,9 @@ build: [
       "--host" "riscv64-unknown-linux-musl"
       "CC=riscv64-unknown-linux-musl-clang"
       "AR=riscv64-unknown-linux-gnu-ar"
+      "AS=riscv64-unknown-linux-gnu-as"
       "RANLIB=riscv64-unknown-linux-gnu-ranlib"
       "PARTIALLD=riscv64-unknown-linux-gnu-ld -r"
-      "OC_LDFLAGS=--ld-path=%{prefix}%/bin/riscv64-unknown-linux-gnu-ld"
   ]
   [ make "world" "-j%{jobs}%"]
   [ make "world.opt" "-j%{jobs}%"]
