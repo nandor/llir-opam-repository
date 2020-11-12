@@ -28,7 +28,7 @@ build: [
 ]
 install: [
   [ make "install" ]
-  [ "ln" "-s" "%{prefix}%/bin/ppc64-unknown-linux-gnu-ld" "%{prefix}%/bin/ppc64-unknown-linux-musl-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-ld" ]
 ]
 synopsis: "GNU binutils"
 url {
