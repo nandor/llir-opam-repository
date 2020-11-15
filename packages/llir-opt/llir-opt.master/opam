@@ -8,7 +8,7 @@ build: [
   [
     "cmake" "."
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DLLVM_DIR=%{prefix}/llvm/lib/cmake/llvm"
+    "-DLLVM_DIR=%{prefix}%/llvm/lib/cmake/llvm"
     "-DCMAKE_INSTALL_PREFIX=%{prefix}%"
   ]
   [ make "-j" jobs ]
