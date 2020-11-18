@@ -8,15 +8,6 @@ build: [
   ["which" "gnuplot"]
 ]
 depends: ["conf-which" {build}]
-depexts: [
-  ["gnuplot-x11"] {os-family = "debian"}
-  ["gnuplot"] {os-distribution = "centos"}
-  ["gnuplot"] {os-distribution = "fedora"}
-  ["gnuplot"] {os = "macos" & os-distribution = "homebrew"}
-  ["gnuplot"] {os-distribution = "alpine"}
-  ["gnuplot"] {os-family = "suse"}
-  ["gnuplot"] {os = "freebsd"}
-]
 synopsis: "Virtual package relying on gnuplot installation"
 description: """
 This package can only install if the gnuplot command
