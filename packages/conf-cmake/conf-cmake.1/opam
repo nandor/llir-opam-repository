@@ -6,20 +6,6 @@ bug-reports: "https://github.com/ocaml/opam-repository/issues"
 license: "BSD-3-Clause"
 build: ["bash" "-ex" "configure.sh"]
 depexts: [
-  ["cmake"] {os-distribution = "homebrew" & os = "macos"}
-  ["cmake"] {os-distribution = "macports" & os = "macos"}
-  ["cmake"] {os-family = "debian"}
-  ["cmake3" "epel-release"] {os-distribution = "centos"}
-  ["cmake"] {os-distribution = "fedora"}
-  ["cmake"] {os-distribution = "alpine"}
-  ["cmake"] {os-distribution = "arch"}
-  ["cmake"] {os-family = "suse"}
-  ["cmake"] {os-distribution = "ol"}
-  ["dev-util/cmake"] {os-distribution = "gentoo"}
-  ["devel/cmake"] {os = "freebsd"}
-  ["devel/cmake"] {os = "openbsd"}
-  ["devel/cmake"] {os = "netbsd"}
-  ["devel/cmake"] {os = "dragonfly"}
 ]
 synopsis: "Virtual package relying on cmake"
 description:
