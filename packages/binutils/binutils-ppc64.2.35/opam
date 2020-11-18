@@ -8,6 +8,7 @@ build: [
     "./configure"
       "--prefix" prefix
       "--target" "powerpc64le-unknown-linux-gnu"
+      "--program-prefix" "powerpc64le-unknown-linux-gnu-"
       "--disable-libstdcxx"
       "--disable-libquadmath"
       "--disable-elfcpp"

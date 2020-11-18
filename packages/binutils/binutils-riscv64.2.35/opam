@@ -8,6 +8,7 @@ build: [
     "./configure"
       "--prefix" prefix
       "--target" "riscv64-unknown-linux-gnu"
+      "--program-prefix" "riscv64-unknown-linux-gnu-"
       "--disable-libstdcxx"
       "--disable-libquadmath"
       "--disable-elfcpp"

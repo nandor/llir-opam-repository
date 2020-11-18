@@ -8,6 +8,7 @@ build: [
     "./configure"
       "--prefix" prefix
       "--target" "x86_64-unknown-linux-gnu"
+      "--program-prefix" "x86_64-unknown-linux-gnu-"
       "--disable-libstdcxx"
       "--disable-libquadmath"
       "--disable-elfcpp"
