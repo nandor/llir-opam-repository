@@ -8,8 +8,8 @@ depends: [
   "ocaml-config"
   ( "ocaml-variants-x86_64"
   | "ocaml-variants-arm64"
-  | "ocaml-variants-ppc64"
-  | "ocaml-variants-riscv64"
+  | "ocaml-variants-power"
+  | "ocaml-variants-riscv"
   )
 ]
 setenv: [

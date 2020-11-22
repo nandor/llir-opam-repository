@@ -1,0 +1,58 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-llvm"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Chris Lattner" "Vikram Adve"]
+license: "apache"
+build: [
+  [ "mkdir" "Release" ]
+  [
+    "cmake" "compiler-rt"
+      "-B" "Release"
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DLLVM_CONFIG_PATH=%{prefix}%/bin/llvm-config"
+      "-DCMAKE_C_COMPILER=%{prefix}%/bin/llir_riscv64-unknown-linux-musl-gcc"
+      "-DCMAKE_ASM_COMPILER=%{prefix}%/bin/llir_riscv64-unknown-linux-musl-gcc"
+      "-DCMAKE_AR=%{prefix}%/bin/llir_riscv64-unknown-linux-musl-ar"
+      "-DCMAKE_NM=%{prefix}%/bin/llir_riscv64-unknown-linux-musl-nm"
+      "-DCMAKE_RANLIB=%{prefix}%/bin/llir_riscv64-unknown-linux-musl-ranlib"
+      "-DCMAKE_C_COMPILER_TARGET=llir_riscv64-unknown-musl-linux"
+      "-DCMAKE_ASM_COMPILER_TARGET=llir_riscv64-unknown-musl-linux"
+      "-DCMAKE_C_FLAGS='-nostdlib -nostdinc -O2'"
+      "-DCMAKE_CXX_FLAGS='-nostdlib -nostdinc -O2'"
+      "-DCMAKE_ASM_FLAGS='-nostdlib -nostdinc'"
+      "-DCMAKE_INSTALL_PREFIX=%{prefix}%/llvm/lib/clang/12.0.0"
+      "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
+      "-DCOMPILER_RT_BUILD_BUILTINS=ON"
+      "-DCOMPILER_RT_BUILD_CRT=OFF"
+      "-DCOMPILER_RT_CRT_USE_EH_FRAME_REGISTRY=OFF"
+      "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+      "-DCOMPILER_RT_BUILD_XRAY=OFF"
+      "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+      "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+      "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
+      "-DCOMPILER_RT_BUILD_XRAY_NO_PREINIT=OFF"
+      "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+      "-DCOMPILER_RT_EMULATOR='qemu-riscv64'" {with-test}
+      "-DCOMPILER_RT_INCLUDE_TESTS=ON" {with-test}
+      "-DCOMPILER_RT_TEST_COMPILER='%{prefix}%/bin/llir_riscv64-unknown-linux-gcc'" {with-test}
+      "-DCOMPILER_RT_TEST_COMPILER_CFLAGS='-O2'" {with-test}
+  ]
+  [ make "-j" jobs "-C" "Release" ]
+]
+install: [
+  [ make "-j" jobs "-C" "Release" "install" ]
+]
+depends: [
+  "conf-cmake" {build}
+  "llir-llvm" {= "0.0.1"}
+  "llir-opt" {= "0.0.1"}
+  "binutils-riscv"
+]
+synopsis: "compiler-rt for LLIR"
+description: "This package install compiler-rt for LLIR"
+url {
+  src: "https://github.com/nandor/llir-llvm/archive/0.0.1.tar.gz"
+  checksum: "md5=5af579874495e0906402cb3526fea152"
+}
+
