@@ -123,3 +123,62 @@ index fc52ca5..b6a1c81 100644
     OPT: -print -print-libc
     OPT: -load-module @PTEST_DIR@/check_parsing_individual_headers
     OPT: -load-module @PTEST_DIR@/check_libc_anonymous_tags
+diff --git a/tests/misc/pragma-pack.c b/tests/misc/pragma-pack.c
+index 4d81f06..5ab3a2a 100644
+--- a/tests/misc/pragma-pack.c
++++ b/tests/misc/pragma-pack.c
+@@ -1,6 +1,6 @@
+ /*run.config
+   STDOPT: #"-machdep gcc_x86_64 -kernel-msg-key typing:pragma"
+-  STDOPT: #"-cpp-command=\"gcc -E -C -I. -m32\" -cpp-frama-c-compliant"
++  STDOPT: #"-cpp-command=\" $CC -E -C -I. -m32\" -cpp-frama-c-compliant"
+   STDOPT: #"-machdep msvc_x86_64"
+  */
+ 
+diff --git a/tests/spec/preprocess_string.c b/tests/spec/preprocess_string.c
+index 36ad972..664cbbf 100644
+--- a/tests/spec/preprocess_string.c
++++ b/tests/spec/preprocess_string.c
+@@ -1,5 +1,5 @@
+ /* run.config
+-   STDOPT: +"-cpp-command \"gcc -C -E -I. -Wno-comment\""
++   STDOPT: +"-cpp-command \" $CC -C -E -I. -Wno-comment\""
+  */
+ 
+ /*@ ensures "/*"[0] == '/'; */
+diff --git a/tests/syntax/bts0519.c b/tests/syntax/bts0519.c
+index 9c17131..1699449 100644
+--- a/tests/syntax/bts0519.c
++++ b/tests/syntax/bts0519.c
+@@ -1,6 +1,6 @@
+ /* run.config
+-   STDOPT: +"-cpp-command='gcc -C -E -I.'" +"-cpp-frama-c-compliant"
+-   STDOPT: +"-cpp-command='gcc -C -E -I. -DERR'" +"-cpp-frama-c-compliant"
++   STDOPT: +"-cpp-command=' $CC -C -E -I.'" +"-cpp-frama-c-compliant"
++   STDOPT: +"-cpp-command=' $CC -C -E -I. -DERR'" +"-cpp-frama-c-compliant"
+  */
+ 
+ int t[4];
+diff --git a/tests/syntax/preprocessed.ci b/tests/syntax/preprocessed.ci
+index 57aaaec..f79675c 100644
+--- a/tests/syntax/preprocessed.ci
++++ b/tests/syntax/preprocessed.ci
+@@ -1,5 +1,5 @@
+ /* run.config
+-OPT: -cpp-command="gcc -C -E -DFOO=42" -print
++OPT: -cpp-command=" $CC -C -E -DFOO=42" -print
+ */
+ 
+ /*@ ensures \result == FOO; */
+diff --git a/tests/value/enum2.c b/tests/value/enum2.c
+index 9435078..417db35 100644
+--- a/tests/value/enum2.c
++++ b/tests/value/enum2.c
+@@ -1,6 +1,6 @@
+ /* run.config*
+   GCC:
+-  STDOPT: #"-cpp-frama-c-compliant -cpp-command \"gcc -C -E -I. %1 -o %2\""
++  STDOPT: #"-cpp-frama-c-compliant -cpp-command \" $CC -C -E -I. %1 -o %2\""
+ */
+ 
+ /* This test of enums doubles with a test of the % syntax in -cpp-command */
