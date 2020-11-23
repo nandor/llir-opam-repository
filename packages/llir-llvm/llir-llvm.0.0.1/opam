@@ -20,6 +20,8 @@ build: [
     "-DLLVM_ENABLE_PROJECTS=clang"
     "-DCLANG_LINKS_TO_CREATE="
     "-DCLANG_RESOURCE_DIR=../lib/clang/12.0.0"
+    "-DCMAKE_C_COMPILER=gcc"
+    "-DCMAKE_CXX_COMPILER=g++"
   ]
   [ make "-j" jobs "-C" "Release" ]
 ]

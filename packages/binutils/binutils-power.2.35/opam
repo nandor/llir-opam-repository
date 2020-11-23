@@ -22,6 +22,8 @@ build: [
       "--disable-libdecnumber"
       "--disable-zlib"
       "--disable-intl"
+      "CC=gcc"
+      "CXX=g++"
   ]
   [
     make "-j%{jobs}%"
