@@ -9,6 +9,7 @@ build: [
     "./configure"
       "--prefix=%{prefix}%"
       "--target=llir_powerpc64le-unknown-linux-musl"
+      "CFLAGS=-mlong-double-64"
   ]
   [ make "-j" jobs ]
 ]
@@ -22,6 +23,7 @@ depends: [
 ]
 setenv: [
   [ AR = "llir_powerpc64le-unknown-linux-musl-ar" ]
+  [ CFLAGS = "-mlong-double-64" ]
   [ RANLIB = "llir_powerpc64le-unknown-linux-musl-ranlib" ]
   [ LD = "llir_powerpc64le-unknown-linux-musl-ld" ]
   [ CC = "llir_powerpc64le-unknown-linux-musl-gcc" ]
