@@ -10,6 +10,8 @@ build: [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_DIR=%{prefix}%/llvm/lib/cmake/llvm"
     "-DCMAKE_INSTALL_PREFIX=%{prefix}%"
+    "-DCMAKE_C_COMPILER=gcc"
+    "-DCMAKE_CXX_COMPILER=g++"
   ]
   [ make "-j" jobs ]
   [ "./test.py" ] { with-test }
