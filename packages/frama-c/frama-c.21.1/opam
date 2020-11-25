@@ -146,7 +146,7 @@ messages: [
 ]
 
 extra-files: [
-  [ "build-llir.patch" "md5=c8ec8e2eccfcc03ad6e48fd2fcdc7dc9" ]
+  [ "build-llir.patch" "md5=c190942fdc2eb7bbf391fc1e0e7af68f" ]
 ]
 
 patches: [ "build-llir.patch" ]
