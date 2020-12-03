@@ -1,0 +1,244 @@
+diff --git a/bindings/cpu_x86_64.h b/bindings/cpu_x86_64.h
+index ceb5189..e38e05f 100644
+--- a/bindings/cpu_x86_64.h
++++ b/bindings/cpu_x86_64.h
+@@ -171,14 +171,21 @@ struct trap_regs {
+
+ static inline uint64_t cpu_rdtsc(void)
+ {
++#ifdef __llir__
++    return __rdtsc();
++#else
+     unsigned long l, h;
+
+     __asm__ __volatile__("rdtsc" : "=a"(l), "=d"(h));
+     return ((uint64_t)h << 32) | l;
++#endif
+ }
+
+ static inline uint64_t mul64_32(uint64_t a, uint32_t b, uint8_t s)
+ {
++#ifdef __llir__
++    return (a * b) >> s;
++#else
+     uint64_t prod;
+
+     __asm__ (
+@@ -189,46 +196,84 @@ static inline uint64_t mul64_32(uint64_t a, uint32_t b, uint8_t s)
+     );
+
+     return prod;
++#endif
+ }
+
+ /* accessing devices via port space */
+
+ static inline void outb(uint16_t port, uint8_t v)
+ {
++#ifdef __llir__
++    (void) port;
++    (void) v;
++    __builtin_trap();
++#else
+     __asm__ __volatile__("outb %0,%1" : : "a" (v), "dN" (port));
++#endif
+ }
+ static inline void outw(uint16_t port, uint16_t v)
+ {
++#ifdef __llir__
++    (void) port;
++    (void) v;
++    __builtin_trap();
++#else
+     __asm__ __volatile__("outw %0,%1" : : "a" (v), "dN" (port));
++#endif
+ }
+ static inline void outl(uint16_t port, uint32_t v)
+ {
++#ifdef __llir__
++    (void) port;
++    (void) v;
++    __builtin_trap();
++#else
+     __asm__ __volatile__("outl %0,%1" : : "a" (v), "dN" (port));
++#endif
+ }
+ static inline uint8_t inb(uint16_t port)
+ {
++#ifdef __llir__
++    (void) port;
++    __builtin_trap();
++#else
+     uint8_t v;
+
+     __asm__ __volatile__("inb %1,%0" : "=a" (v) : "dN" (port));
+     return v;
++#endif
+ }
+ static inline uint16_t inw(uint16_t port)
+ {
++#ifdef __llir__
++    (void) port;
++    __builtin_trap();
++#else
+     uint16_t v;
+
+     __asm__ __volatile__("inw %1,%0" : "=a" (v) : "dN" (port));
+     return v;
++#endif
+ }
+ static inline uint32_t inl(uint16_t port)
+ {
++#ifdef __llir__
++    (void) port;
++    __builtin_trap();
++#else
+     uint32_t v;
+
+     __asm__ __volatile__("inl %1,%0" : "=a" (v) : "dN" (port));
+     return v;
++#endif
+ }
+
+ static inline uint64_t inq(uint16_t port_lo)
+ {
++#ifdef __llir__
++    (void) port_lo;
++    __builtin_trap();
++#else
+     uint16_t port_hi = port_lo + 4;
+     uint32_t lo, hi;
+
+@@ -236,21 +281,35 @@ static inline uint64_t inq(uint16_t port_lo)
+     __asm__ __volatile__("inl %1,%0" : "=a" (hi) : "dN" (port_hi));
+
+     return ((uint64_t)lo) | ((uint64_t)hi << 32);
++#endif
+ }
+
+ static inline void cpu_set_tls_base(uint64_t base)
+ {
++#ifdef __llir__
++    (void) base;
++    __builtin_trap();
++#else
+      __asm__ __volatile("wrmsr" ::
+          "c" (0xc0000100), /* IA32_FS_BASE */
+          "a" ((uint32_t)(base)),
+          "d" ((uint32_t)(base >> 32))
+      );
++#endif
+ }
+
+ static inline void
+ x86_cpuid(uint32_t level, uint32_t *eax_out, uint32_t *ebx_out,
+         uint32_t *ecx_out, uint32_t *edx_out)
+ {
++#ifdef __llir__
++    (void) level;
++    (void) eax_out;
++    (void) ebx_out;
++    (void) ecx_out;
++    (void) edx_out;
++    __builtin_trap();
++#else
+     uint32_t eax_, ebx_, ecx_, edx_;
+
+     __asm__(
+@@ -262,6 +321,7 @@ x86_cpuid(uint32_t level, uint32_t *eax_out, uint32_t *ebx_out,
+     *ebx_out = ebx_;
+     *ecx_out = ecx_;
+     *edx_out = edx_;
++#endif
+ }
+
+ #endif /* !ASM_FILE */
+diff --git a/configure.sh b/configure.sh
+index f4f970e..fbf37a7 100755
+--- a/configure.sh
++++ b/configure.sh
+@@ -40,6 +40,11 @@ cc_is_clang()
+     ${CC} -dM -E - </dev/null | grep -Eq '^#define __clang__ 1$'
+ }
+
++cc_is_llir()
++{
++    ${CC} -dM -E - </dev/null | grep -Eq '^#define __llir__ 1$'
++}
++
+ cc_has_pie()
+ {
+     ${CC} -dM -E - </dev/null | grep -Eq '^#define __PIE__ [1-9]$'
+@@ -111,7 +116,7 @@ get_header_deps()
+ config_host_linux()
+ {
+     # On Linux/gcc we use -nostdinc and copy all the gcc-provided headers.
+-    cc_is_gcc || die "Only 'gcc' 4.x+ is supported on Linux"
++    cc_is_gcc || cc_is_llir || die "Only 'gcc' 4.x+ is supported on Linux"
+     CC_INCDIR=$(${CC} -print-file-name=include)
+     [ -d "${CC_INCDIR}" ] || die "Cannot determine gcc include directory"
+     mkdir -p ${HOST_INCDIR}
+@@ -276,15 +281,15 @@ CC_MACHINE=$(${CC} -dumpmachine)
+     die "Could not run '${CC} -dumpmachine', is your compiler working?"
+ # Determine HOST and ARCH based on what the toolchain reports.
+ case ${CC_MACHINE} in
+-    x86_64-*linux*)
++    x86_64-*linux*|llir_x86_64-*linux*)
+         CONFIG_ARCH=x86_64 CONFIG_HOST=Linux
+         CONFIG_GUEST_PAGE_SIZE=0x1000
+         ;;
+-    aarch64-*linux*)
++    aarch64-*linux*|llir_aarch64-*linux*)
+         CONFIG_ARCH=aarch64 CONFIG_HOST=Linux
+         CONFIG_GUEST_PAGE_SIZE=0x1000
+         ;;
+-    powerpc64le-*linux*|ppc64le-*linux*)
++    powerpc64le-*linux*|ppc64le-*linux*|llir_powerpc64le-*linux*)
+         CONFIG_ARCH=ppc64le CONFIG_HOST=Linux
+         CONFIG_GUEST_PAGE_SIZE=0x10000
+         ;;
+@@ -341,7 +346,7 @@ esac
+ # GNU make. Given the differences in quoting rules between the two
+ # (unable to sensibly use VAR="VALUE"), our convention is as follows:
+ #
+-# 1. GNU make parses the entire file, i.e. all variables defined below are
++# 1. GNU make parses the entire file, i.e. all variables defined below are
+ #    available to Makefiles.
+ #
+ # 2. Shell scripts parse the subset of *lines* starting with "CONFIG_". I.e.
+diff --git a/include/solo5/elf_abi.h b/include/solo5/elf_abi.h
+index 28090dd..d28c8f3 100644
+--- a/include/solo5/elf_abi.h
++++ b/include/solo5/elf_abi.h
+@@ -133,10 +133,14 @@ __attribute__ ((section (".note.solo5.abi"), aligned(4))) \
+  * presence of a valid ELF executable at "/nonexistent/solo5".
+  *
+  */
++#ifdef __llir__
++#define DECLARE_ELF_INTERP
++#else
+ #define DECLARE_ELF_INTERP \
+ const char __fake_interp[24] \
+ __attribute__ ((section (".interp"), aligned(8))) \
+ = "/nonexistent/solo5/";
++#endif
+
+ /*
+  * This is the format of an OpenBSD "identification" NOTE (see elf(5) and
+@@ -166,6 +170,9 @@ struct openbsd_note {
+  * the "pretend to be an OpenBSD executable" NOTE must go in the *first*
+  * PT_NOTE.  See the linker scripts for that.
+  */
++#ifdef __llir__
++#define DECLARE_OPENBSD_NOTE
++#else
+ #define DECLARE_OPENBSD_NOTE \
+ const struct openbsd_note __solo5_openbsd_note \
+ __attribute__ ((section (".note.solo5.not-openbsd"), aligned(4))) \
+@@ -176,5 +183,6 @@ __attribute__ ((section (".note.solo5.not-openbsd"), aligned(4))) \
+     .n_name = "OpenBSD", \
+     .data = 0 \
+ };
++#endif
+
+ #endif /* ELF_ABI_H */

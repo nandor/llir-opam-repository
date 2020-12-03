@@ -1,0 +1,13 @@
+opam-version: "2.0"
+maintainer: "opam-devel@lists.ocaml.org"
+authors: "OCaml contributors"
+homepage: "http://ocaml.org/"
+install: ["cp" "-r" "." "%{lib}%/ocaml-src"]
+synopsis: "Compiler sources"
+depends: [
+  "ocaml" {= "4.11.1"}
+]
+extra-files: ["META" "md5=4103c507eb4d1b35ed58d20ac32888e3"]
+url {
+  src: "git+https://github.com/nandor/llir-ocaml"
+}

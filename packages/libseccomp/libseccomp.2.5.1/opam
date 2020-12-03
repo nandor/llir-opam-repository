@@ -5,7 +5,7 @@ bug-reports: "https://github.com/seccomp/libseccomp/issues"
 authors: ["libseccomp contributors"]
 license: "zlib"
 build: [
-  [ "./configure" "--prefix" prefix]
+  [ "./configure" "--prefix" prefix "--with-gnu-ld"]
   [ make "-j%{jobs}%" ]
   [ make "test" ] {with-test}
 ]
