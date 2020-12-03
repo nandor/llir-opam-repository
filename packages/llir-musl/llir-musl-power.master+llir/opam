@@ -22,11 +22,12 @@ depends: [
   "llir-compiler-rt-power" {= version}
 ]
 setenv: [
-  [ AR = "llir_powerpc64le-unknown-linux-musl-ar" ]
   [ CFLAGS = "-mlong-double-64" ]
-  [ RANLIB = "llir_powerpc64le-unknown-linux-musl-ranlib" ]
   [ LD = "llir_powerpc64le-unknown-linux-musl-ld" ]
   [ CC = "llir_powerpc64le-unknown-linux-musl-gcc" ]
+  [ AR = "llir_powerpc64le-unknown-linux-musl-ar" ]
+  [ RANLIB = "llir_powerpc64le-unknown-linux-musl-ranlib" ]
+  [ OBJCOPY = "llir_powerpc64le-unknown-linux-musl-objcopy" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

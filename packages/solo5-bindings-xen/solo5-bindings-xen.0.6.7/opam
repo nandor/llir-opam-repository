@@ -30,12 +30,6 @@ available: [
   (arch = "x86_64") &
   (os = "linux" | os = "freebsd" | os = "openbsd")
 ]
-
-extra-files: [
-  [ "llir.patch" "md5=e8f16d4efeb39da3779f4558afaf3531" ]
-]
-patches: "llir.patch"
-
 synopsis: "Solo5 sandboxed execution environment (xen target)"
 description: """
 Solo5 is a sandboxed execution environment primarily intended
@@ -48,6 +42,5 @@ run MirageOS unikernels on the "xen" target.
 The "xen" target is supported on 64-bit Linux, FreeBSD and
 OpenBSD systems with hardware virtualization."""
 url {
-  src: "https://github.com/Solo5/solo5/releases/download/v0.6.7/solo5-v0.6.7.tar.gz"
-  checksum: "sha512=f651824fa131d1676e8449e734260c6b9515fc47fd9335f9b8a24498ccd1283d3c1cd512e3009c89fe99eb70204e9adff0858440694a1f937afc78f09b73cdc7"
+  src: "git+https://github.com/nandor/llir-solo5"
 }

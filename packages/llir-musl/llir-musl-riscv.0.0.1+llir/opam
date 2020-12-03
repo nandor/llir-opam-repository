@@ -21,10 +21,11 @@ depends: [
   "llir-compiler-rt-riscv" {= version}
 ]
 setenv: [
-  [ AR = "llir_riscv64-unknown-linux-musl-ar" ]
-  [ RANLIB = "llir_riscv64-unknown-linux-musl-ranlib" ]
   [ LD = "llir_riscv64-unknown-linux-musl-ld" ]
   [ CC = "llir_riscv64-unknown-linux-musl-gcc" ]
+  [ AR = "llir_riscv64-unknown-linux-musl-ar" ]
+  [ RANLIB = "llir_riscv64-unknown-linux-musl-ranlib" ]
+  [ OBJCOPY = "llir_riscv64-unknown-linux-musl-objcopy" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

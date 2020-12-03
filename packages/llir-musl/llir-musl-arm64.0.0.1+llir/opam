@@ -21,10 +21,11 @@ depends: [
   "llir-compiler-rt-arm64" {= version}
 ]
 setenv: [
+  [ CC = "llir_aarch64-unknown-linux-musl-gcc" ]
+  [ LD = "llir_aarch64-unknown-linux-musl-ld" ]
   [ AR = "llir_aarch64-unknown-linux-musl-ar" ]
   [ RANLIB = "llir_aarch64-unknown-linux-musl-ranlib" ]
-  [ LD = "llir_aarch64-unknown-linux-musl-ld" ]
-  [ CC = "llir_aarch64-unknown-linux-musl-gcc" ]
+  [ OBJCOPY = "llir_aarch64-unknown-linux-musl-objcopy" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"
