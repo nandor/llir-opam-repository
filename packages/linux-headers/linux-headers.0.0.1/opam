@@ -1,0 +1,14 @@
+opam-version: "2.0"
+synopsis: "linux-headers virtual package"
+description: """Provides the correct linux-headers as a dependency"""
+maintainer: "platform@lists.ocaml.org"
+authors: [ "Nandor Licker <n@ndor.email>" ]
+homepage: "https://github.com/nandor/llir-opam-repository"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+depends: [
+  ( "linux-headers-arm64"
+  | "linux-headers-amd64"
+  | "linux-headers-power"
+  | "linux-headers-x86_64"
+  )
+]

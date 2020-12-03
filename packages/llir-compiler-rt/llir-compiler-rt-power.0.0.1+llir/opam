@@ -47,6 +47,7 @@ depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "0.0.1"}
   "llir-opt" {= "0.0.1"}
+  "linux-headers-power" {= "0.0.1"}
   "binutils-power"
 ]
 synopsis: "compiler-rt for LLIR"

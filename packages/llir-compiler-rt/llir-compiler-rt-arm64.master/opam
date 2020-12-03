@@ -49,6 +49,7 @@ depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}
   "llir-opt" {= "master"}
+  "linux-headers-arm64" {= "master"}
   "binutils-arm64"
 ]
 synopsis: "compiler-rt for LLIR"

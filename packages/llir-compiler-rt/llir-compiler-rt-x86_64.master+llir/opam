@@ -47,7 +47,7 @@ depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}
   "llir-opt" {= "master"}
-  "binutils-x86_64"
+  "binutils-amd64"
 ]
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"

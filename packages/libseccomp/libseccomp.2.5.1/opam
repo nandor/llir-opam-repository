@@ -1,0 +1,23 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/seccomp/libseccomp/"
+bug-reports: "https://github.com/seccomp/libseccomp/issues"
+authors: ["libseccomp contributors"]
+license: "zlib"
+build: [
+  [ "./configure" "--prefix" prefix]
+  [ make "-j%{jobs}%" ]
+  [ make "test" ] {with-test}
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "linux-headers"
+  "ocaml"
+]
+synopsis: "libseccomp compiler for llir"
+url {
+  src: "https://github.com/seccomp/libseccomp/releases/download/v2.5.1/libseccomp-2.5.1.tar.gz"
+  checksum: "md5=59f5563c532d3fa1df9db0516b36b1cd"
+}
