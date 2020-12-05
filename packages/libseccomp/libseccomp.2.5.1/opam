@@ -7,7 +7,6 @@ license: "zlib"
 build: [
   [ "./configure" "--prefix" prefix "--with-gnu-ld"]
   [ make "-j%{jobs}%" ]
-  [ make "test" ] {with-test}
 ]
 install: [
   [ make "install" ]

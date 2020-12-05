@@ -1,0 +1,159 @@
+diff --git a/lib/bindings/bindings.h b/lib/bindings/bindings.h
+index 672d82f..ea6ddb5 100644
+--- a/lib/bindings/bindings.h
++++ b/lib/bindings/bindings.h
+@@ -35,6 +35,26 @@ void gnttab_init(void);
+ #define PAGE_SIZE  4096
+ #define PAGE_SHIFT 12
+ 
++#ifdef __llir__
++
++#define cpu_cli() __builtin_trap()
++#define cpu_sti() __builtin_trap()
++
++/*
++ * "wait for interrupt". On x86, must be called with interrupts disabled for
++ * this operation to be race-free.
++ */
++#define cpu_wfi() __builtin_trap()
++
++/* compiler-only memory "barrier" */
++#define cc_barrier() __builtin_trap()
++
++#define cpu_barrier() __builtin_trap()
++#define cpu_read_barrier() __builtin_trap()
++#define cpu_write_barrier() __builtin_trap()
++
++#else
++
+ #define cpu_cli() __asm__ __volatile__("cli")
+ #define cpu_sti() __asm__ __volatile__("sti")
+ 
+@@ -51,6 +71,8 @@ void gnttab_init(void);
+ #define cpu_read_barrier() __asm__ __volatile__("lfence" : : : "memory")
+ #define cpu_write_barrier() __asm__ __volatile__("sfence" : : : "memory")
+ 
++#endif
++
+ /*
+  * Atomically test-and-set bit (nr) in (*bits). Fully synchronous.
+  */
+diff --git a/lib/bindings/hypercall-x86_64.h b/lib/bindings/hypercall-x86_64.h
+index 324d493..64cc374 100644
+--- a/lib/bindings/hypercall-x86_64.h
++++ b/lib/bindings/hypercall-x86_64.h
+@@ -49,16 +49,78 @@
+ #define __XEN_HYPERCALL_X86_64_H__
+ 
+ /*
+- * Hypercall primatives for 64bit
++ * Hypercall primitives for 64bit
+  *
+  * Inputs: %rdi, %rsi, %rdx, %r10, %r8, %r9 (arguments 1-6)
+  */
++#ifdef __llir__
++
++#define _hypercall64_1(type, hcall, a1)                                 \
++    ({                                                                  \
++        extern const uint8_t HYPERCALL_PAGE[PAGE_SIZE];                 \
++        int64_t __res;                                                  \
++        __asm__ __volatile__ (                                          \
++            "call.i64.xen %0, %1, %2"                                   \
++            : "=r" (__res)                                              \
++            : "r" ((uintptr_t)HYPERCALL_PAGE + hcall * 32),             \
++              "r" ((long)(a1))                                          \
++            : "memory" );                                               \
++        (type)__res;                                                    \
++    })
++
++#define _hypercall64_2(type, hcall, a1, a2)                             \
++    ({                                                                  \
++        extern const uint8_t HYPERCALL_PAGE[PAGE_SIZE];                 \
++        int64_t __res;                                                  \
++        __asm__ __volatile__ (                                          \
++            "call.i64.xen %0, %1, %2, %3"                               \
++            : "=r" (__res)                                              \
++            : "r" ((uintptr_t)HYPERCALL_PAGE + hcall * 32),             \
++              "r" ((long)(a1)),                                         \
++              "r" ((long)(a2))                                          \
++            : "memory" );                                               \
++        (type)__res;                                                    \
++    })
++
++#define _hypercall64_3(type, hcall, a1, a2, a3)                         \
++    ({                                                                  \
++        extern const uint8_t HYPERCALL_PAGE[PAGE_SIZE];                 \
++        int64_t __res;                                                  \
++        __asm__ __volatile__ (                                          \
++            "call.i64.xen %0, %1, %2, %3, %4"                           \
++            : "=r" (__res)                                              \
++            : "r" ((uintptr_t)HYPERCALL_PAGE + hcall * 32),             \
++              "r" ((long)(a1)),                                         \
++              "r" ((long)(a2)),                                         \
++              "r" ((long)(a3))                                          \
++            : "memory" );                                               \
++        (type)__res;                                                    \
++    })
++
++#define _hypercall64_4(type, hcall, a1, a2, a3, a4)                     \
++    ({                                                                  \
++        extern const uint8_t HYPERCALL_PAGE[PAGE_SIZE];                 \
++        int64_t __res;                                                  \
++        __asm__ __volatile__ (                                          \
++            "call.i64.xen %0, %1, %2, %3, %4, %5"                       \
++            : "=r" (__res)                                              \
++            : "r" ((uintptr_t)HYPERCALL_PAGE + hcall * 32),             \
++              "r" ((long)(a1)),                                         \
++              "r" ((long)(a2)),                                         \
++              "r" ((long)(a3)),                                         \
++              "r" ((long)(a4))                                          \
++            : "memory" );                                               \
++        (type)__res;                                                    \
++    })
++
++
++#else
+ 
+ #define _hypercall64_1(type, hcall, a1)                                 \
+     ({                                                                  \
+         long __res, __ign1;                                             \
+         __asm__ __volatile__ (                                          \
+-            "call solo5__xen_HYPERCALL_PAGE + %c[offset]"               \
++            "call HYPERCALL_PAGE + %c[offset]"                          \
+             : "=a" (__res), "=D" (__ign1)                               \
+             : [offset] "i" (hcall * 32),                                \
+               "1" ((long)(a1))                                          \
+@@ -70,7 +132,7 @@
+     ({                                                                  \
+         long __res, __ign1, __ign2;                                     \
+         __asm__ __volatile__ (                                          \
+-            "call solo5__xen_HYPERCALL_PAGE + %c[offset]"               \
++            "call HYPERCALL_PAGE + %c[offset]"                          \
+             : "=a" (__res), "=D" (__ign1), "=S" (__ign2)                \
+             : [offset] "i" (hcall * 32),                                \
+               "1" ((long)(a1)), "2" ((long)(a2))                        \
+@@ -82,7 +144,7 @@
+     ({                                                                  \
+         long __res, __ign1, __ign2, __ign3;                             \
+         __asm__ __volatile__ (                                          \
+-            "call solo5__xen_HYPERCALL_PAGE + %c[offset]"               \
++            "call HYPERCALL_PAGE + %c[offset]"                          \
+             : "=a" (__res), "=D" (__ign1), "=S" (__ign2), "=d" (__ign3) \
+             : [offset] "i" (hcall * 32),                                \
+               "1" ((long)(a1)), "2" ((long)(a2)), "3" ((long)(a3))      \
+@@ -95,7 +157,7 @@
+         long __res, __ign1, __ign2, __ign3, __ign4;                     \
+         register long _a4 __asm__ ("r10") = ((long)(a4));               \
+         __asm__ __volatile__ (                                          \
+-            "call solo5__xen_HYPERCALL_PAGE + %c[offset]"               \
++            "call HYPERCALL_PAGE + %c[offset]"                          \
+             : "=a" (__res), "=D" (__ign1), "=S" (__ign2), "=d" (__ign3),\
+               "=&r" (__ign4)                                            \
+             : [offset] "i" (hcall * 32),                                \
+@@ -105,4 +167,6 @@
+         (type)__res;                                                    \
+     })
+ 
++#endif /* __llir__ */
++
+ #endif /* __XEN_HYPERCALL_X86_64_H__ */

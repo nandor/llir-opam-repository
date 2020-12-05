@@ -15,6 +15,7 @@ build: [
 ]
 install: [make "V=1" "CONFIG_SPT=" "CONFIG_VIRTIO=" "CONFIG_MUEN=" "CONFIG_GENODE=" "CONFIG_XEN=" "install-opam-hvt" "PREFIX=%{prefix}%"]
 depends: [
+  "conf-pkg-config"
   "libseccomp" {build & os = "linux"}
 ]
 conflicts: [
