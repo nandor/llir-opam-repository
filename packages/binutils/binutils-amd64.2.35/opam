@@ -32,6 +32,7 @@ build: [
 install: [
   [ make "install" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-linux-musl-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-none-ld" ]
 ]
 synopsis: "GNU binutils"
 url {
