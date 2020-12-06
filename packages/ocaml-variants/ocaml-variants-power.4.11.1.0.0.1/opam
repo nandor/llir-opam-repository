@@ -27,6 +27,7 @@ build: [
       "CC=powerpc64le-unknown-linux-musl-clang"
       "AR=powerpc64le-unknown-linux-gnu-ar"
       "AS=powerpc64le-unknown-linux-gnu-as"
+      "ASPP=powerpc64le-unknown-linux-musl-clang -c -Wno-trigraphs"
       "RANLIB=powerpc64le-unknown-linux-gnu-ranlib"
       "PARTIALLD=powerpc64le-unknown-linux-gnu-ld -r"
   ]
