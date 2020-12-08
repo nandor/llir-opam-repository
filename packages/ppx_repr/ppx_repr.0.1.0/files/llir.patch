@@ -1,0 +1,13 @@
+diff --git a/src/ppx_repr/lib/engine.ml b/src/ppx_repr/lib/engine.ml
+index b0ccae9..b8733bd 100644
+--- a/src/ppx_repr/lib/engine.ml
++++ b/src/ppx_repr/lib/engine.ml
+@@ -266,7 +266,7 @@ module Located (Attributes : Attributes.S) (A : Ast_builder.S) : S = struct
+      pexp_desc =
+        Pexp_construct
+          ( { txt = Lident "Some"; _ },
+-           Some { pexp_desc = Pexp_constant (Pconst_string (lib, None)); _ } );
++           Some { pexp_desc = Pexp_constant (Pconst_string (lib, _, None)); _ } );
+      _;
+     } ->
+         Some lib

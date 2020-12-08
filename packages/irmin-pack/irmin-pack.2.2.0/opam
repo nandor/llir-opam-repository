@@ -1,11 +1,10 @@
 opam-version: "2.0"
 maintainer:   "thomas@gazagnaire.org"
-authors:      ["Thomas Gazagnaire" "Thomas Leonard"]
+authors:      ["Thomas Gazagnaire"]
 license:      "ISC"
 homepage:     "https://github.com/mirage/irmin"
 bug-reports:  "https://github.com/mirage/irmin/issues"
 dev-repo:     "git+https://github.com/mirage/irmin.git"
-doc:          "https://mirage.github.io/irmin/"
 
 build: [
  ["dune" "subst"] {pinned}
@@ -13,14 +12,15 @@ build: [
 ]
 
 depends: [
-  "ocaml"      {>= "4.03.0"}
+  "ocaml"      {>= "4.02.3"}
   "dune"       {>= "1.8.0"}
   "irmin"      {>= "2.2.0"}
-  "irmin-layers" {=version}
+  "index"      {>= "1.2.1"}
+  "lwt"
+  "irmin-layers"
 ]
 
-
-synopsis: "Generic in-memory Irmin stores"
+synopsis: "Irmin backend which stores values in a pack file"
 url {
   src: "git+https://github.com/mirage/irmin"
 }

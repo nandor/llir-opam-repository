@@ -1,6 +1,6 @@
 opam-version: "2.0"
 maintainer:   "thomas@gazagnaire.org"
-authors:      ["Thomas Gazagnaire" "Thomas Leonard"]
+authors:      "Thomas Gazagnaire"
 license:      "ISC"
 homepage:     "https://github.com/mirage/irmin"
 bug-reports:  "https://github.com/mirage/irmin/issues"
@@ -13,14 +13,16 @@ build: [
 ]
 
 depends: [
-  "ocaml"      {>= "4.03.0"}
-  "dune"       {>= "1.8.0"}
-  "irmin"      {>= "2.2.0"}
-  "irmin-layers" {=version}
+  "dune"       {>= "2.7.0"}
+  "irmin"      {= version}
+  "irmin-mem"  {= version}
+  "fmt"
+  "ptime"
+  "mirage-clock" {>= "3.0.0"}
 ]
 
+synopsis: "MirageOS-compatible Irmin stores"
 
-synopsis: "Generic in-memory Irmin stores"
 url {
   src: "git+https://github.com/mirage/irmin"
 }
