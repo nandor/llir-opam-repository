@@ -20,7 +20,6 @@ depends: [
   "mtime"
   "lwt"
   "metrics-lwt" {=version & with-test}
-  "conf-gnuplot"
 ]
 synopsis: "Unix backend for the Metrics library"
 url {
