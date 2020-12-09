@@ -43,6 +43,9 @@ build: [
 install: [
   [ make "-j" jobs "-C" "Release" "install" ]
 ]
+setenv: [
+  [ ARCH = "llir_powerpc64le" ]
+]
 depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}

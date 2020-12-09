@@ -45,6 +45,9 @@ build: [
 install: [
   [ make "-j" jobs "-C" "Release" "install" ]
 ]
+setenv: [
+  [ ARCH = "x86_64" ]
+]
 depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}

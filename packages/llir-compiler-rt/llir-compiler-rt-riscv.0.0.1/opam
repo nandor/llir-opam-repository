@@ -45,6 +45,9 @@ build: [
 install: [
   [ make "-j" jobs "-C" "Release" "install" ]
 ]
+setenv: [
+  [ ARCH = "riscv64" ]
+]
 depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "0.0.1"}

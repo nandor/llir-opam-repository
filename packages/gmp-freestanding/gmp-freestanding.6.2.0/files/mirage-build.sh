@@ -30,14 +30,19 @@ check_deps || exit 1
 # this during './configure' to prevent it complaining that the compiler does not
 # work, and reinstate it again during 'make'.
 #
-FREESTANDING_CFLAGS="$(pkg-config --cflags ${PKG_CONFIG_DEPS})"
-ac_cv_func_obstack_vprintf=no \
-ac_cv_func_localeconv=no \
-./configure \
-    --host=$(uname -m)-unknown-none --disable-fat --disable-shared --with-pic=no \
-    CC=cc "CPPFLAGS=${FREESTANDING_CFLAGS} -fno-stack-protector" --disable-assembly
+export CFLAGS="$(pkg-config --cflags ${PKG_CONFIG_DEPS}) ${CFLAGS}"
+export CC=$ARCH-unknown-none-gcc
+export HOST_CC=$ARCH-unknown-linux-musl-gcc
+export AR=$ARCH-unknown-none-ar
+export RANLIB=$ARCH-unknown-none-ranlib
+export DIRECTORIES="mpn mpz mpq mpf"
 
-make SUBDIRS="mpn mpz mpq mpf" \
-    PRINTF_OBJECTS= SCANF_OBJECTS= \
-    CPPFLAGS="${FREESTANDING_CFLAGS}" \
-    CFLAGS+=-Werror=implicit-function-declaration
+./configure --prefix `opam config var prefix`
+
+echo "#undef HAVE_NL_LANGINFO" >> config.h
+echo "#undef HAVE_LANGINFO_H" >> config.h
+echo "#undef HAVE_LOCALE_H" >> config.h
+echo "#undef HAVE_LOCALECONV" >> config.h
+echo "#undef HAVE_QUAD_T" >> config.h
+
+make
