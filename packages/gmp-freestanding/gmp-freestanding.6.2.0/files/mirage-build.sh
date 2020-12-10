@@ -45,4 +45,4 @@ echo "#undef HAVE_LOCALE_H" >> config.h
 echo "#undef HAVE_LOCALECONV" >> config.h
 echo "#undef HAVE_QUAD_T" >> config.h
 
-make
+make libgmp.a

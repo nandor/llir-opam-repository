@@ -21,7 +21,7 @@ description: "Freestanding build of GNU GMP."
 flags: light-uninstall
 extra-files: [
   ["mirage-install.sh" "md5=7312cc2daac7fa288302e0a15cc6b81c"]
-  ["mirage-build.sh" "md5=7c407c78ff2745ffa70bc8dd669729a1"]
+  ["mirage-build.sh" "md5=ded7be664f0b0c4f86ebf8547ef64307"]
   ["gmp-freestanding.pc" "md5=82797d0bc845c992c7324d9ef5521323"]
 ]
 url {
