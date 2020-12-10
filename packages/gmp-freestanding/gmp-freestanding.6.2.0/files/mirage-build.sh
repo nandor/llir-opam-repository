@@ -35,7 +35,7 @@ export CC=$ARCH-unknown-none-gcc
 export HOST_CC=$ARCH-unknown-linux-musl-gcc
 export AR=$ARCH-unknown-none-ar
 export RANLIB=$ARCH-unknown-none-ranlib
-export DIRECTORIES="mpn mpz mpq mpf"
+export DIRECTORIES="mpn mpz mpq mpf rand"
 
 ./configure --prefix `opam config var prefix`
 
