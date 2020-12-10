@@ -33,6 +33,8 @@ install: [
   [ make "install" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-linux-musl-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-none-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ar" "%{prefix}%/bin/x86_64-unknown-none-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ranlib" "%{prefix}%/bin/x86_64-unknown-none-ranlib" ]
 ]
 synopsis: "GNU binutils"
 url {

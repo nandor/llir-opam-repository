@@ -32,6 +32,9 @@ build: [
 install: [
   [ make "install" ]
   [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld" "%{prefix}%/bin/powerpc64le-unknown-none-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ar" "%{prefix}%/bin/powerpc64le-unknown-none-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ranlib" "%{prefix}%/bin/powerpc64le-unknown-none-ranlib" ]
 ]
 synopsis: "GNU binutils"
 url {

@@ -38,6 +38,8 @@ install: [
   # X86_64 Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-none-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-linux-musl-g++" ]
@@ -50,6 +52,8 @@ install: [
   # AArch64 Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-none-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-linux-musl-g++" ]
@@ -62,6 +66,8 @@ install: [
   # PowerPC Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-none-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-linux-musl-g++" ]
@@ -74,6 +80,8 @@ install: [
   # RISC-V Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-none-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-linux-musl-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-linux-musl-g++" ]

@@ -32,6 +32,9 @@ build: [
 install: [
   [ make "install" ]
   [ "ln" "-s" "%{prefix}%/bin/riscv64-unknown-linux-gnu-ld" "%{prefix}%/bin/riscv64-unknown-linux-musl-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/riscv64-unknown-linux-gnu-ld" "%{prefix}%/bin/riscv64-unknown-none-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/riscv64-unknown-linux-gnu-ar" "%{prefix}%/bin/riscv64-unknown-none-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/riscv64-unknown-linux-gnu-ranlib" "%{prefix}%/bin/riscv64-unknown-none-ranlib" ]
 ]
 synopsis: "GNU binutils"
 url {
