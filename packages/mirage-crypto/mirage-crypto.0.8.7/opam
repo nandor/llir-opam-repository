@@ -41,3 +41,8 @@ url {
     "sha512=e8c3f57e868361b16014666e95dbadbd22cf9295a168c61e2ab278333d79039772407468154b3a88662bb47b49b199a45b568a5d04054b445cf4e065cb448809"
   ]
 }
+extra-files: [
+  [ "llir.patch" "md5=dceb271e35422efa41c7823b718463a3" ]
+]
+patches: "llir.patch"
+
