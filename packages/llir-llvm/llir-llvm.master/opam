@@ -22,6 +22,7 @@ build: [
     "-DCLANG_RESOURCE_DIR=../lib/clang/12.0.0"
     "-DCMAKE_C_COMPILER=gcc"
     "-DCMAKE_CXX_COMPILER=g++"
+    "-DLLVM_ENABLE_ASSERTIONS=ON"
   ]
   [ make "-j" jobs "-C" "Release" ]
 ]
