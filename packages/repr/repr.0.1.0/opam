@@ -39,5 +39,5 @@ build: [
 dev-repo: "git+https://github.com/mirage/repr.git"
 x-commit-hash: "d8f03cd243cf92c6e4a6ec760f33e0bc23dd982e"
 url {
-  src: "git+https://github.com/mirage/repr"
+  src: "git+https://github.com/mirage/repr#d8f03cd243cf92c6e4a6ec760f33e0bc23dd982e"
 }
