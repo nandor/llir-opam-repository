@@ -28,9 +28,6 @@ depends: [
   "crowbar" {with-test}
   "re" {with-test}
   "stdlib-shims"
-  "semaphore-compat"
-  "ppx_repr"
-  "progress"
 ]
 synopsis: "A platform-agnostic multi-level index for OCaml"
 description:"""
@@ -44,5 +41,10 @@ run-time shares a common singleton instance.
 Index supports multiple-reader/single-writer access. Concurrent access
 is safely managed using lock files."""
 url {
-  src: "git+https://github.com/mirage/index"
+  src:
+    "https://github.com/mirage/index/releases/download/1.2.1/index-1.2.1.tbz"
+  checksum: [
+    "sha256=cd80c43fd046b3d405b567eed237ad25450140e931d1eef5015ee6af74362ba9"
+    "sha512=1f9a7f02309450c0c64b2b92ef1ef367b10fae65af7ff451976c8fef7c88929527e4561bea8360e9dd34af50187c816f1ab716e234d24a81b43ca718e0b52ee2"
+  ]
 }
