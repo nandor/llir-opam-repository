@@ -16,6 +16,7 @@ build: [
     "-DLLVM_ENABLE_BINDINGS=OFF"
     "-DLLVM_ENABLE_OCAMLDOC=OFF"
     "-DLLVM_ENABLE_TOOLS=ON"
+    "-DLLVM_INSTALL_UTILS=ON"
     "-DDEFAULT_SYSROOT=%{prefix}%"
     "-DLLVM_ENABLE_PROJECTS=clang"
     "-DCLANG_LINKS_TO_CREATE="
@@ -36,6 +37,7 @@ install: [
   # Add links to utilities.
   [ "ln" "-s" "%{prefix}%/llvm/bin/llvm-config" "%{prefix}%/bin/llvm-config" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llvm-symbolizer" "%{prefix}%/bin/llvm-symbolizer" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/llvm-dwp" "%{prefix}%/bin/llvm-dwp" ]
   # X86_64 Linux
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-linux-g++" ]
