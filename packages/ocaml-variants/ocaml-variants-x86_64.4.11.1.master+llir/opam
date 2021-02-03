@@ -15,6 +15,7 @@ depends: [
   "llir-opt" {= "master"}
   "llir-musl-x86_64" {= "master+llir"}
   "llir-compiler-rt-x86_64" {= "master+llir"}
+  "llir-libunwind-x86_64" {= "master+llir"}
 ]
 conflict-class: "ocaml-core-compiler"
 flags: compiler

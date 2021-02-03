@@ -18,12 +18,15 @@ build: [
     "-DLLVM_ENABLE_TOOLS=ON"
     "-DLLVM_INSTALL_UTILS=ON"
     "-DDEFAULT_SYSROOT=%{prefix}%"
-    "-DLLVM_ENABLE_PROJECTS=clang"
+    "-DLLVM_ENABLE_PROJECTS=clang;libunwind"
     "-DCLANG_LINKS_TO_CREATE="
     "-DCLANG_RESOURCE_DIR=../lib/clang/12.0.0"
     "-DCMAKE_C_COMPILER=gcc"
     "-DCMAKE_CXX_COMPILER=g++"
     "-DLLVM_ENABLE_ASSERTIONS=ON"
+    "-DLIBUNWIND_ENABLE_SHARED=OFF"
+    "-DLIBUNWIND_ENABLE_STATIC=ON"
+    "-DLIBUNWIND_INSTALL_LIBRARY=ON"
   ]
   [ make "-j" jobs "-C" "Release" ]
 ]
