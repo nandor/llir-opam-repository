@@ -1,0 +1,27 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "www.openssl.org"
+bug-reports: "https://github.com/openssl/openssl/issues"
+authors: ["OpenSSL Software Foundation, Inc"]
+license: "Apache 2.0"
+build: [
+  [
+    "./Configure"
+      "--prefix=%{prefix}%"
+      "--openssldir=%{prefix}%/lib/ssl"
+      "no-asm"
+      "no-afalgeng"
+  ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "OpenSSL compiled for LLIR"
+url {
+  src: "https://www.openssl.org/source/openssl-3.0.0-alpha11.tar.gz"
+  checksum: "sha256=2a18f18df6a7ba33cfcc423b77d93990bf70939c06aa2b599b1eabf6e222ea74"
+}
