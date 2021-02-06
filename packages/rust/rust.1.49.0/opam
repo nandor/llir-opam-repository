@@ -5,18 +5,22 @@ bug-reports: "https://github.com/rust-lang/rust/issues"
 authors: ["Rust Authors"]
 license: "Apache 2.0"
 build: [
-  [ "./configure-llir" ]
-  [ "./x.py" "build" ]
+  [ "./llir-configure.sh" prefix ]
+  [ "./llir-build.sh" prefix ]
 ]
 install: [
-  [
-    "./x.py" "install"
-      "cargo"
-      "library/std"
-      "src/librustc"
-  ]
+  [ "./llir-install.sh" prefix ]
 ]
 depends: [
   "llir-musl"
+  "openssl"
 ]
+patches: "llir.patch"
 synopsis: "rust with an LLIR backend"
+setenv: [
+  [ CARGO_HOME = "%{prefix}%" ]
+]
+url {
+  src: "git+https://github.com/rust-lang/rust#1.49.0"
+}
+
