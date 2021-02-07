@@ -10,7 +10,7 @@ index 4a9e6b1..a34392f 100644
 -#define xen_rmb() xen_barrier()
 -#define xen_wmb() xen_barrier()
 +#  if defined(__llir__)
-+#  define xen_mb()  asm volatile ( "x86_mfence" : : : "memory")
++#  define xen_mb()  asm volatile ( "x86_m_fence" : : : "memory")
 +#  define xen_rmb() xen_barrier()
 +#  define xen_wmb() xen_barrier()
 +#else
