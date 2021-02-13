@@ -34,7 +34,12 @@ install: [
   [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld" "%{prefix}%/bin/powerpc64le-unknown-none-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ar" "%{prefix}%/bin/powerpc64le-unknown-none-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-as" "%{prefix}%/bin/powerpc64le-unknown-none-as" ]
   [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ranlib" "%{prefix}%/bin/powerpc64le-unknown-none-ranlib" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld" "%{prefix}%/bin/powerpc64le-unknown-linux-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ar" "%{prefix}%/bin/powerpc64le-unknown-linux-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-as" "%{prefix}%/bin/powerpc64le-unknown-linux-as" ]
+  [ "ln" "-s" "%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ranlib" "%{prefix}%/bin/powerpc64le-unknown-linux-ranlib" ]
 ]
 synopsis: "GNU binutils"
 url {

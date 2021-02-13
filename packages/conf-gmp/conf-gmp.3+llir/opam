@@ -1,0 +1,13 @@
+opam-version: "2.0"
+maintainer: "nbraud"
+homepage: "http://gmplib.org/"
+bug-reports: "https://github.com/ocaml/opam-repository/issues"
+license: "GPL-1.0-or-later"
+depends: [
+  "gmp"
+]
+synopsis: "Virtual package relying on a GMP lib system installation"
+description:
+  "This package can only install if the GMP lib is installed on the system."
+authors: "nbraud"
+flags: conf

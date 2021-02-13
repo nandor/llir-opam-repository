@@ -26,5 +26,5 @@ install: [
   [make "install"]
 ]
 url {
-  src: "git+https://github.com/AbsInt/CompCert.git#26ddb90280b45e92d90eead89edb237f2922824a"
+  src: "git+https://github.com/AbsInt/CompCert.git#25483cf1acce8695a438f4f2164b09fb1ecd9d2e"
 }

@@ -34,7 +34,12 @@ install: [
   [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-ld" "%{prefix}%/bin/aarch64-unknown-linux-musl-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-ld" "%{prefix}%/bin/aarch64-unknown-none-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-ar" "%{prefix}%/bin/aarch64-unknown-none-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-as" "%{prefix}%/bin/aarch64-unknown-none-as" ]
   [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-ranlib" "%{prefix}%/bin/aarch64-unknown-none-ranlib" ]
+  [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-ld" "%{prefix}%/bin/aarch64-unknown-linux-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-ar" "%{prefix}%/bin/aarch64-unknown-linux-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-as" "%{prefix}%/bin/aarch64-unknown-linux-as" ]
+  [ "ln" "-s" "%{prefix}%/bin/aarch64-unknown-linux-gnu-ranlib" "%{prefix}%/bin/aarch64-unknown-linux-ranlib" ]
 ]
 synopsis: "GNU binutils"
 url {

@@ -1,0 +1,13 @@
+diff --git a/lib/mirage_configure_solo5.ml b/lib/mirage_configure_solo5.ml
+index 7a297f6..5e93a87 100644
+--- a/lib/mirage_configure_solo5.ml
++++ b/lib/mirage_configure_solo5.ml
+@@ -80,7 +80,7 @@ let compile_manifest target =
+   let c = "_build/manifest.c" in
+   let obj = "_build/manifest.o" in
+   cflags bindings >>= fun cflags ->
+-  let cmd = Bos.Cmd.(v "cc" %% of_list cflags % "-c" % c % "-o" % obj)
++  let cmd = Bos.Cmd.(v (Sys.getenv "CC") %% of_list cflags % "-c" % c % "-o" % obj)
+   in
+   Log.info (fun m -> m "executing %a" Bos.Cmd.pp cmd);
+   Bos.OS.Cmd.run cmd

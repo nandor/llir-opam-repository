@@ -27,6 +27,7 @@ install: [
 depends: [
   "llir-llvm" {= "master"}
   "llir-compiler-rt-arm64" {= version}
+  "arch-arm64"
 ]
 setenv: [
   [ CC = "aarch64-unknown-linux-musl-clang" ]

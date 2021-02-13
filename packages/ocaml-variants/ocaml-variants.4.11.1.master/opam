@@ -1,0 +1,13 @@
+opam-version: "2.0"
+synopsis: "Virtual package for ocaml-variants"
+description: """Provides the correct ocaml-variants as a dependency"""
+maintainer: "n@ndor.email"
+authors: [ "Nandor Licker <n@ndor.email>" ]
+homepage: "https://github.com/nandor/llir-opam-repository"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+depends: [
+  "ocaml-variants-amd64" {= version} |
+  "ocaml-variants-arm64" {= version} |
+  "ocaml-variants-power" {= version} |
+  "ocaml-variants-riscv" {= version}
+]

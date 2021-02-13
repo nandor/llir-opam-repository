@@ -3,13 +3,14 @@ maintainer: "n@ndor.email"
 homepage: "https://github.com/nandor/llir-opam-repository"
 bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
 authors: ["Nandor Licker"]
+synopsis: "LLIR port of the linux headers"
+description: "This package installs the llir linux-headers"
 license: "GNU GPL 3.0"
 build: []
 install: [
   [ "make" "PREFIX=%{prefix}%" "ARCH=amd64" "install"]
 ]
-synopsis: "LLIR port of the linux headers"
-description: "This package installs the llir linux-headers"
+depends: ["arch-amd64"]
 url {
   src: "git+https://github.com/nandor/llir-linux-headers#master"
 }

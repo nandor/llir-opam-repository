@@ -1,0 +1,15 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-opam-repository"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Nandor Licker" "Timothy M. Jones"]
+license: "MIT"
+synopsis: "LLIR Architecture Selector Package"
+description: "This package is used to select an architecture"
+flags: conf
+conflicts: [
+  "arch-amd64"
+  "arch-arm64"
+  "arch-power"
+]
+

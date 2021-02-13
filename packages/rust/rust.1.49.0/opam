@@ -12,6 +12,7 @@ install: [
   [ "./llir-install.sh" prefix ]
 ]
 depends: [
+  "llir-libunwind"
   "llir-musl"
   "openssl"
 ]

@@ -1,0 +1,16 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-opam-repository"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Nandor Licker" "Timothy M. Jones"]
+depends: [
+  "llir-compiler-rt-amd64" {= version} |
+  "llir-compiler-rt-arm64" {= version} |
+  "llir-compiler-rt-power" {= version} |
+  "llir-compiler-rt-riscv64" {= version}
+]
+license: "MIT"
+synopsis: "LLIR Architecture Selector Package"
+description: "Selects the correct version of compiler-rt"
+flags: conf
+
