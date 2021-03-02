@@ -5,14 +5,15 @@ bug-reports: " https://sourceware.org/bugzilla"
 license: "GNU GPL v3"
 synopsis: "GNU binutils"
 depends: [
-  "binutils-amd64" {=version} |
-  "binutils-arm64" {=version} |
-  "binutils-power" {=version} |
-  "binutils-riscv" {=version}
+  "binutils-i386"
+  "binutils-amd64"
+  "binutils-arm64"
+  "binutils-power"
+  "binutils-riscv32"
+  "binutils-riscv64"
 ]
 url {
   src: "https://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.gz"
   checksum: "md5=63c597bd52f978d964028b7c3213d22e"
 }
-flag: conf
 

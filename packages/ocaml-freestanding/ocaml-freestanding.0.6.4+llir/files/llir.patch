@@ -1,0 +1,1121 @@
+diff --git a/Makefile b/Makefile
+index b07b8c6..94d159a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -39,15 +39,18 @@ OCAML_CFLAGS=$(FREESTANDING_CFLAGS) -I$(TOP)/openlibm/include -I$(TOP)/openlibm/
+ 
+ ocaml/Makefile.config: ocaml/Makefile
+ 	cd ocaml && \
+-	    CC="cc $(OCAML_CFLAGS) -nostdlib" \
+-	    AS="as" \
+-	    ASPP="cc $(OCAML_CFLAGS) -c" \
+-	    LD="ld" \
++	    CC="$(CC) $(OCAML_CFLAGS) -nostdlib" \
++	    AS="$(AS)" \
++	    ASPP="$(CC) $(OCAML_CFLAGS) -c" \
++	    LD="$(CC)" \
+ 	    CPPFLAGS="$(OCAML_CFLAGS)" \
+-	    ./configure --host=$(BUILD_ARCH)-unknown-none
++	    ./configure --host=$(BUILD_ARCH)-unknown-none $(OCAML_CONFIG_FLAGS)
+ 	echo "ARCH=$(OCAML_BUILD_ARCH)" >> ocaml/Makefile.config
++	echo '#undef HAS_GETTIMEOFDAY' >> ocaml/runtime/caml/s.h
+ 	echo '#define HAS_GETTIMEOFDAY' >> ocaml/runtime/caml/s.h
++	echo '#undef HAS_SECURE_GETENV' >> ocaml/runtime/caml/s.h
+ 	echo '#define HAS_SECURE_GETENV' >> ocaml/runtime/caml/s.h
++	echo '#undef HAS_TIMES' >> ocaml/runtime/caml/s.h
+ 	echo '#define HAS_TIMES' >> ocaml/runtime/caml/s.h
+ 	echo '#undef OCAML_OS_TYPE' >> ocaml/runtime/caml/s.h
+ 	echo '#define OCAML_OS_TYPE "None"' >> ocaml/runtime/caml/s.h
+diff --git a/configure.sh b/configure.sh
+index 4d154ed..6424d85 100755
+--- a/configure.sh
++++ b/configure.sh
+@@ -24,7 +24,7 @@ fi
+ ocamlfind query ocaml-src >/dev/null || exit 1
+ 
+ FREESTANDING_CFLAGS="$(pkg-config --cflags ${PKG_CONFIG_DEPS})"
+-BUILD_ARCH="$(uname -m)"
++BUILD_ARCH="$(cat $(opam config var prefix)/lib/ocaml/Makefile.config | grep '^ARCH' | head -n 1 | sed -e s/ARCH=//g)"
+ BUILD_OS="$(uname -s)"
+ OCAML_BUILD_ARCH=
+ 
+@@ -34,9 +34,16 @@ case "${BUILD_ARCH}" in
+     amd64|x86_64)
+         BUILD_ARCH="x86_64"
+         OCAML_BUILD_ARCH="amd64"
++	OCAML_CONFIG_FLAGS=""
+         ;;
++    llir_amd64)
++	BUILD_ARCH="x86_64"
++	OCAML_BUILD_ARCH="llir_amd64"
++	OCAML_CONFIG_FLAGS="--enable-llir"
++	;;
+     aarch64)
+         OCAML_BUILD_ARCH="arm64"
++	OCAML_CONFIG_FLAGS=""
+         ;;
+     *)
+         echo "ERROR: Unsupported architecture: ${BUILD_ARCH}" 1>&2
+@@ -54,6 +61,7 @@ FREESTANDING_CFLAGS=${FREESTANDING_CFLAGS}
+ BUILD_ARCH=${BUILD_ARCH}
+ BUILD_OS=${BUILD_OS}
+ OCAML_BUILD_ARCH=${OCAML_BUILD_ARCH}
++OCAML_CONFIG_FLAGS=${OCAML_CONFIG_FLAGS}
+ NOLIBC_SYSDEP_OBJS=sysdeps_solo5.o
+ PKG_CONFIG_DEPS=${PKG_CONFIG_DEPS}
+ PKG_CONFIG_EXTRA_LIBS=${PKG_CONFIG_EXTRA_LIBS}
+diff --git a/nolibc/Makefile b/nolibc/Makefile
+index 6710652..23cfc1d 100644
+--- a/nolibc/Makefile
++++ b/nolibc/Makefile
+@@ -12,7 +12,6 @@ all: libnolibc.a
+ clean:
+ 	$(RM) libnolibc.a *.o test-include/*.[co] test-include/sys/*.[co]
+ 
+-CC=cc
+ CFLAGS=-O2 -std=c99 -Wall -Wno-parentheses -Werror
+ CFLAGS+=$(FREESTANDING_CFLAGS)
+ 
+diff --git a/nolibc/dlmalloc.i b/nolibc/dlmalloc.i
+index 8a77058..1396447 100644
+--- a/nolibc/dlmalloc.i
++++ b/nolibc/dlmalloc.i
+@@ -4541,7 +4541,9 @@ static void* tmalloc_small(mstate m, size_t nb) {
+ 
+ #if !ONLY_MSPACES
+ 
+-void* dlmalloc(size_t bytes) {
++void*
++__attribute__((noinline))
++dlmalloc(size_t bytes) {
+   /*
+      Basic algorithm:
+      If a small request (< 256 bytes minus per-chunk overhead):
+@@ -4680,7 +4682,9 @@ void* dlmalloc(size_t bytes) {
+ 
+ /* ---------------------------- free --------------------------- */
+ 
+-void dlfree(void* mem) {
++void
++__attribute__((noinline))
++dlfree(void* mem) {
+   /*
+      Consolidate freed chunks with preceeding or succeeding bordering
+      free chunks, if they exist, and then place in a bin.  Intermixed
+@@ -5183,7 +5187,9 @@ static void internal_inspect_all(mstate m,
+ 
+ #if !ONLY_MSPACES
+ 
+-void* dlrealloc(void* oldmem, size_t bytes) {
++void*
++__attribute__((noinline))
++dlrealloc(void* oldmem, size_t bytes) {
+   void* mem = 0;
+   if (oldmem == 0) {
+     mem = dlmalloc(bytes);
+diff --git a/openlibm/Make.inc b/openlibm/Make.inc
+index f1c177d..5b1b536 100644
+--- a/openlibm/Make.inc
++++ b/openlibm/Make.inc
+@@ -21,26 +21,7 @@ else
+ pkgconfigdir = $(libdir)/pkgconfig
+ endif
+ 
+-USEGCC = 1
+-USECLANG = 0
+-
+-ifneq (,$(findstring $(OS),Darwin FreeBSD OpenBSD))
+-USEGCC = 0
+-USECLANG = 1
+-endif
+-
+-AR = ar
+-
+-ifeq ($(USECLANG),1)
+-USEGCC = 0
+-CC = clang
+ CFLAGS_add += -fno-builtin -fno-strict-aliasing
+-endif
+-
+-ifeq ($(USEGCC),1)
+-CC = gcc
+-CFLAGS_add += -fno-gnu89-inline -fno-builtin
+-endif
+ 
+ ARCH ?= $(shell $(CC) -dumpmachine | sed "s/\([^-]*\).*$$/\1/")
+ 
+@@ -67,6 +48,9 @@ endif
+ ifeq ($(ARCH),x86_64)
+ override ARCH := amd64
+ endif
++ifeq ($(ARCH),llir_x86_64)
++override ARCH := llir_amd64
++endif
+ 
+ # If CFLAGS does not contain a -O optimization flag, default to -O3
+ ifeq ($(findstring -O,$(CFLAGS)),)
+@@ -120,7 +104,7 @@ SFLAGS_add  += $(SFLAGS_arch)
+ LDFLAGS_add += $(LDFLAGS_arch)
+ 
+ CFLAGS_add += -std=c99 -Wall -I$(OPENLIBM_HOME) -I$(OPENLIBM_HOME)/include -I$(OPENLIBM_HOME)/$(ARCH) -I$(OPENLIBM_HOME)/src -DASSEMBLER -D__BSD_VISIBLE -Wno-implicit-function-declaration
+-ifneq ($(filter $(ARCH),i387 amd64 powerpc),)
++ifneq ($(filter $(ARCH),i387 amd64 llir_amd64 powerpc),)
+ CFLAGS_add += -I$(OPENLIBM_HOME)/ld80
+ else
+ ifneq ($(filter $(ARCH),aarch64),)
+diff --git a/openlibm/Makefile b/openlibm/Makefile
+index 7144cf9..2b08853 100644
+--- a/openlibm/Makefile
++++ b/openlibm/Makefile
+@@ -3,7 +3,7 @@ include ./Make.inc
+ 
+ SUBDIRS = src $(ARCH) bsdsrc
+ # Add ld80 directory on x86 and x64
+-ifneq ($(filter $(ARCH),i387 amd64),)
++ifneq ($(filter $(ARCH),i387 amd64 llir_amd64),)
+ SUBDIRS += ld80
+ else
+ ifneq ($(filter $(ARCH),aarch64),)
+@@ -56,7 +56,7 @@ check test: test/test-double test/test-float
+ 	test/test-float
+ 
+ libopenlibm.a: $(OBJS)
+-	$(AR) -rcs libopenlibm.a $(OBJS)
++	$(AR) rcs libopenlibm.a $(OBJS)
+ 
+ libopenlibm.$(OLM_MAJOR_MINOR_SHLIB_EXT): $(OBJS)
+ 	$(CC) -shared $(OBJS) $(LDFLAGS) $(LDFLAGS_add) -Wl,$(SONAME_FLAG),libopenlibm.$(OLM_MAJOR_SHLIB_EXT) -o $@
+diff --git a/openlibm/include/openlibm_fenv.h b/openlibm/include/openlibm_fenv.h
+index 9cdb4a2..72aa6b0 100644
+--- a/openlibm/include/openlibm_fenv.h
++++ b/openlibm/include/openlibm_fenv.h
+@@ -5,7 +5,11 @@
+ #if defined(__aarch64__) || defined(__arm__)
+ #include <openlibm_fenv_arm.h>
+ #elif defined(__x86_64__)
++#ifdef __llir__
++#include <openlibm_fenv_llir_amd64.h>
++#else
+ #include <openlibm_fenv_amd64.h>
++#endif
+ #elif defined(__i386__)
+ #include <openlibm_fenv_i387.h>
+ #elif defined(__powerpc__)
+diff --git a/openlibm/include/openlibm_fenv_llir_amd64.h b/openlibm/include/openlibm_fenv_llir_amd64.h
+new file mode 100644
+index 0000000..4e6e8c9
+--- /dev/null
++++ b/openlibm/include/openlibm_fenv_llir_amd64.h
+@@ -0,0 +1,222 @@
++/*-
++ * Copyright (c) 2004-2005 David Schultz <das@FreeBSD.ORG>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * $FreeBSD: src/lib/msun/amd64/fenv.h,v 1.8 2011/10/10 15:43:09 das Exp $
++ */
++
++#ifndef	_FENV_H_
++#define	_FENV_H_
++
++#include "cdefs-compat.h"
++#include "types-compat.h"
++
++#include "math_private.h"
++
++#ifndef	__fenv_static
++#define	__fenv_static	static
++#endif
++
++typedef struct {
++	struct {
++		uint32_t	__control;
++		uint32_t	__status;
++		uint32_t	__tag;
++		char		__other[16];
++	} __x87;
++	uint32_t		__mxcsr;
++} fenv_t;
++
++typedef	uint16_t	fexcept_t;
++
++/* Exception flags */
++#define	FE_INVALID	0x01
++#define	FE_DENORMAL	0x02
++#define	FE_DIVBYZERO	0x04
++#define	FE_OVERFLOW	0x08
++#define	FE_UNDERFLOW	0x10
++#define	FE_INEXACT	0x20
++#define	FE_ALL_EXCEPT	(FE_DIVBYZERO | FE_DENORMAL | FE_INEXACT | \
++			 FE_INVALID | FE_OVERFLOW | FE_UNDERFLOW)
++
++/* Rounding modes */
++#define	FE_TONEAREST	0x0000
++#define	FE_DOWNWARD	0x0400
++#define	FE_UPWARD	0x0800
++#define	FE_TOWARDZERO	0x0c00
++#define	_ROUND_MASK	(FE_TONEAREST | FE_DOWNWARD | \
++			 FE_UPWARD | FE_TOWARDZERO)
++
++/*
++ * As compared to the x87 control word, the SSE unit's control word
++ * has the rounding control bits offset by 3 and the exception mask
++ * bits offset by 7.
++ */
++#define	_SSE_ROUND_SHIFT	3
++#define	_SSE_EMASK_SHIFT	7
++
++__BEGIN_DECLS
++
++/* Default floating-point environment */
++extern const fenv_t	__fe_dfl_env;
++#define	FE_DFL_ENV	(&__fe_dfl_env)
++
++#define	__fldcw(__cw)		__asm __volatile("x86_fldcw %0" : : "r" (&__cw))
++#define	__fldenv(__env)		__asm __volatile("x86_fldenv %0" : : "r" (&__env))
++#define	__fldenvx(__env)	__builtin_trap()
++#define	__fnclex()		__asm __volatile("x86_fnclex")
++#define	__fnstenv(__env)	__asm __volatile("x86_fnstenv %0" : : "r" (__env))
++#define	__fnstcw(__cw)		__asm __volatile("x86_fnstcw %0" : : "r" (__cw))
++#define	__fnstsw(__sw)		__asm __volatile("x86_fnstsw %0" : : "r" (__sw))
++#define	__fwait()		__builtin_trap()
++#define	__ldmxcsr(__csr)	__asm __volatile("x86_ldmxcsr %0" : : "r" (&__csr))
++#define	__stmxcsr(__csr)	__asm __volatile("x86_stmxcsr %0" : : "r" (__csr))
++
++__fenv_static __attribute__((always_inline)) inline int
++feclearexcept(int __excepts)
++{
++	fenv_t __env;
++
++	if (__excepts == FE_ALL_EXCEPT) {
++		__fnclex();
++	} else {
++		__fnstenv(&__env.__x87);
++		__env.__x87.__status &= ~__excepts;
++		__fldenv(__env.__x87);
++	}
++	__stmxcsr(&__env.__mxcsr);
++	__env.__mxcsr &= ~__excepts;
++	__ldmxcsr(__env.__mxcsr);
++	return (0);
++}
++
++__fenv_static inline int
++fegetexceptflag(fexcept_t *__flagp, int __excepts)
++{
++	uint32_t __mxcsr;
++	uint16_t __status;
++
++	__stmxcsr(&__mxcsr);
++	__fnstsw(&__status);
++	*__flagp = (__mxcsr | __status) & __excepts;
++	return (0);
++}
++
++OLM_DLLEXPORT int fesetexceptflag(const fexcept_t *__flagp, int __excepts);
++OLM_DLLEXPORT int feraiseexcept(int __excepts);
++
++__fenv_static __attribute__((always_inline)) inline int
++fetestexcept(int __excepts)
++{
++	uint32_t __mxcsr;
++	uint16_t __status;
++
++	__stmxcsr(&__mxcsr);
++	__fnstsw(&__status);
++	return ((__status | __mxcsr) & __excepts);
++}
++
++__fenv_static inline int
++fegetround(void)
++{
++	uint16_t __control;
++
++	/*
++	 * We assume that the x87 and the SSE unit agree on the
++	 * rounding mode.  Reading the control word on the x87 turns
++	 * out to be about 5 times faster than reading it on the SSE
++	 * unit on an Opteron 244.
++	 */
++	__fnstcw(&__control);
++	return (__control & _ROUND_MASK);
++}
++
++__fenv_static inline int
++fesetround(int __round)
++{
++	uint32_t __mxcsr;
++	uint16_t __control;
++
++	if (__round & ~_ROUND_MASK)
++		return (-1);
++
++	__fnstcw(&__control);
++	__control &= ~_ROUND_MASK;
++	__control |= __round;
++	__fldcw(__control);
++
++	__stmxcsr(&__mxcsr);
++	__mxcsr &= ~(_ROUND_MASK << _SSE_ROUND_SHIFT);
++	__mxcsr |= __round << _SSE_ROUND_SHIFT;
++	__ldmxcsr(__mxcsr);
++
++	return (0);
++}
++
++OLM_DLLEXPORT int fegetenv(fenv_t *__envp);
++OLM_DLLEXPORT int feholdexcept(fenv_t *__envp);
++
++__fenv_static inline int
++fesetenv(const fenv_t *__envp)
++{
++
++	/*
++	 * XXX Using fldenvx() instead of fldenv() tells the compiler that this
++	 * instruction clobbers the i387 register stack.  This happens because
++	 * we restore the tag word from the saved environment.  Normally, this
++	 * would happen anyway and we wouldn't care, because the ABI allows
++	 * function calls to clobber the i387 regs.  However, fesetenv() is
++	 * inlined, so we need to be more careful.
++	 */
++	__fldenvx(__envp->__x87);
++	__ldmxcsr(__envp->__mxcsr);
++	return (0);
++}
++
++OLM_DLLEXPORT int feupdateenv(const fenv_t *__envp);
++
++#if __BSD_VISIBLE
++
++OLM_DLLEXPORT int feenableexcept(int __mask);
++OLM_DLLEXPORT int fedisableexcept(int __mask);
++
++/* We currently provide no external definition of fegetexcept(). */
++static inline int
++fegetexcept(void)
++{
++	uint16_t __control;
++
++	/*
++	 * We assume that the masks for the x87 and the SSE unit are
++	 * the same.
++	 */
++	__fnstcw(&__control);
++	return (~__control & FE_ALL_EXCEPT);
++}
++
++#endif /* __BSD_VISIBLE */
++
++__END_DECLS
++
++#endif	/* !_FENV_H_ */
+diff --git a/openlibm/llir_amd64/Make.files b/openlibm/llir_amd64/Make.files
+new file mode 100644
+index 0000000..a32f3b5
+--- /dev/null
++++ b/openlibm/llir_amd64/Make.files
+@@ -0,0 +1 @@
++$(CUR_SRCS) = fenv.c 
+diff --git a/openlibm/llir_amd64/bsd_fpu.h b/openlibm/llir_amd64/bsd_fpu.h
+new file mode 100644
+index 0000000..513b345
+--- /dev/null
++++ b/openlibm/llir_amd64/bsd_fpu.h
+@@ -0,0 +1,218 @@
++/*-
++ * Copyright (c) 1990 The Regents of the University of California.
++ * All rights reserved.
++ *
++ * This code is derived from software contributed to Berkeley by
++ * William Jolitz.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 4. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ *	from: @(#)npx.h	5.3 (Berkeley) 1/18/91
++ * $FreeBSD: src/sys/x86/include/fpu.h,v 1.1 2012/03/16 20:24:30 tijl Exp $
++ */
++
++/*
++ * Floating Point Data Structures and Constants
++ * W. Jolitz 1/90
++ */
++
++#ifndef _BSD_FPU_H_
++#define	_BSD_FPU_H_
++
++#include "types-compat.h"
++
++/* Environment information of floating point unit. */
++struct env87 {
++	int32_t		en_cw;		/* control word (16bits) */
++	int32_t		en_sw;		/* status word (16bits) */
++	int32_t		en_tw;		/* tag word (16bits) */
++	int32_t		en_fip;		/* fp instruction pointer */
++	uint16_t	en_fcs;		/* fp code segment selector */
++	uint16_t	en_opcode;	/* opcode last executed (11 bits) */
++	int32_t		en_foo;		/* fp operand offset */
++	int32_t		en_fos;		/* fp operand segment selector */
++};
++
++/* Contents of each x87 floating point accumulator. */
++struct fpacc87 {
++	uint8_t		fp_bytes[10];
++};
++
++/* Floating point context. (i386 fnsave/frstor) */
++struct save87 {
++	struct env87	sv_env;		/* floating point control/status */
++	struct fpacc87	sv_ac[8];	/* accumulator contents, 0-7 */
++	uint8_t		sv_pad0[4];	/* saved status word (now unused) */
++	/*
++	 * Bogus padding for emulators.  Emulators should use their own
++	 * struct and arrange to store into this struct (ending here)
++	 * before it is inspected for ptracing or for core dumps.  Some
++	 * emulators overwrite the whole struct.  We have no good way of
++	 * knowing how much padding to leave.  Leave just enough for the
++	 * GPL emulator's i387_union (176 bytes total).
++	 */
++	uint8_t		sv_pad[64];	/* padding; used by emulators */
++};
++
++/* Contents of each SSE extended accumulator. */
++struct xmmacc {
++	uint8_t		xmm_bytes[16];
++};
++
++/* Contents of the upper 16 bytes of each AVX extended accumulator. */
++struct ymmacc {
++	uint8_t		ymm_bytes[16];
++};
++
++/* Rename structs below depending on machine architecture. */
++#ifdef __i386__
++#define	__envxmm32	envxmm
++#else
++#define	__envxmm32	envxmm32
++#define	__envxmm64	envxmm
++#endif
++
++struct __envxmm32 {
++	uint16_t	en_cw;		/* control word (16bits) */
++	uint16_t	en_sw;		/* status word (16bits) */
++	uint16_t	en_tw;		/* tag word (16bits) */
++	uint16_t	en_opcode;	/* opcode last executed (11 bits) */
++	uint32_t	en_fip;		/* fp instruction pointer */
++	uint16_t	en_fcs;		/* fp code segment selector */
++	uint16_t	en_pad0;	/* padding */
++	uint32_t	en_foo;		/* fp operand offset */
++	uint16_t	en_fos;		/* fp operand segment selector */
++	uint16_t	en_pad1;	/* padding */
++	uint32_t	en_mxcsr;	/* SSE control/status register */
++	uint32_t	en_mxcsr_mask;	/* valid bits in mxcsr */
++};
++
++struct __envxmm64 {
++	uint16_t	en_cw;		/* control word (16bits) */
++	uint16_t	en_sw;		/* status word (16bits) */
++	uint8_t		en_tw;		/* tag word (8bits) */
++	uint8_t		en_zero;
++	uint16_t	en_opcode;	/* opcode last executed (11 bits ) */
++	uint64_t	en_rip;		/* fp instruction pointer */
++	uint64_t	en_rdp;		/* fp operand pointer */
++	uint32_t	en_mxcsr;	/* SSE control/status register */
++	uint32_t	en_mxcsr_mask;	/* valid bits in mxcsr */
++};
++
++/* Floating point context. (i386 fxsave/fxrstor) */
++struct savexmm {
++	struct __envxmm32	sv_env;
++	struct {
++		struct fpacc87	fp_acc;
++		uint8_t		fp_pad[6];      /* padding */
++	} sv_fp[8];
++	struct xmmacc		sv_xmm[8];
++	uint8_t			sv_pad[224];
++} __attribute__ ((aligned(16)));
++
++#ifdef __i386__
++union savefpu {
++	struct save87	sv_87;
++	struct savexmm	sv_xmm;
++};
++#else
++/* Floating point context. (amd64 fxsave/fxrstor) */
++struct savefpu {
++	struct __envxmm64	sv_env;
++	struct {
++		struct fpacc87	fp_acc;
++		uint8_t		fp_pad[6];	/* padding */
++	} sv_fp[8];
++	struct xmmacc		sv_xmm[16];
++	uint8_t			sv_pad[96];
++} __attribute__ ((aligned(16)));
++#endif
++
++struct xstate_hdr {
++	uint64_t	xstate_bv;
++	uint8_t		xstate_rsrv0[16];
++	uint8_t		xstate_rsrv[40];
++};
++
++struct savexmm_xstate {
++	struct xstate_hdr	sx_hd;
++	struct ymmacc		sx_ymm[16];
++};
++
++struct savexmm_ymm {
++	struct __envxmm32	sv_env;
++	struct {
++		struct fpacc87	fp_acc;
++		int8_t		fp_pad[6];	/* padding */
++	} sv_fp[8];
++	struct xmmacc		sv_xmm[16];
++	uint8_t			sv_pad[96];
++	struct savexmm_xstate	sv_xstate;
++} __attribute__ ((aligned(16)));
++
++struct savefpu_xstate {
++	struct xstate_hdr	sx_hd;
++	struct ymmacc		sx_ymm[16];
++};
++
++struct savefpu_ymm {
++	struct __envxmm64	sv_env;
++	struct {
++		struct fpacc87	fp_acc;
++		int8_t		fp_pad[6];	/* padding */
++	} sv_fp[8];
++	struct xmmacc		sv_xmm[16];
++	uint8_t			sv_pad[96];
++	struct savefpu_xstate	sv_xstate;
++} __attribute__ ((aligned(64)));
++
++#undef __envxmm32
++#undef __envxmm64
++
++/*
++ * The hardware default control word for i387's and later coprocessors is
++ * 0x37F, giving:
++ *
++ *	round to nearest
++ *	64-bit precision
++ *	all exceptions masked.
++ *
++ * FreeBSD/i386 uses 53 bit precision for things like fadd/fsub/fsqrt etc
++ * because of the difference between memory and fpu register stack arguments.
++ * If its using an intermediate fpu register, it has 80/64 bits to work
++ * with.  If it uses memory, it has 64/53 bits to work with.  However,
++ * gcc is aware of this and goes to a fair bit of trouble to make the
++ * best use of it.
++ *
++ * This is mostly academic for AMD64, because the ABI prefers the use
++ * SSE2 based math.  For FreeBSD/amd64, we go with the default settings.
++ */
++#define	__INITIAL_FPUCW__	0x037F
++#define	__INITIAL_FPUCW_I386__	0x127F
++#define	__INITIAL_NPXCW__	__INITIAL_FPUCW_I386__
++#define	__INITIAL_MXCSR__	0x1F80
++#define	__INITIAL_MXCSR_MASK__	0xFFBF
++
++#endif /* !_BSD_FPU_H_ */
+diff --git a/openlibm/llir_amd64/bsd_ieeefp.h b/openlibm/llir_amd64/bsd_ieeefp.h
+new file mode 100644
+index 0000000..c51a062
+--- /dev/null
++++ b/openlibm/llir_amd64/bsd_ieeefp.h
+@@ -0,0 +1,272 @@
++/*-
++ * Copyright (c) 2003 Peter Wemm.
++ * Copyright (c) 1990 Andrew Moore, Talke Studio
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. Neither the name of the University nor the names of its contributors
++ *    may be used to endorse or promote products derived from this software
++ *    without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * 	from: @(#) ieeefp.h 	1.0 (Berkeley) 9/23/93
++ * $FreeBSD: src/sys/amd64/include/ieeefp.h,v 1.14 2005/04/12 23:12:00 jhb Exp $
++ */
++
++/*
++ *	IEEE floating point type and constant definitions.
++ */
++
++#ifndef _BSD_IEEEFP_H_
++#define _BSD_IEEEFP_H_
++
++/*
++ * FP rounding modes
++ */
++typedef enum {
++	FP_RN=0,	/* round to nearest */
++	FP_RM,		/* round down to minus infinity */
++	FP_RP,		/* round up to plus infinity */
++	FP_RZ		/* truncate */
++} fp_rnd_t;
++
++/*
++ * FP precision modes
++ */
++typedef enum {
++	FP_PS=0,	/* 24 bit (single-precision) */
++	FP_PRS,		/* reserved */
++	FP_PD,		/* 53 bit (double-precision) */
++	FP_PE		/* 64 bit (extended-precision) */
++} fp_prec_t;
++
++#define fp_except_t	int
++
++/*
++ * FP exception masks
++ */
++#define FP_X_INV	0x01	/* invalid operation */
++#define FP_X_DNML	0x02	/* denormal */
++#define FP_X_DZ		0x04	/* zero divide */
++#define FP_X_OFL	0x08	/* overflow */
++#define FP_X_UFL	0x10	/* underflow */
++#define FP_X_IMP	0x20	/* (im)precision */
++#define FP_X_STK	0x40	/* stack fault */
++
++/*
++ * FP registers
++ */
++#define FP_MSKS_REG	0	/* exception masks */
++#define FP_PRC_REG	0	/* precision */
++#define FP_RND_REG	0	/* direction */
++#define FP_STKY_REG	1	/* sticky flags */
++
++/*
++ * FP register bit field masks
++ */
++#define FP_MSKS_FLD	0x3f	/* exception masks field */
++#define FP_PRC_FLD	0x300	/* precision control field */
++#define FP_RND_FLD	0xc00	/* round control field */
++#define FP_STKY_FLD	0x3f	/* sticky flags field */
++
++/*
++ * SSE mxcsr register bit field masks
++ */
++#define	SSE_STKY_FLD	0x3f	/* exception flags */
++#define	SSE_DAZ_FLD	0x40	/* Denormals are zero */
++#define	SSE_MSKS_FLD	0x1f80	/* exception masks field */
++#define	SSE_RND_FLD	0x6000	/* rounding control */
++#define	SSE_FZ_FLD	0x8000	/* flush to zero on underflow */
++
++/*
++ * FP register bit field offsets
++ */
++#define FP_MSKS_OFF	0	/* exception masks offset */
++#define FP_PRC_OFF	8	/* precision control offset */
++#define FP_RND_OFF	10	/* round control offset */
++#define FP_STKY_OFF	0	/* sticky flags offset */
++
++/*
++ * SSE mxcsr register bit field offsets
++ */
++#define	SSE_STKY_OFF	0	/* exception flags offset */
++#define	SSE_DAZ_OFF	6	/* DAZ exception mask offset */
++#define	SSE_MSKS_OFF	7	/* other exception masks offset */
++#define	SSE_RND_OFF	13	/* rounding control offset */
++#define	SSE_FZ_OFF	15	/* flush to zero offset */
++
++#if (defined(__GNUCLIKE_ASM) && defined(__CC_SUPPORTS___INLINE__)) || defined(_WIN32) \
++    && !defined(__cplusplus)
++
++#define	__fldenv(addr)	__asm __volatile("x86_fldenv %0" : : "r" (addr))
++#define	__fnstenv(addr)	__asm __volatile("x86_fnstenv %0" : "=r" (addr))
++#define	__fldcw(addr)	__asm __volatile("x86_fldcw %0" : : "r" (addr))
++#define	__fnstcw(addr)	__asm __volatile("x86_fnstcw %0" : "=r" (addr))
++#define	__fnstsw(addr)	__asm __volatile("x86_fnstsw %0" : "=r" (addr))
++#define	__ldmxcsr(addr)	__asm __volatile("x86_ldmxcsr %0" : : "r" (addr))
++#define	__stmxcsr(addr)	__asm __volatile("x86_stmxcsr %0" : "=r" (addr))
++
++/*
++ * General notes about conflicting SSE vs FP status bits.
++ * This code assumes that software will not fiddle with the control
++ * bits of the SSE and x87 in such a way to get them out of sync and
++ * still expect this to work.  Break this at your peril.
++ * Because I based this on the i386 port, the x87 state is used for
++ * the fpget*() functions, and is shadowed into the SSE state for
++ * the fpset*() functions.  For dual source fpget*() functions, I
++ * merge the two together.  I think.
++ */
++
++/* Set rounding control */
++static __inline__ fp_rnd_t
++__fpgetround(void)
++{
++	unsigned short _cw;
++
++	__fnstcw(&_cw);
++	return ((_cw & FP_RND_FLD) >> FP_RND_OFF);
++}
++
++static __inline__ fp_rnd_t
++__fpsetround(fp_rnd_t _m)
++{
++	unsigned short _cw;
++	unsigned int _mxcsr;
++	fp_rnd_t _p;
++
++	__fnstcw(&_cw);
++	_p = (_cw & FP_RND_FLD) >> FP_RND_OFF;
++	_cw &= ~FP_RND_FLD;
++	_cw |= (_m << FP_RND_OFF) & FP_RND_FLD;
++	__fldcw(&_cw);
++	__stmxcsr(&_mxcsr);
++	_mxcsr &= ~SSE_RND_FLD;
++	_mxcsr |= (_m << SSE_RND_OFF) & SSE_RND_FLD;
++	__ldmxcsr(&_mxcsr);
++	return (_p);
++}
++
++/*
++ * Set precision for fadd/fsub/fsqrt etc x87 instructions
++ * There is no equivalent SSE mode or control.
++ */
++static __inline__ fp_prec_t
++__fpgetprec(void)
++{
++	unsigned short _cw;
++
++	__fnstcw(&_cw);
++	return ((_cw & FP_PRC_FLD) >> FP_PRC_OFF);
++}
++
++static __inline__ fp_prec_t
++__fpsetprec(fp_rnd_t _m)
++{
++	unsigned short _cw;
++	fp_prec_t _p;
++
++	__fnstcw(&_cw);
++	_p = (_cw & FP_PRC_FLD) >> FP_PRC_OFF;
++	_cw &= ~FP_PRC_FLD;
++	_cw |= (_m << FP_PRC_OFF) & FP_PRC_FLD;
++	__fldcw(&_cw);
++	return (_p);
++}
++
++/*
++ * Look at the exception masks
++ * Note that x87 masks are inverse of the fp*() functions
++ * API.  ie: mask = 1 means disable for x87 and SSE, but
++ * for the fp*() api, mask = 1 means enabled.
++ */
++static __inline__ fp_except_t
++__fpgetmask(void)
++{
++	unsigned short _cw;
++
++	__fnstcw(&_cw);
++	return ((~_cw) & FP_MSKS_FLD);
++}
++
++static __inline__ fp_except_t
++__fpsetmask(fp_except_t _m)
++{
++	unsigned short _cw;
++	unsigned int _mxcsr;
++	fp_except_t _p;
++
++	__fnstcw(&_cw);
++	_p = (~_cw) & FP_MSKS_FLD;
++	_cw &= ~FP_MSKS_FLD;
++	_cw |= (~_m) & FP_MSKS_FLD;
++	__fldcw(&_cw);
++	__stmxcsr(&_mxcsr);
++	/* XXX should we clear non-ieee SSE_DAZ_FLD and SSE_FZ_FLD ? */
++	_mxcsr &= ~SSE_MSKS_FLD;
++	_mxcsr |= ((~_m) << SSE_MSKS_OFF) & SSE_MSKS_FLD;
++	__ldmxcsr(&_mxcsr);
++	return (_p);
++}
++
++/* See which sticky exceptions are pending, and reset them */
++static __inline__ fp_except_t
++__fpgetsticky(void)
++{
++	unsigned short _sw;
++	unsigned int _mxcsr;
++	fp_except_t _ex;
++
++	__fnstsw(&_sw);
++	_ex = _sw & FP_STKY_FLD;
++	__stmxcsr(&_mxcsr);
++	_ex |= _mxcsr & SSE_STKY_FLD;
++	return (_ex);
++}
++
++#endif /* __GNUCLIKE_ASM && __CC_SUPPORTS___INLINE__ && !__cplusplus */
++
++#if !defined(__IEEEFP_NOINLINES__) && !defined(__cplusplus) \
++    && defined(__GNUCLIKE_ASM) && defined(__CC_SUPPORTS___INLINE__)
++
++#define	fpgetround()	__fpgetround()
++#define	fpsetround(_m)	__fpsetround(_m)
++#define	fpgetprec()	__fpgetprec()
++#define	fpsetprec(_m)	__fpsetprec(_m)
++#define	fpgetmask()	__fpgetmask()
++#define	fpsetmask(_m)	__fpsetmask(_m)
++#define	fpgetsticky()	__fpgetsticky()
++
++/* Suppress prototypes in the MI header. */
++#define	_IEEEFP_INLINED_	1
++
++#else /* !__IEEEFP_NOINLINES__ && !__cplusplus && __GNUCLIKE_ASM
++         && __CC_SUPPORTS___INLINE__ */
++
++/* Augment the userland declarations */
++__BEGIN_DECLS
++extern fp_prec_t fpgetprec(void);
++extern fp_prec_t fpsetprec(fp_prec_t);
++__END_DECLS
++
++#endif /* !__IEEEFP_NOINLINES__ && !__cplusplus && __GNUCLIKE_ASM
++          && __CC_SUPPORTS___INLINE__ */
++
++#endif /* !_BSD_IEEEFP_H_ */
+diff --git a/openlibm/llir_amd64/fenv.c b/openlibm/llir_amd64/fenv.c
+new file mode 100644
+index 0000000..ddf7dba
+--- /dev/null
++++ b/openlibm/llir_amd64/fenv.c
+@@ -0,0 +1,162 @@
++/*-
++ * Copyright (c) 2004-2005 David Schultz <das@FreeBSD.ORG>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * $FreeBSD: src/lib/msun/amd64/fenv.c,v 1.8 2011/10/21 06:25:31 das Exp $
++ */
++
++#include "bsd_fpu.h"
++#include "math_private.h"
++
++#ifdef _WIN32
++#define __fenv_static OLM_DLLEXPORT
++#endif
++#include <openlibm_fenv.h>
++
++#ifdef __GNUC_GNU_INLINE__
++#error "This file must be compiled with C99 'inline' semantics"
++#endif
++
++const fenv_t __fe_dfl_env = {
++	{ 0xffff0000 | __INITIAL_FPUCW__,
++	  0xffff0000,
++	  0xffffffff,
++	  { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++	    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff }
++	},
++	__INITIAL_MXCSR__
++};
++
++extern inline OLM_DLLEXPORT int feclearexcept(int __excepts);
++extern inline OLM_DLLEXPORT int fegetexceptflag(fexcept_t *__flagp, int __excepts);
++
++OLM_DLLEXPORT int
++fesetexceptflag(const fexcept_t *flagp, int excepts)
++{
++	fenv_t env;
++
++	__fnstenv(&env.__x87);
++	env.__x87.__status &= ~excepts;
++	env.__x87.__status |= *flagp & excepts;
++	__fldenv(env.__x87);
++
++	__stmxcsr(&env.__mxcsr);
++	env.__mxcsr &= ~excepts;
++	env.__mxcsr |= *flagp & excepts;
++	__ldmxcsr(env.__mxcsr);
++
++	return (0);
++}
++
++OLM_DLLEXPORT int
++feraiseexcept(int excepts)
++{
++	fexcept_t ex = excepts;
++
++	fesetexceptflag(&ex, excepts);
++	__fwait();
++	return (0);
++}
++
++extern inline OLM_DLLEXPORT int fetestexcept(int __excepts);
++extern inline OLM_DLLEXPORT int fegetround(void);
++extern inline OLM_DLLEXPORT int fesetround(int __round);
++
++OLM_DLLEXPORT int
++fegetenv(fenv_t *envp)
++{
++
++	__fnstenv(&envp->__x87);
++	__stmxcsr(&envp->__mxcsr);
++	/*
++	 * fnstenv masks all exceptions, so we need to restore the
++	 * control word to avoid this side effect.
++	 */
++	__fldcw(envp->__x87.__control);
++	return (0);
++}
++
++OLM_DLLEXPORT int
++feholdexcept(fenv_t *envp)
++{
++	uint32_t mxcsr;
++
++	__stmxcsr(&mxcsr);
++	__fnstenv(&envp->__x87);
++	__fnclex();
++	envp->__mxcsr = mxcsr;
++	mxcsr &= ~FE_ALL_EXCEPT;
++	mxcsr |= FE_ALL_EXCEPT << _SSE_EMASK_SHIFT;
++	__ldmxcsr(mxcsr);
++	return (0);
++}
++
++extern inline OLM_DLLEXPORT int fesetenv(const fenv_t *__envp);
++
++OLM_DLLEXPORT int
++feupdateenv(const fenv_t *envp)
++{
++	uint32_t mxcsr;
++	uint16_t status;
++
++	__fnstsw(&status);
++	__stmxcsr(&mxcsr);
++	fesetenv(envp);
++	feraiseexcept((mxcsr | status) & FE_ALL_EXCEPT);
++	return (0);
++}
++
++int
++feenableexcept(int mask)
++{
++	uint32_t mxcsr, omask;
++	uint16_t control;
++
++	mask &= FE_ALL_EXCEPT;
++	__fnstcw(&control);
++	__stmxcsr(&mxcsr);
++	omask = ~(control | mxcsr >> _SSE_EMASK_SHIFT) & FE_ALL_EXCEPT;
++	control &= ~mask;
++	__fldcw(control);
++	mxcsr &= ~(mask << _SSE_EMASK_SHIFT);
++	__ldmxcsr(mxcsr);
++	return (omask);
++}
++
++int
++fedisableexcept(int mask)
++{
++	uint32_t mxcsr, omask;
++	uint16_t control;
++
++	mask &= FE_ALL_EXCEPT;
++	__fnstcw(&control);
++	__stmxcsr(&mxcsr);
++	omask = ~(control | mxcsr >> _SSE_EMASK_SHIFT) & FE_ALL_EXCEPT;
++	control |= mask;
++	__fldcw(control);
++	mxcsr |= mask << _SSE_EMASK_SHIFT;
++	__ldmxcsr(mxcsr);
++	return (omask);
++}
+diff --git a/openlibm/src/Make.files b/openlibm/src/Make.files
+index 5462ffc..e833ed8 100644
+--- a/openlibm/src/Make.files
++++ b/openlibm/src/Make.files
+@@ -37,7 +37,7 @@ $(CUR_SRCS) += s_nan.c
+ endif
+ 
+ # Add in long double functions for x86, x64 and aarch64
+-ifneq ($(filter $(ARCH),i387 amd64 aarch64),)
++ifneq ($(filter $(ARCH),i387 amd64 llir_amd64 aarch64),)
+ # C99 long double functions
+ $(CUR_SRCS) +=	s_copysignl.c s_fabsl.c s_llrintl.c s_lrintl.c s_modfl.c
+ 

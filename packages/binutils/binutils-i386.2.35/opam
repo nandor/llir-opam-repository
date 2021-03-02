@@ -1,0 +1,62 @@
+opam-version: "2.0"
+maintainer: "nand"
+homepage: "https://www.gnu.org/software/binutils/"
+bug-reports: " https://sourceware.org/bugzilla"
+license: "GNU GPL v3"
+build: [
+  [
+    "./configure"
+      "--prefix" prefix
+      "--target" "i386-unknown-linux-gnu"
+      "--program-prefix" "i386-unknown-linux-gnu-"
+      "--disable-libstdcxx"
+      "--disable-libquadmath"
+      "--disable-elfcpp"
+      "--disable-gast"
+      "--disable-gdb"
+      "--disable-gdbserver"
+      "--disable-gdbsupport"
+      "--disable-gnulib"
+      "--disable-gold"
+      "--disable-gproc"
+      "--disable-libdecnumber"
+      "--disable-zlib"
+      "--disable-intl"
+      "CC=gcc"
+      "CXX=g++"
+  ]
+  [
+    make "-j%{jobs}%"
+  ]
+]
+install: [
+  [ make "install" ]
+  # musl
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-ld" "%{prefix}%/bin/i386-unknown-linux-musl-ld" ]
+  # none
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-ld" "%{prefix}%/bin/i386-unknown-none-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-ar" "%{prefix}%/bin/i386-unknown-none-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-as" "%{prefix}%/bin/i386-unknown-none-as" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-ranlib" "%{prefix}%/bin/i386-unknown-none-ranlib" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-objdump" "%{prefix}%/bin/i386-unknown-none-objdump" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-objcopy" "%{prefix}%/bin/i386-unknown-none-objcopy" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-readelf" "%{prefix}%/bin/i386-unknown-none-readelf" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-strip" "%{prefix}%/bin/i386-unknown-none-strip" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-nm" "%{prefix}%/bin/i386-unknown-none-nm" ]
+  # linux
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-ld" "%{prefix}%/bin/i386-unknown-linux-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-ar" "%{prefix}%/bin/i386-unknown-linux-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-as" "%{prefix}%/bin/i386-unknown-linux-as" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-ranlib" "%{prefix}%/bin/i386-unknown-linux-ranlib" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-objdump" "%{prefix}%/bin/i386-unknown-linux-objdump" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-objcopy" "%{prefix}%/bin/i386-unknown-linux-objcopy" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-readelf" "%{prefix}%/bin/i386-unknown-linux-readelf" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-strip" "%{prefix}%/bin/i386-unknown-linux-strip" ]
+  [ "ln" "-s" "%{prefix}%/bin/i386-unknown-linux-gnu-nm" "%{prefix}%/bin/i386-unknown-linux-nm" ]
+]
+synopsis: "GNU binutils"
+url {
+  src: "https://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.gz"
+  checksum: "md5=63c597bd52f978d964028b7c3213d22e"
+}
+

@@ -31,18 +31,40 @@ build: [
 ]
 install: [
   [ make "install" ]
-  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-linux-musl-ld" ]
+  # none
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-none-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ar" "%{prefix}%/bin/x86_64-unknown-none-ar" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-as" "%{prefix}%/bin/x86_64-unknown-none-as" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ranlib" "%{prefix}%/bin/x86_64-unknown-none-ranlib" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-objdump" "%{prefix}%/bin/x86_64-unknown-none-objdump" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-objcopy" "%{prefix}%/bin/x86_64-unknown-none-objcopy" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-readelf" "%{prefix}%/bin/x86_64-unknown-none-readelf" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-strip" "%{prefix}%/bin/x86_64-unknown-none-strip" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-nm" "%{prefix}%/bin/x86_64-unknown-none-nm" ]
+  # linux
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-linux-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ar" "%{prefix}%/bin/x86_64-unknown-linux-ar" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-as" "%{prefix}%/bin/x86_64-unknown-linux-as" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ranlib" "%{prefix}%/bin/x86_64-unknown-linux-ranlib" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-objdump" "%{prefix}%/bin/x86_64-unknown-linux-objdump" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-objcopy" "%{prefix}%/bin/x86_64-unknown-linux-objcopy" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-readelf" "%{prefix}%/bin/x86_64-unknown-linux-readelf" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-strip" "%{prefix}%/bin/x86_64-unknown-linux-strip" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-nm" "%{prefix}%/bin/x86_64-unknown-linux-nm" ]
+  # linux-musl
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-linux-musl-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ar" "%{prefix}%/bin/x86_64-unknown-linux-musl-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-as" "%{prefix}%/bin/x86_64-unknown-linux-musl-as" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ranlib" "%{prefix}%/bin/x86_64-unknown-linux-musl-ranlib" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-objdump" "%{prefix}%/bin/x86_64-unknown-linux-musl-objdump" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-objcopy" "%{prefix}%/bin/x86_64-unknown-linux-musl-objcopy" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-readelf" "%{prefix}%/bin/x86_64-unknown-linux-musl-readelf" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-strip" "%{prefix}%/bin/x86_64-unknown-linux-musl-strip" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-nm" "%{prefix}%/bin/x86_64-unknown-linux-musl-nm" ]
 ]
 synopsis: "GNU binutils"
 url {
   src: "https://ftp.gnu.org/gnu/binutils/binutils-2.35.tar.gz"
   checksum: "md5=63c597bd52f978d964028b7c3213d22e"
 }
+

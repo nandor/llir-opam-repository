@@ -53,7 +53,7 @@ depends: [
   "llir-llvm" {= "master"}
   "llir-opt" {= "master"}
   "linux-headers-amd64" {= "master"}
-  "binutils-amd64"
+  "binutils"
 ]
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"
