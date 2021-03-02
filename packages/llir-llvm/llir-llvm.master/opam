@@ -40,7 +40,9 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/llvm-config" "%{prefix}%/bin/llvm-config" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llvm-symbolizer" "%{prefix}%/bin/llvm-symbolizer" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llvm-dwp" "%{prefix}%/bin/llvm-dwp" ]
-  # X86_64 Linux
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/clang" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/clang++" ]
+  # X86_64
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-linux-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86_64-unknown-none-gcc" ]
@@ -54,7 +56,7 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-none-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86_64-unknown-none-clang++" ]
-  # X86 Linux
+  # X86
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86-unknown-linux-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/x86-unknown-none-gcc" ]
@@ -68,7 +70,7 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86-unknown-none-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_x86-unknown-none-clang++" ]
-  # AArch64 Linux
+  # AArch64
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-linux-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/aarch64-unknown-none-gcc" ]
@@ -82,7 +84,7 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-none-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_aarch64-unknown-none-clang++" ]
-  # PowerPC Linux
+  # PowerPC
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-linux-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/powerpc64le-unknown-none-gcc" ]
@@ -96,7 +98,7 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-none-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_powerpc64le-unknown-none-clang++" ]
-  # RISC-V Linux
+  # RISC-V 64-bit
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-linux-gcc" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-linux-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv64-unknown-none-gcc" ]
@@ -110,6 +112,20 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-none-g++" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-none-clang" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv64-unknown-none-clang++" ]
+  # RISC-V 32-bit
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv32-unknown-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv32-unknown-linux-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv32-unknown-none-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/riscv32-unknown-none-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-linux-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-linux-musl-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-linux-musl-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-linux-musl-clang" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-linux-musl-clang++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-none-gcc" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-none-g++" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-none-clang" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/clang-12" "%{prefix}%/bin/llir_riscv32-unknown-none-clang++" ]
 ]
 depends: [
   "conf-cmake" {build}
