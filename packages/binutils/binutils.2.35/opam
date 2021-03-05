@@ -5,7 +5,7 @@ bug-reports: " https://sourceware.org/bugzilla"
 license: "GNU GPL v3"
 synopsis: "GNU binutils"
 depends: [
-  "binutils-i386"
+  "binutils-i686"
   "binutils-amd64"
   "binutils-arm64"
   "binutils-power"

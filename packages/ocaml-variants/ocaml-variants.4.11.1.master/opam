@@ -6,6 +6,7 @@ authors: [ "Nandor Licker <n@ndor.email>" ]
 homepage: "https://github.com/nandor/llir-opam-repository"
 bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
 depends: [
+  "ocaml-variants-i686" {= version} |
   "ocaml-variants-amd64" {= version} |
   "ocaml-variants-arm64" {= version} |
   "ocaml-variants-power" {= version} |

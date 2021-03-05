@@ -8,6 +8,7 @@ synopsis: "LLIR Architecture Selector Package"
 description: "This package is used to select an architecture"
 flags: conf
 conflicts: [
+  "arch-i686"
   "arch-amd64"
   "arch-arm64"
   "arch-riscv"

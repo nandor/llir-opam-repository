@@ -4,6 +4,7 @@ homepage: "https://github.com/nandor/llir-opam-repository"
 bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
 authors: ["Nandor Licker" "Timothy M. Jones"]
 depends: [
+  "linux-headers-i686" |
   "linux-headers-amd64" |
   "linux-headers-arm64" |
   "linux-headers-power" |

@@ -4,6 +4,7 @@ homepage: "https://github.com/nandor/llir-opam-repository"
 bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
 authors: ["Nandor Licker" "Timothy M. Jones"]
 depends: [
+  "arch-i686" |
   "arch-amd64" |
   "arch-arm64" |
   "arch-power" |
