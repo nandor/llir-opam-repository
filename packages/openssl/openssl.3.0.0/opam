@@ -6,7 +6,7 @@ authors: ["OpenSSL Software Foundation, Inc"]
 license: "Apache 2.0"
 build: [
   [
-    "./Configure"
+    "./config"
       "--prefix=%{prefix}%"
       "--openssldir=%{prefix}%/lib/ssl"
       "no-asm"
@@ -22,6 +22,6 @@ depends: [
 ]
 synopsis: "OpenSSL compiled for LLIR"
 url {
-  src: "https://www.openssl.org/source/openssl-3.0.0-alpha11.tar.gz"
-  checksum: "sha256=2a18f18df6a7ba33cfcc423b77d93990bf70939c06aa2b599b1eabf6e222ea74"
+  src: "https://www.openssl.org/source/openssl-1.1.1j.tar.gz"
+  checksum: "sha256=aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf"
 }
