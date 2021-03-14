@@ -16,12 +16,11 @@ depends: [
   "llir-musl"
   "openssl"
 ]
-patches: "llir.patch"
 synopsis: "rust with an LLIR backend"
 setenv: [
-  [ CARGO_HOME = "%{prefix}%" ]
+  [ CARGO_HOME = "%{prefix}%/.cargo" ]
 ]
 url {
-  src: "git+https://github.com/rust-lang/rust#1.49.0"
+  src: "git+https://github.com/nandor/llir-rust.git"
 }
 
