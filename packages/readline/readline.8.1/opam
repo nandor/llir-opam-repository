@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: "chet.ramey@case.edu"
+homepage: "https://tiswww.case.edu/php/chet/readline/rltop.html"
+bug-reports: "bug-readline@gnu.org"
+authors: ["Chet Ramey"]
+license: "GPLv3"
+build: [
+  ["./configure" "--prefix" prefix]
+  [ make "-j%{jobs}%" "SHLIB_LIBS=-ltermcap" "all" "shared" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "readline compiled for LLIR"
+url {
+  src: "ftp://ftp.cwru.edu/pub/bash/readline-8.1.tar.gz"
+  checksum: "md5=e9557dd5b1409f5d7b37ef717c64518e"
+}

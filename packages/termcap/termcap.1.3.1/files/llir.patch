@@ -1,0 +1,25 @@
+diff --git a/Makefile.in b/Makefile.in
+index 578a50a..b96dc00 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -21,7 +21,7 @@ srcdir = @srcdir@
+ VPATH = @srcdir@
+ 
+ CC = @CC@
+-AR = ar
++AR = @AR@
+ RANLIB = @RANLIB@
+ 
+ INSTALL = @INSTALL@
+diff --git a/configure.in b/configure.in
+index f3f944f..ad5a520 100644
+--- a/configure.in
++++ b/configure.in
+@@ -16,6 +16,7 @@ AC_SUBST(termcapfile)dnl
+ 
+ AC_PROG_CC
+ AC_PROG_RANLIB
++AC_CHECK_TOOL(AR, ar)
+ AC_PROG_INSTALL
+ AC_HAVE_HEADERS(string.h unistd.h)
+ AC_STDC_HEADERS
