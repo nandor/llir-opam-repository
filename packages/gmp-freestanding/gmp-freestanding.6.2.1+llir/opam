@@ -23,7 +23,7 @@ flags: light-uninstall
 extra-files: [
   ["mirage-install.sh" "md5=7312cc2daac7fa288302e0a15cc6b81c"]
   ["mirage-build.sh" "md5=3270c6282caf90ed5d8e8beccdefc031"]
-  ["gmp-freestanding.pc" "md5=82797d0bc845c992c7324d9ef5521323"]
+  ["gmp-freestanding.pc" "md5=314f83a7d574bb4d1afe0dabffa5fbe0"]
 ]
 url {
   src: "git+https://github.com/nandor/llir-gmp#master"
