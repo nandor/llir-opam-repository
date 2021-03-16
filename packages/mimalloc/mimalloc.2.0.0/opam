@@ -1,0 +1,25 @@
+opam-version: "2.0"
+homepage: "https://github.com/microsoft/mimalloc"
+bug-reports: "https://github.com/microsoft/mimalloc/issues"
+authors: ["Microsoft"]
+license: "GPLv3"
+build: [
+  [ "sh" "-x" "configure.sh" prefix]
+  [ make ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "mimalloc compiled for LLIR"
+extra-files: [
+  [ "configure.sh" "md5=d759c2a4b66ccdb0ae79a8480f2c147c" ]
+  [ "llir.patch" "md5=1a84b4515a5e14b20a920eda4d67f3a0" ]
+]
+patches: "llir.patch"
+url {
+  src: "https://github.com/microsoft/mimalloc/archive/v2.0.0.tar.gz"
+  checksum: "md5=27c61173ebf422cd8189bb3e2ef115c7"
+}
