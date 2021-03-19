@@ -27,7 +27,7 @@ index b07b8c6..94d159a 100644
  	echo '#undef OCAML_OS_TYPE' >> ocaml/runtime/caml/s.h
  	echo '#define OCAML_OS_TYPE "None"' >> ocaml/runtime/caml/s.h
 diff --git a/configure.sh b/configure.sh
-index 4d154ed..6424d85 100755
+index 4d154ed..7d9064e 100755
 --- a/configure.sh
 +++ b/configure.sh
 @@ -24,7 +24,7 @@ fi
@@ -39,24 +39,39 @@ index 4d154ed..6424d85 100755
  BUILD_OS="$(uname -s)"
  OCAML_BUILD_ARCH=
  
-@@ -34,9 +34,16 @@ case "${BUILD_ARCH}" in
+@@ -34,9 +34,22 @@ case "${BUILD_ARCH}" in
      amd64|x86_64)
          BUILD_ARCH="x86_64"
          OCAML_BUILD_ARCH="amd64"
-+	OCAML_CONFIG_FLAGS=""
-         ;;
++        OCAML_CONFIG_FLAGS=""
++        ;;
 +    llir_amd64)
-+	BUILD_ARCH="x86_64"
-+	OCAML_BUILD_ARCH="llir_amd64"
-+	OCAML_CONFIG_FLAGS="--enable-llir"
-+	;;
++        BUILD_ARCH="x86_64"
++        OCAML_BUILD_ARCH="llir_amd64"
++        OCAML_CONFIG_FLAGS="--enable-llir"
+         ;;
      aarch64)
++        BUILD_ARCH="aarch64"
          OCAML_BUILD_ARCH="arm64"
-+	OCAML_CONFIG_FLAGS=""
++        OCAML_CONFIG_FLAGS=""
++        ;;
++    llir_arm64)
++        BUILD_ARCH="aarch64"
++        OCAML_BUILD_ARCH="llir_arm64"
++        OCAML_CONFIG_FLAGS="--enable-llir"
          ;;
      *)
          echo "ERROR: Unsupported architecture: ${BUILD_ARCH}" 1>&2
-@@ -54,6 +61,7 @@ FREESTANDING_CFLAGS=${FREESTANDING_CFLAGS}
+@@ -45,7 +58,7 @@ case "${BUILD_ARCH}" in
+ esac
+ 
+ PKG_CONFIG_EXTRA_LIBS=
+-if [ "${BUILD_ARCH}" = "aarch64" ]; then
++if [ "${OCAML_BUILD_ARCH}" = "arm64" ]; then
+     PKG_CONFIG_EXTRA_LIBS="$PKG_CONFIG_EXTRA_LIBS $(gcc -print-libgcc-file-name)" || exit 1
+ fi
+ 
+@@ -54,6 +67,7 @@ FREESTANDING_CFLAGS=${FREESTANDING_CFLAGS}
  BUILD_ARCH=${BUILD_ARCH}
  BUILD_OS=${BUILD_OS}
  OCAML_BUILD_ARCH=${OCAML_BUILD_ARCH}
@@ -114,7 +129,7 @@ index 8a77058..1396447 100644
    if (oldmem == 0) {
      mem = dlmalloc(bytes);
 diff --git a/openlibm/Make.inc b/openlibm/Make.inc
-index f1c177d..5b1b536 100644
+index f1c177d..fddff8f 100644
 --- a/openlibm/Make.inc
 +++ b/openlibm/Make.inc
 @@ -21,26 +21,7 @@ else
@@ -154,7 +169,7 @@ index f1c177d..5b1b536 100644
  
  # If CFLAGS does not contain a -O optimization flag, default to -O3
  ifeq ($(findstring -O,$(CFLAGS)),)
-@@ -120,7 +104,7 @@ SFLAGS_add  += $(SFLAGS_arch)
+@@ -120,10 +104,10 @@ SFLAGS_add  += $(SFLAGS_arch)
  LDFLAGS_add += $(LDFLAGS_arch)
  
  CFLAGS_add += -std=c99 -Wall -I$(OPENLIBM_HOME) -I$(OPENLIBM_HOME)/include -I$(OPENLIBM_HOME)/$(ARCH) -I$(OPENLIBM_HOME)/src -DASSEMBLER -D__BSD_VISIBLE -Wno-implicit-function-declaration
@@ -162,12 +177,16 @@ index f1c177d..5b1b536 100644
 +ifneq ($(filter $(ARCH),i387 amd64 llir_amd64 powerpc),)
  CFLAGS_add += -I$(OPENLIBM_HOME)/ld80
  else
- ifneq ($(filter $(ARCH),aarch64),)
+-ifneq ($(filter $(ARCH),aarch64),)
++ifneq ($(filter $(ARCH),aarch64 llir_aarch64),)
+ CFLAGS_add += -I$(OPENLIBM_HOME)/ld128
+ endif
+ endif
 diff --git a/openlibm/Makefile b/openlibm/Makefile
-index 7144cf9..2b08853 100644
+index 7144cf9..99ec78a 100644
 --- a/openlibm/Makefile
 +++ b/openlibm/Makefile
-@@ -3,7 +3,7 @@ include ./Make.inc
+@@ -3,10 +3,10 @@ include ./Make.inc
  
  SUBDIRS = src $(ARCH) bsdsrc
  # Add ld80 directory on x86 and x64
@@ -175,7 +194,11 @@ index 7144cf9..2b08853 100644
 +ifneq ($(filter $(ARCH),i387 amd64 llir_amd64),)
  SUBDIRS += ld80
  else
- ifneq ($(filter $(ARCH),aarch64),)
+-ifneq ($(filter $(ARCH),aarch64),)
++ifneq ($(filter $(ARCH),aarch64 llir_aarch64),)
+ SUBDIRS += ld128
+ else
+ endif
 @@ -56,7 +56,7 @@ check test: test/test-double test/test-float
  	test/test-float
  
@@ -185,13 +208,28 @@ index 7144cf9..2b08853 100644
  
  libopenlibm.$(OLM_MAJOR_MINOR_SHLIB_EXT): $(OBJS)
  	$(CC) -shared $(OBJS) $(LDFLAGS) $(LDFLAGS_add) -Wl,$(SONAME_FLAG),libopenlibm.$(OLM_MAJOR_SHLIB_EXT) -o $@
+@@ -72,7 +72,7 @@ test/test-float: libopenlibm.$(OLM_MAJOR_MINOR_SHLIB_EXT)
+ 	$(MAKE) -C test test-float
+ 
+ clean:
+-	rm -f aarch64/*.o amd64/*.o arm/*.o bsdsrc/*.o i387/*.o ld80/*.o ld128/*.o src/*.o powerpc/*.o
++	rm -f aarch64/*.o llir_aarch64/*.o amd64/*.o llir_amd64/*.o arm/*.o bsdsrc/*.o i387/*.o ld80/*.o ld128/*.o src/*.o powerpc/*.o
+ 	rm -f libopenlibm.a libopenlibm.*$(SHLIB_EXT)*
+ 	$(MAKE) -C test clean
+ 
 diff --git a/openlibm/include/openlibm_fenv.h b/openlibm/include/openlibm_fenv.h
-index 9cdb4a2..72aa6b0 100644
+index 9cdb4a2..40aa907 100644
 --- a/openlibm/include/openlibm_fenv.h
 +++ b/openlibm/include/openlibm_fenv.h
-@@ -5,7 +5,11 @@
+@@ -3,9 +3,17 @@
+ #else /* !OPENLIBM_USE_HOST_FENV_H */
+ 
  #if defined(__aarch64__) || defined(__arm__)
++#if defined(__llir__)
++#include <openlibm_fenv_llir_arm.h>
++#else
  #include <openlibm_fenv_arm.h>
++#endif
  #elif defined(__x86_64__)
 +#ifdef __llir__
 +#include <openlibm_fenv_llir_amd64.h>
@@ -429,6 +467,307 @@ index 0000000..4e6e8c9
 +__END_DECLS
 +
 +#endif	/* !_FENV_H_ */
+diff --git a/openlibm/include/openlibm_fenv_llir_arm.h b/openlibm/include/openlibm_fenv_llir_arm.h
+new file mode 100644
+index 0000000..ad7609f
+--- /dev/null
++++ b/openlibm/include/openlibm_fenv_llir_arm.h
+@@ -0,0 +1,230 @@
++/*-
++ * Copyright (c) 2004-2005 David Schultz <das@FreeBSD.ORG>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * $FreeBSD: src/lib/msun/arm/fenv.h,v 1.6 2011/10/10 15:43:09 das Exp $
++ */
++
++#ifndef _FENV_H_
++#define _FENV_H_
++
++#include <stdint.h>
++
++#include "cdefs-compat.h"
++
++#ifndef __fenv_static
++#define __fenv_static static
++#endif
++
++typedef uint32_t  fenv_t;
++typedef uint32_t  fexcept_t;
++
++/* Exception flags */
++#define FE_INVALID  0x0001
++#define FE_DIVBYZERO  0x0002
++#define FE_OVERFLOW 0x0004
++#define FE_UNDERFLOW  0x0008
++#define FE_INEXACT  0x0010
++#define FE_ALL_EXCEPT (FE_DIVBYZERO | FE_INEXACT | \
++       FE_INVALID | FE_OVERFLOW | FE_UNDERFLOW)
++
++/* Rounding modes */
++#define FE_TONEAREST  0x0000
++#define FE_TOWARDZERO 0x0001
++#define FE_UPWARD 0x0002
++#define FE_DOWNWARD 0x0003
++#define _ROUND_MASK (FE_TONEAREST | FE_DOWNWARD | \
++       FE_UPWARD | FE_TOWARDZERO)
++__BEGIN_DECLS
++
++/* Default floating-point environment */
++extern const fenv_t __fe_dfl_env;
++#define FE_DFL_ENV  (&__fe_dfl_env)
++
++/* We need to be able to map status flag positions to mask flag positions */
++#define _FPUSW_SHIFT  16
++#define _ENABLE_MASK  (FE_ALL_EXCEPT << _FPUSW_SHIFT)
++
++#if defined(__aarch64__)
++#define __rfs(__fpsr)   __asm __volatile("get.i32 %0, $aarch64_fpsr" : "=wr" (*(__fpsr)))
++#define __wfs(__fpsr)   __asm __volatile("set $aarch64_fpsr,%0" : : "wr" (__fpsr))
++/* Test for hardware support for ARM floating point operations, explicitly
++checking for float and double support, see "ARM C Language Extensions", 6.5.1 */
++#elif defined(__ARM_FP) && (__ARM_FP & 0x0C) != 0
++#define __rfs(__fpsr)   __asm __volatile("get.i32 %0, $arm_fpscr" : "=&r" (*(__fpsr)))
++#define __wfs(__fpsr)   __asm __volatile("set $arm_fpscr,%0" : : "r" (__fpsr))
++#else
++#define __rfs(__fpsr) (*(__fpsr) = 0)
++#define __wfs(__fpsr)
++#endif
++
++__fenv_static inline int
++feclearexcept(int __excepts)
++{
++  fexcept_t __fpsr;
++
++  __rfs(&__fpsr);
++  __fpsr &= ~__excepts;
++  __wfs(__fpsr);
++  return (0);
++}
++
++__fenv_static inline int
++fegetexceptflag(fexcept_t *__flagp, int __excepts)
++{
++  fexcept_t __fpsr;
++
++  __rfs(&__fpsr);
++  *__flagp = __fpsr & __excepts;
++  return (0);
++}
++
++__fenv_static inline int
++fesetexceptflag(const fexcept_t *__flagp, int __excepts)
++{
++  fexcept_t __fpsr;
++
++  __rfs(&__fpsr);
++  __fpsr &= ~__excepts;
++  __fpsr |= *__flagp & __excepts;
++  __wfs(__fpsr);
++  return (0);
++}
++
++__fenv_static inline int
++feraiseexcept(int __excepts)
++{
++  fexcept_t __ex = __excepts;
++
++  fesetexceptflag(&__ex, __excepts);  /* XXX */
++  return (0);
++}
++
++__fenv_static inline int
++fetestexcept(int __excepts)
++{
++  fexcept_t __fpsr;
++
++  __rfs(&__fpsr);
++  return (__fpsr & __excepts);
++}
++
++__fenv_static inline int
++fegetround(void)
++{
++
++  /*
++   * Apparently, the rounding mode is specified as part of the
++   * instruction format on ARM, so the dynamic rounding mode is
++   * indeterminate.  Some FPUs may differ.
++   */
++  return (-1);
++}
++
++__fenv_static inline int
++fesetround(int __round)
++{
++
++  return (-1);
++}
++
++__fenv_static inline int
++fegetenv(fenv_t *__envp)
++{
++
++  __rfs(__envp);
++  return (0);
++}
++
++__fenv_static inline int
++feholdexcept(fenv_t *__envp)
++{
++  fenv_t __env;
++
++  __rfs(&__env);
++  *__envp = __env;
++  __env &= ~(FE_ALL_EXCEPT | _ENABLE_MASK);
++  __wfs(__env);
++  return (0);
++}
++
++__fenv_static inline int
++fesetenv(const fenv_t *__envp)
++{
++
++  __wfs(*__envp);
++  return (0);
++}
++
++__fenv_static inline int
++feupdateenv(const fenv_t *__envp)
++{
++  fexcept_t __fpsr;
++
++  __rfs(&__fpsr);
++  __wfs(*__envp);
++  feraiseexcept(__fpsr & FE_ALL_EXCEPT);
++  return (0);
++}
++
++#if __BSD_VISIBLE
++
++/* We currently provide no external definitions of the functions below. */
++
++static inline int
++feenableexcept(int __mask)
++{
++  fenv_t __old_fpsr, __new_fpsr;
++
++  __rfs(&__old_fpsr);
++  __new_fpsr = __old_fpsr | (__mask & FE_ALL_EXCEPT) << _FPUSW_SHIFT;
++  __wfs(__new_fpsr);
++  return ((__old_fpsr >> _FPUSW_SHIFT) & FE_ALL_EXCEPT);
++}
++
++static inline int
++fedisableexcept(int __mask)
++{
++  fenv_t __old_fpsr, __new_fpsr;
++
++  __rfs(&__old_fpsr);
++  __new_fpsr = __old_fpsr & ~((__mask & FE_ALL_EXCEPT) << _FPUSW_SHIFT);
++  __wfs(__new_fpsr);
++  return ((__old_fpsr >> _FPUSW_SHIFT) & FE_ALL_EXCEPT);
++}
++
++static inline int
++fegetexcept(void)
++{
++  fenv_t __fpsr;
++
++  __rfs(&__fpsr);
++  return ((__fpsr & _ENABLE_MASK) >> _FPUSW_SHIFT);
++}
++
++#endif /* __BSD_VISIBLE */
++
++__END_DECLS
++
++#endif  /* !_FENV_H_ */
+diff --git a/openlibm/llir_aarch64/Make.files b/openlibm/llir_aarch64/Make.files
+new file mode 100644
+index 0000000..483a7cc
+--- /dev/null
++++ b/openlibm/llir_aarch64/Make.files
+@@ -0,0 +1 @@
++$(CUR_SRCS) = fenv.c
+diff --git a/openlibm/llir_aarch64/fenv.c b/openlibm/llir_aarch64/fenv.c
+new file mode 100644
+index 0000000..99b1f57
+--- /dev/null
++++ b/openlibm/llir_aarch64/fenv.c
+@@ -0,0 +1,52 @@
++/*-
++ * Copyright (c) 2004 David Schultz <das@FreeBSD.ORG>
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
++ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
++ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
++ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
++ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
++ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
++ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
++ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
++ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
++ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ *
++ * $FreeBSD: src/lib/msun/arm/fenv.c,v 1.3 2011/10/16 05:37:56 das Exp $
++ */
++
++#define __fenv_static
++#include <openlibm_fenv.h>
++
++#ifdef __GNUC_GNU_INLINE__
++#error "This file must be compiled with C99 'inline' semantics"
++#endif
++
++/*
++ * Hopefully the system ID byte is immutable, so it's valid to use
++ * this as a default environment.
++ */
++const fenv_t __fe_dfl_env = 0;
++
++extern inline int feclearexcept(int __excepts);
++extern inline int fegetexceptflag(fexcept_t *__flagp, int __excepts);
++extern inline int fesetexceptflag(const fexcept_t *__flagp, int __excepts);
++extern inline int feraiseexcept(int __excepts);
++extern inline int fetestexcept(int __excepts);
++extern inline int fegetround(void);
++extern inline int fesetround(int __round);
++extern inline int fegetenv(fenv_t *__envp);
++extern inline int feholdexcept(fenv_t *__envp);
++extern inline int fesetenv(const fenv_t *__envp);
++extern inline int feupdateenv(const fenv_t *__envp);
 diff --git a/openlibm/llir_amd64/Make.files b/openlibm/llir_amd64/Make.files
 new file mode 100644
 index 0000000..a32f3b5
@@ -1107,7 +1446,7 @@ index 0000000..ddf7dba
 +	return (omask);
 +}
 diff --git a/openlibm/src/Make.files b/openlibm/src/Make.files
-index 5462ffc..e833ed8 100644
+index 5462ffc..7634d32 100644
 --- a/openlibm/src/Make.files
 +++ b/openlibm/src/Make.files
 @@ -37,7 +37,7 @@ $(CUR_SRCS) += s_nan.c
@@ -1115,7 +1454,7 @@ index 5462ffc..e833ed8 100644
  
  # Add in long double functions for x86, x64 and aarch64
 -ifneq ($(filter $(ARCH),i387 amd64 aarch64),)
-+ifneq ($(filter $(ARCH),i387 amd64 llir_amd64 aarch64),)
++ifneq ($(filter $(ARCH),i387 amd64 llir_amd64 aarch64 llir_aarch64),)
  # C99 long double functions
  $(CUR_SRCS) +=	s_copysignl.c s_fabsl.c s_llrintl.c s_lrintl.c s_modfl.c
  

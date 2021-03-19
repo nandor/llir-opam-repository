@@ -1,10 +1,10 @@
 diff --git a/lib/bindings/barrier_stubs.c b/lib/bindings/barrier_stubs.c
-index 638cead..b658e72 100644
+index 638cead..dfab9f8 100644
 --- a/lib/bindings/barrier_stubs.c
 +++ b/lib/bindings/barrier_stubs.c
-@@ -22,9 +22,15 @@
+@@ -22,14 +22,26 @@
  #include <caml/bigarray.h>
-
+ 
  #if defined(__x86_64__)
 +#if defined(__llir__)
 +#define mb()     __asm__ __volatile__("x86_m_fence" ::: "memory")
@@ -16,5 +16,16 @@ index 638cead..b658e72 100644
  #define wmb()    __asm__ __volatile__("sfence" ::: "memory")
 +#endif
  #elif defined(__aarch64__)
++#if defined(__llir__)
++#define mb()     // TODO: __asm__ __volatile__("aarch64_m_fence" ::: "memory")
++#define rmb()    // TODO: __asm__ __volatile__("aarch64_l_fence" ::: "memory")
++#define wmb()    // TODO: __asm__ __volatile__("aarch64_s_fence" ::: "memory")
++#else
  #define dsb(opt) __asm__ __volatile__("dsb " #opt ::: "memory")
  #define mb()     dsb(sy)
+ #define rmb()    dsb(ld)
+ #define wmb()    dsb(st)
++#endif
+ #else
+ #error Unsupported architecture
+ #endif
