@@ -21,7 +21,7 @@ synopsis: "The GNU Multiple Precision Arithmetic Library"
 description: "Freestanding build of GNU GMP."
 flags: light-uninstall
 extra-files: [
-  ["mirage-install.sh" "md5=7312cc2daac7fa288302e0a15cc6b81c"]
+  ["mirage-install.sh" "md5=9dfe8542225983e05f516b7a8cd07b41"]
   ["mirage-build.sh" "md5=3270c6282caf90ed5d8e8beccdefc031"]
   ["gmp-freestanding.pc" "md5=314f83a7d574bb4d1afe0dabffa5fbe0"]
 ]

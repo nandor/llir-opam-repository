@@ -1,7 +1,5 @@
 #!/bin/sh -ex
-if [ -z "$PREFIX" ]; then
-	PREFIX=`opam config var prefix`
-fi
+PREFIX=`opam config var prefix`
 PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig
 LIBDIR=${PREFIX}/lib/gmp-freestanding
 
