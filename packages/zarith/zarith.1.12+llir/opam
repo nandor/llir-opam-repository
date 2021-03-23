@@ -11,7 +11,7 @@ dev-repo: "git+https://github.com/ocaml/Zarith.git"
 build: [
   [
     "sh" "-exc"
-    "CFLAGS=\"-I%{prefix}%/include\" LDFLAGS=\"-L%{lib}%\" ./configure -noasm"] { os = "linux"}
+    "CFLAGS=\"-I%{prefix}%/include\" LDFLAGS=\"-L%{lib}%\" ./configure"] { os = "linux"}
   [make]
 ]
 install: [
