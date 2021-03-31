@@ -1,0 +1,10 @@
+opam-version: "2.0"
+maintainer: "blue-prawn"
+authors: ["Anthony Green"]
+homepage: "http://sourceware.org/libffi/"
+license: "MIT"
+depends: ["libffi"]
+synopsis: "Virtual package relying on libffi system installation"
+description: "This package can only install if libffi is installed on the system."
+bug-reports: "https://github.com/ocaml/opam-repository/issues"
+flags: conf

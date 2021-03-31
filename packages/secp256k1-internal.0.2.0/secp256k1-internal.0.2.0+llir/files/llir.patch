@@ -1,0 +1,13 @@
+diff --git a/config/discover.ml b/config/discover.ml
+index e3012c4..cdb561e 100644
+--- a/config/discover.ml
++++ b/config/discover.ml
+@@ -5,7 +5,7 @@ let sixtyfour = Sys.word_size = 64
+ 
+ let symbols = [
+   (if sixtyfour then Some ("HAVE___INT128", None) else None) ;
+-  (if hw = "x86_64" then Some ("USE_ASM_X86_64", None) else None) ;
++  (* (if hw = "x86_64" then Some ("USE_ASM_X86_64", None) else None) ; *)
+   Some ((if sixtyfour then "USE_SCALAR_4X64" else "USE_SCALAR_8X32"), None) ;
+   Some ((if sixtyfour then "USE_FIELD_5X52" else "USE_FIELD_10X26"), None) ;
+   Some ("USE_NUM_GMP", None) ;

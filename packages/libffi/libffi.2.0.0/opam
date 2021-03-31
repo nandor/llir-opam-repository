@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: "nand"
+homepage: "https://sourceware.org/libffi/"
+bug-reports: "https://github.com/nandor/llir-libffi/issues"
+license: "GPL-1.0-or-later"
+build: [
+  [ "sh" "-x" "autogen.sh"]
+  [ "sh" "-x" "configure" "--prefix=%{prefix}%" ]
+  [ make "-j%{jobs}%" ]
+  [ make "install" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "libffi compiled for LLIR"
+url {
+  src: "git+https://github.com/nandor/llir-libffi#master"
+}

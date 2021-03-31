@@ -1,0 +1,154 @@
+diff --git a/raw/Makefile b/raw/Makefile
+index 6112bb3..a4750db 100644
+--- a/raw/Makefile
++++ b/raw/Makefile
+@@ -35,6 +35,7 @@ endif
+ # TODO: Makefile.config: configure; ./$<
+ # TODO: include Makefile.config
+ UNAME		?= $(shell uname)
++MARCH 		= $(ARCH)
+ MARCH		?= $(shell uname -m)
+ ifeq ($(UNAME),Darwin)
+   VARIANT	= -darwin
+diff --git a/raw/Makefile.config b/raw/Makefile.config
+index c4f751f..d993f31 100644
+--- a/raw/Makefile.config
++++ b/raw/Makefile.config
+@@ -1,3 +1,5 @@
+-CFLAGS_128 = -mavx
+-CFLAGS_256 = -mavx -mavx2
++BLACKLIST += Hacl_Curve25519_64.c Hacl_HPKE_Curve64_CP128_SHA256.c Hacl_HPKE_Curve64_CP128_SHA512.c Hacl_HPKE_Curve64_CP256_SHA256.c Hacl_HPKE_Curve64_CP256_SHA512.c Hacl_HPKE_Curve64_CP32_SHA256.c Hacl_HPKE_Curve64_CP32_SHA512.c
++BLACKLIST += evercrypt_vale_stubs.c
++BLACKLIST += Hacl_Blake2s_128.c Hacl_Chacha20Poly1305_128.c Hacl_Chacha20_Vec128.c Hacl_HKDF_Blake2s_128.c Hacl_HMAC_Blake2s_128.c Hacl_HPKE_Curve51_CP128_SHA256.c Hacl_HPKE_Curve51_CP128_SHA512.c Hacl_HPKE_Curve64_CP128_SHA256.c Hacl_HPKE_Curve64_CP128_SHA512.c Hacl_HPKE_P256_CP128_SHA256.c Hacl_Poly1305_128.c Hacl_Streaming_Blake2s_128.c Hacl_Streaming_Poly1305_128.c
++BLACKLIST += Hacl_Blake2b_256.c Hacl_Chacha20Poly1305_256.c Hacl_Chacha20_Vec256.c Hacl_HKDF_Blake2b_256.c Hacl_HMAC_Blake2b_256.c Hacl_HPKE_Curve51_CP256_SHA256.c Hacl_HPKE_Curve51_CP256_SHA512.c Hacl_HPKE_Curve64_CP256_SHA256.c Hacl_HPKE_Curve64_CP256_SHA512.c Hacl_HPKE_P256_CP256_SHA256.c Hacl_Poly1305_256.c Hacl_Streaming_Blake2b_256.c Hacl_Streaming_Poly1305_256.c
+ LDFLAGS	+= -Xlinker -z -Xlinker noexecstack -Xlinker --unresolved-symbols=report-all
+diff --git a/raw/config.h b/raw/config.h
+index f5bcd20..6b7dbe0 100644
+--- a/raw/config.h
++++ b/raw/config.h
+@@ -1,3 +1,4 @@
+-#define SUPPORTS_VALE 1
+-#define SUPPORTS_128 1
+-#define SUPPORTS_256 1
++#define BROKEN_INTRINSICS 1
++#define BROKEN_INLINE_ASM 1
++#define Lib_IntVector_Intrinsics_vec128 void *
++#define Lib_IntVector_Intrinsics_vec256 void *
+diff --git a/raw/configure b/raw/configure
+index 33c1dbf..964432b 100755
+--- a/raw/configure
++++ b/raw/configure
+@@ -58,7 +58,7 @@ check_no_bug81300 () {
+ #include <lib_intrinsics.h>
+ uint64_t add4_variables(uint64_t *x, uint64_t y0) {
+   uint64_t *r2 = x + 2;
+-  uint64_t *r3 = x + 3; 
++  uint64_t *r3 = x + 3;
+   uint64_t cc = Lib_IntTypes_Intrinsics_add_carry_u64(0, x[0], y0, x);
+   uint64_t cc1 = Lib_IntTypes_Intrinsics_add_carry_u64(cc, 1, 0, x);
+   uint64_t cc2 = Lib_IntTypes_Intrinsics_add_carry_u64(1, 0, 0, r2);
+@@ -299,55 +299,6 @@ supports_vale=false
+ supports_inline_asm=false
+ supports_intrinsics=false
+ 
+-if detect_arm; then
+-  echo "... detected ARM platform"
+-  if detect_arm_neon; then
+-    echo "... $build_target supports 128-bit NEON"
+-    supports_128=true
+-    echo "... $CC $CROSS_CFLAGS can cross-compile to ARM64 with SIMD"
+-    echo "CFLAGS_128 = -march=armv8-a+simd" >> Makefile.config
+-  fi
+-fi
+-
+-if detect_x86; then
+-  # Just print information: none of the above build options are supported on x86
+-  echo "... detected x86 platform"
+-  # TODO: can probably detect intrinsics here too and try to enable them!
+-fi
+-
+-if detect_x64; then
+-  echo "... detected x64 platform"
+-  echo "... $build_target supports 128-bit and 256-bit AVX/AVX2"
+-  supports_128=true
+-  echo "CFLAGS_128 = -mavx" >> Makefile.config
+-  supports_256=true
+-  echo "CFLAGS_256 = -mavx -mavx2" >> Makefile.config
+-  # x64 always supports Vale -- this configure script assumes a GCC-like
+-  # compiler, meaning that in theory inline assembly should work (rather than
+-  # the external linking) BUT some versions of xcode are irremediably broken and
+-  # fail with a register allocator error
+-  # Note: MSVC compilers don't support inline GCC assembly and are expected to
+-  # use their own build system
+-  echo "... $build_target supports vale"
+-  supports_vale=true
+-  if detect_broken_xcode; then
+-    echo "found broken XCode version, known to refuse to compile our inline ASM, disabling "
+-  else
+-    echo "... not using known buggy Apple LLVM build"
+-    echo "... $build_target supports our inline ASM"
+-    supports_inline_asm=true
+-  fi
+-fi
+-
+-if detect_x86 || detect_x64; then
+-  if ! check_no_bug81300; then
+-    echo "found broken GCC < 5.5 with bug 81300, disabling subborrow + addcarry"
+-  else
+-    supports_intrinsics=true
+-    echo "... using a non-buggy GCC"
+-  fi
+-fi
+-
+ if ! $supports_intrinsics; then
+   echo "$build_target does not support _addcarry_u64, using a C implementation"
+   echo "#define BROKEN_INTRINSICS 1" >> config.h
+diff --git a/raw/evercrypt_targetconfig.h b/raw/evercrypt_targetconfig.h
+index d8658e0..399c49e 100644
+--- a/raw/evercrypt_targetconfig.h
++++ b/raw/evercrypt_targetconfig.h
+@@ -11,6 +11,7 @@
+  * preprocessor macros. In particular, the only relevant information for
+  * EverCrypt should be: SUPPORTS_128 and SUPPORTS_256. */
+ 
++#ifndef __llir__
+ #if defined(__x86_64__) || defined(_M_X64)
+ #define EVERCRYPT_TARGETCONFIG_X64 1
+ #elif defined(__i386__) || defined(_M_IX86)
+@@ -20,6 +21,7 @@
+ #elif defined(__arm__) || defined(_M_ARM)
+ #define EVERCRYPT_TARGETCONFIG_AARCH32 1
+ #endif
++#endif
+ 
+ #if __has_include("config.h")
+ #include "config.h"
+diff --git a/raw/libintvector.h b/raw/libintvector.h
+index 0b773bf..eb7c1f9 100644
+--- a/raw/libintvector.h
++++ b/raw/libintvector.h
+@@ -13,8 +13,12 @@
+ #include <tmmintrin.h>
+ #include <smmintrin.h>
+ 
++#ifndef Lib_IntVector_Intrinsics_vec128
++
+ typedef __m128i Lib_IntVector_Intrinsics_vec128;
+ 
++#endif
++
+ #define Lib_IntVector_Intrinsics_ni_aes_enc(x0, x1) \
+   (_mm_aesenc_si128(x0, x1))
+ 
+@@ -206,8 +210,11 @@ typedef __m128i Lib_IntVector_Intrinsics_vec128;
+ #include <immintrin.h>
+ #include <wmmintrin.h>
+ 
++#ifndef Lib_IntVector_Intrinsics_vec256
++
+ typedef __m256i Lib_IntVector_Intrinsics_vec256;
+ 
++#endif
+ 
+ #define Lib_IntVector_Intrinsics_vec256_eq64(x0, x1) \
+   (_mm256_cmpeq_epi64(x0, x1))

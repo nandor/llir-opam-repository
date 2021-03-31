@@ -32,14 +32,13 @@ description: """
 Mirage-crypto provides symmetric ciphers (DES, AES, RC4, ChaCha20/Poly1305), and
 hashes (MD5, SHA-1, SHA-2).
 """
-x-commit-hash: "61488bba767a1b084002a26bfea0a182ce301a8a"
+x-commit-hash: "3013c5286f563743e2f5c13da068a6bdf90cd805"
 url {
   src:
-    "https://github.com/mirage/mirage-crypto/releases/download/v0.8.8/mirage-crypto-v0.8.8.tbz"
+    "https://github.com/mirage/mirage-crypto/releases/download/v0.9.0/mirage-crypto-v0.9.0.tbz"
   checksum: [
-    "sha256=8b6ba8c51494c1b4585bf3a3a94e8f7c10419f4ffbe1c5fe77934de51df59fa5"
-    "sha512=5f130ae2690dcd4f9fa1df08209d3f7943120e87ac5833b3ba8b678e915be6efbca0dd062abedb71e0c1d158f229b4d35fa22bbb1d4a0c3aa0776d9133bb558c"
+    "sha256=716684f8a70031f16115e3c84d42141c75fb1e688b7a699bbd09166176ed5217"
+    "sha512=7eb56f28583567824b32bf33635b15c39dd684a047455b2cc6a5f768c52ccbe6d8eac80308fac80d78c8f678b0132059fdbc219a252de6ecfd53c26c717a9a3a"
   ]
 }
 patches: "llir.patch"
-
