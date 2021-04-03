@@ -20,6 +20,7 @@ build: [
       "-DLIBUNWIND_ENABLE_SHARED=OFF"
       "-DLIBUNWIND_ENABLE_STATIC=ON"
       "-DLIBUNWIND_INSTALL_LIBRARY=ON"
+      "-DLIBUNWIND_ENABLE_ASSERTIONS=OFF"
   ]
   [ make "-j" jobs "-C" "libunwind/Release" ]
 ]
