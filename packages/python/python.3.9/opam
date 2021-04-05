@@ -1,0 +1,28 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "www.openssl.org"
+bug-reports: "https://github.com/openssl/openssl/issues"
+authors: ["OpenSSL Software Foundation, Inc"]
+license: "Apache 2.0"
+build: [
+  [
+    "./configure"
+      "--disable-test-modules"
+      "--with-system-ffi"
+      "--prefix=%{prefix}%"
+  ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+  "libffi"
+]
+synopsis: "cpython compiled for LLIR"
+url {
+  src: "https://github.com/python/cpython/archive/refs/tags/v3.9.4.tar.gz"
+  checksum: "md5=1ee1ff29ed440d61e0007b524ff8e5bc"
+}
+patches: "llir.patch"
