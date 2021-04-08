@@ -1,0 +1,17 @@
+diff --git a/time_stamp_counter/src/time_stamp_counter_stubs.c b/time_stamp_counter/src/time_stamp_counter_stubs.c
+index 5d5ec32..0d6e433 100644
+--- a/time_stamp_counter/src/time_stamp_counter_stubs.c
++++ b/time_stamp_counter/src/time_stamp_counter_stubs.c
+@@ -24,11 +24,9 @@
+ CAMLprim value tsc_get()
+ {
+ #ifdef __x86_64__
+-  uint32_t hi, lo;
+-  __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
+   /* Given we're on x86_64, caml_alloc_int63 should expand to Val_long, and hence
+    * the stub may be marked noalloc */
+-  return caml_alloc_int63( ((uint64_t)lo) | (((uint64_t)hi)<<32) );
++  return caml_alloc_int63(__rdtsc());
+ #else
+ #define NANOS_PER_SECOND 1000000000
+   struct timespec ts;

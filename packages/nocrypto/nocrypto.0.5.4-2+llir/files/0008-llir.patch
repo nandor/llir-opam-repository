@@ -1,0 +1,57 @@
+diff --git a/src/native/hash/bitfn.h b/src/native/hash/bitfn.h
+index e1cd6e9..34eec21 100644
+--- a/src/native/hash/bitfn.h
++++ b/src/native/hash/bitfn.h
+@@ -32,7 +32,11 @@
+ #  define ARCH_HAS_SWAP32
+ static inline uint32_t bitfn_swap32(uint32_t a)
+ {
++#ifdef __llir__
++  __asm__ ("bswap.i32 %0, %1" : "=r"(a) : "r"(a));
++#else
+ 	__asm__ ("bswap %0" : "=r" (a) : "0" (a));
++#endif
+ 	return a;
+ }
+ /**********************************************************/
+@@ -54,13 +58,21 @@ static inline uint32_t bitfn_swap32(uint32_t a)
+ #  define ARCH_HAS_SWAP64
+ static inline uint32_t bitfn_swap32(uint32_t a)
+ {
++#ifdef __llir__
++  __asm__ ("bswap.i32 %0, %1" : "=r"(a) : "r"(a));
++#else
+ 	__asm__ ("bswap %0" : "=r" (a) : "0" (a));
++#endif
+ 	return a;
+ }
+ 
+ static inline uint64_t bitfn_swap64(uint64_t a)
+ {
++#ifdef __llir__
++  __asm__ ("bswap.i64 %0, %1" : "=r"(a) : "r"(a));
++#else
+ 	__asm__ ("bswap %0" : "=r" (a) : "0" (a));
++#endif
+ 	return a;
+ }
+ 
+diff --git a/src/native/nocrypto.h b/src/native/nocrypto.h
+index 30d809f..fcded37 100644
+--- a/src/native/nocrypto.h
++++ b/src/native/nocrypto.h
+@@ -16,11 +16,12 @@
+ #endif
+ 
+ #if defined (__x86_64__) && defined (ACCELERATE) && defined (__SSE2__)
+-#define __nc_SSE2__
++//#define __nc_SSE2__
+ #endif
+ 
+ #if defined (__x86_64__) && defined (ACCELERATE) && defined (__AES__)
+-#define __nc_AES_NI__
++//#define __nc_AES_NI__
++#define __nc_AES_GENERIC__
+ #else
+ #define __nc_AES_GENERIC__
+ #endif

@@ -24,7 +24,7 @@ x-ci-accept-failures: [
 ]
 build: [
   ["sh" "-exc" "cd raw && ./configure"]
-  [make "-C" "raw"]
+  [make "-C" "raw" "-j%{jobs}%"]
 ]
 install: [make "-C" "raw" "install-hacl-star-raw"]
 dev-repo: "git+https://github.com/project-everest/hacl-star.git"
