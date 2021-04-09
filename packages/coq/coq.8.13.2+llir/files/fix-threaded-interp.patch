@@ -1,0 +1,54 @@
+diff --git a/kernel/byterun/coq_fix_code.c b/kernel/byterun/coq_fix_code.c
+index 306643f..c612ed6 100644
+--- a/kernel/byterun/coq_fix_code.c
++++ b/kernel/byterun/coq_fix_code.c
+@@ -26,6 +26,7 @@
+ #ifdef THREADED_CODE
+ char ** coq_instr_table;
+ char * coq_instr_base;
++#endif /*  THREADED_CODE */
+ int arity[STOP+1];
+ 
+ void init_arity () {
+@@ -82,8 +83,6 @@ void init_arity () {
+   arity[CLOSUREREC]=arity[CLOSURECOFIX]=arity[SWITCH]=0;
+ }
+ 
+-#endif /*  THREADED_CODE */
+-
+ 
+ void * coq_stat_alloc (asize_t sz)
+ {
+diff --git a/kernel/byterun/coq_fix_code.h b/kernel/byterun/coq_fix_code.h
+index 5a233e6..df09ca8 100644
+--- a/kernel/byterun/coq_fix_code.h
++++ b/kernel/byterun/coq_fix_code.h
+@@ -18,12 +18,13 @@ void * coq_stat_alloc (asize_t sz);
+ #ifdef THREADED_CODE
+ extern char ** coq_instr_table;
+ extern char * coq_instr_base;
+-void init_arity();
+ #define VALINSTR(instr) ((opcode_t)(coq_instr_table[instr] - coq_instr_base))
+ #else
+ #define VALINSTR(instr) instr
+ #endif /*  THREADED_CODE */
+ 
++void init_arity();
++
+ #define Is_instruction(pc,instr) (*pc == VALINSTR(instr))
+ 
+ value coq_tcode_of_code(value code);
+diff --git a/kernel/byterun/coq_memory.c b/kernel/byterun/coq_memory.c
+index 6233675..86c0d76 100644
+--- a/kernel/byterun/coq_memory.c
++++ b/kernel/byterun/coq_memory.c
+@@ -99,9 +99,7 @@ value init_coq_vm(value unit) /* ML */
+     fprintf(stderr,"already open \n");fflush(stderr);}
+   else {
+     drawinstr=0;
+-#ifdef THREADED_CODE
+     init_arity();
+-#endif /* THREADED_CODE */
+     /* Allocate the table of global and the stack */
+     init_coq_stack();
+     /* Initialing the interpreter */
