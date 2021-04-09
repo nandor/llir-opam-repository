@@ -1,0 +1,18 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+license: "isc"
+build: [
+  ["./configure" "--prefix" prefix]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "libsodium compiled for LLIR"
+url {
+  src: "https://github.com/jedisct1/libsodium/archive/refs/tags/1.0.18.tar.gz"
+  checksum: "md5=94a783f33ff8a97a09708bc61370d280" 
+}
