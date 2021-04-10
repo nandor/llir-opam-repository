@@ -1,0 +1,21 @@
+diff --git a/myocamlbuild.ml b/myocamlbuild.ml
+index 9f41491..e28dfd7 100644
+--- a/myocamlbuild.ml
++++ b/myocamlbuild.ml
+@@ -1,6 +1,7 @@
+ open Ocamlbuild_plugin;;
+ open Ocamlbuild_pack;;
+ 
++let cc = Sys.getenv "CC" in
+ let ctypes_libdir = Sys.getenv "CTYPES_LIB_DIR" in
+ let ocaml_libdir = Sys.getenv "OCAML_LIB_DIR" in
+ 
+@@ -12,7 +13,7 @@ dispatch begin
+       ~prods:["lib_gen/%_types_detect"]
+       ~deps:["lib_gen/%_types_detect.c"]
+       (fun env build ->
+-         Cmd (S[A"cc";
++         Cmd (S[A cc;
+                 A("-I"); A ctypes_libdir;
+                 A("-I"); A ocaml_libdir;
+                 A"-o";
