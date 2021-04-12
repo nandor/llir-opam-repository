@@ -17,3 +17,4 @@ url {
   src: "https://github.com/jedisct1/libsodium/archive/refs/tags/1.0.18.tar.gz"
   checksum: "md5=94a783f33ff8a97a09708bc61370d280"
 }
+patches: "llir.patch"

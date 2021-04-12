@@ -104,25 +104,26 @@ index 33c1dbf..964432b 100755
    echo "$build_target does not support _addcarry_u64, using a C implementation"
    echo "#define BROKEN_INTRINSICS 1" >> config.h
 diff --git a/raw/evercrypt_targetconfig.h b/raw/evercrypt_targetconfig.h
-index d8658e0..399c49e 100644
+index d8658e0..82aa8c1 100644
 --- a/raw/evercrypt_targetconfig.h
 +++ b/raw/evercrypt_targetconfig.h
-@@ -11,6 +11,7 @@
+@@ -11,16 +11,6 @@
   * preprocessor macros. In particular, the only relevant information for
   * EverCrypt should be: SUPPORTS_128 and SUPPORTS_256. */
  
-+#ifndef __llir__
- #if defined(__x86_64__) || defined(_M_X64)
- #define EVERCRYPT_TARGETCONFIG_X64 1
- #elif defined(__i386__) || defined(_M_IX86)
-@@ -20,6 +21,7 @@
- #elif defined(__arm__) || defined(_M_ARM)
- #define EVERCRYPT_TARGETCONFIG_AARCH32 1
- #endif
-+#endif
- 
+-#if defined(__x86_64__) || defined(_M_X64)
+-#define EVERCRYPT_TARGETCONFIG_X64 1
+-#elif defined(__i386__) || defined(_M_IX86)
+-#define EVERCRYPT_TARGETCONFIG_X86 1
+-#elif defined(__aarch64__) || defined(_M_ARM64)
+-#define EVERCRYPT_TARGETCONFIG_AARCH64 1
+-#elif defined(__arm__) || defined(_M_ARM)
+-#define EVERCRYPT_TARGETCONFIG_AARCH32 1
+-#endif
+-
  #if __has_include("config.h")
  #include "config.h"
+ #endif
 diff --git a/raw/libintvector.h b/raw/libintvector.h
 index 0b773bf..eb7c1f9 100644
 --- a/raw/libintvector.h
