@@ -1,0 +1,32 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index df7269c..12c0be0 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -9,3 +9,6 @@ crate-type = ["staticlib", "cdylib"]
+ 
+ [dependencies]
+ ocaml = "*"
++
++[patch.crates-io]
++cty = { git = 'https://github.com/nandor/llir-rust-cty', rev='3e6ee0036c42a47156f809c43539441efb5f1630' }
+diff --git a/src/dune b/src/dune
+index 1519156..ea427e3 100644
+--- a/src/dune
++++ b/src/dune
+@@ -6,13 +6,12 @@
+   (progn
+    (run cargo clean)
+    (run cargo build --target-dir %{project_root}/target --release)
+-   (run sh -c
+-     "mv %{project_root}/target/release/libvec_stubs.so ./dllvec_stubs.so || mv %{project_root}/target/release/libvec_stubs.dylib ./dllvec_stubs.so")
+-   (run mv %{project_root}/target/release/libvec_stubs.a libvec_stubs.a))))
++   (run mv %{project_root}/target/llir_x86_64-unknown-linux-musl/release/libvec_stubs.so ./dllvec_stubs.so)
++   (run mv %{project_root}/target/llir_x86_64-unknown-linux-musl/release/libvec_stubs.a ./libvec_stubs.a))))
+ 
+ (library
+  (name vec)
+  (public_name vec)
+  (foreign_archives vec_stubs)
+  (c_library_flags
+-  (-lpthread -lc -lm)))
++  (-lpthread -lunwind -lc -lm)))

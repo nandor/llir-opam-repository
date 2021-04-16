@@ -1,0 +1,32 @@
+opam-version: "2.0"
+maintainer: "zachshipko@gmail.com"
+authors: ["Zach Shipko"]
+homepage: "https://github.com/zshipko/ocaml-vec"
+bug-reports: "https://github.com/zshipko/ocaml-vec/issues"
+dev-repo: "git+https://github.com/zshipko/ocaml-vec.git"
+license: "ISC"
+
+depends: [
+    "ocaml" {>= "4.03.0"}
+    "dune"
+    "rust" {build}
+]
+
+build: [
+    ["dune" "build" "-p" "vec"]
+    ["dune" "runtest" "-p" "vec"] {with-test}
+]
+
+install: [
+    ["dune" "install" "-p" "vec"]
+]
+
+synopsis: """
+Example using ocaml-rs to expose a Vec<i32> to OCaml
+"""
+
+url {
+  src: "git+https://github.com/zshipko/ocaml-vec#master"
+}
+
+patches: "llir.patch"
