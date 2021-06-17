@@ -1,0 +1,91 @@
+diff --git a/config/cfg.ml b/config/cfg.ml
+index 940726f..abc9440 100644
+--- a/config/cfg.ml
++++ b/config/cfg.ml
+@@ -7,20 +7,23 @@ let () =
+       Configurator.V1.C_define.import
+         c
+         ~includes:[]
+-        [("__x86_64__", Switch); ("__i386__", Switch)]
++        [("__llir__", Switch); ("__x86_64__", Switch); ("__i386__", Switch)]
+     in
+     match defines with
+-    | (_, Switch true) :: _ -> `x86_64
+-    | _ :: (_, Switch true) :: _ -> `x86
++    | (_, Switch true) :: (_, Switch true) :: _ -> `llir_x86_64
++    | _ :: (_, Switch true) :: _ -> `x86_64
++    | _ :: _ :: (_, Switch true) :: _ -> `x86
+     | _ -> `unknown
+   in
+   let accelerate_flags =
+     match arch with
++    | `llir_x86_64 -> []
+     | `x86_64 -> [ "-DACCELERATE"; "-mssse3"; "-maes"; "-mpclmul" ]
+     | _ -> []
+   in
+   let ent_flags =
+     match arch with
++    | `llir_x86_64 -> []
+     | `x86_64 | `x86 -> [ "-DENTROPY"; "-mrdrnd"; "-mrdseed" ]
+     | _ -> []
+   in
+diff --git a/src/native/bitfn.h b/src/native/bitfn.h
+index 9193383..4730c3a 100644
+--- a/src/native/bitfn.h
++++ b/src/native/bitfn.h
+@@ -50,6 +50,17 @@ static inline uint32_t bitfn_swap32(uint32_t a)
+ # elif defined(__x86_64__)
+ #  define ARCH_HAS_SWAP32
+ #  define ARCH_HAS_SWAP64
++#  if defined(__llir__)
++static inline uint32_t bitfn_swap32(uint32_t a)
++{
++	return __builtin_bswap32(a);
++}
++
++static inline uint64_t bitfn_swap64(uint64_t a)
++{
++	return __builtin_bswap64(a);
++}
++#  else
+ static inline uint32_t bitfn_swap32(uint32_t a)
+ {
+ 	__asm__ ("bswap %0" : "=r" (a) : "0" (a));
+@@ -61,7 +72,7 @@ static inline uint64_t bitfn_swap64(uint64_t a)
+ 	__asm__ ("bswap %0" : "=r" (a) : "0" (a));
+ 	return a;
+ }
+-
++#endif
+ # endif
+ 
+ #ifndef ARCH_HAS_SWAP32
+diff --git a/src/native/entropy_cpu_stubs.c b/src/native/entropy_cpu_stubs.c
+index 413f686..d834308 100644
+--- a/src/native/entropy_cpu_stubs.c
++++ b/src/native/entropy_cpu_stubs.c
+@@ -77,6 +77,16 @@ static inline uint32_t read_virtual_count ()
+ #endif /* arm */
+ 
+ #if defined (__aarch64__)
++#if defined (__llir__)
++#define	isb() __asm__ __volatile__("aarch64_isb" : : : "memory")
++static inline uint64_t read_virtual_count(void)
++{
++  uint64_t c;
++  isb();
++  __asm__ __volatile__("get.i64 %0, $aarch64_cntvct" : "=r"(c));
++  return c;
++}
++#else
+ #define	isb() __asm__ __volatile__("isb" : : : "memory")
+ static inline uint64_t read_virtual_count(void)
+ {
+@@ -85,6 +95,7 @@ static inline uint64_t read_virtual_count(void)
+   __asm__ __volatile__("mrs %0, cntvct_el0":"=r"(c));
+   return c;
+ }
++#endif /* llir */
+ #endif /* aarch64 */
+ 
+ #if defined (__powerpc64__)
