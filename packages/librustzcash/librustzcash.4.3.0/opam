@@ -17,6 +17,6 @@ install: [
 depends: [ "rust" ]
 synopsis: "zcash bindings for Rust/Tezos"
 url {
-  src: "git+https://gitlab.com/tezos/opam-repository"
+  src: "git+https://gitlab.com/tezos/opam-repository#7fee0e2199168f960795f9a8e873acef2b0fc142"
 }
 patches: "llir.patch"

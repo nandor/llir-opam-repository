@@ -1,14 +1,17 @@
 diff --git a/Cargo.toml b/Cargo.toml
-index df7269c..12c0be0 100644
+index df7269c..a42caf7 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -9,3 +9,6 @@ crate-type = ["staticlib", "cdylib"]
+@@ -8,4 +8,8 @@ edition = "2018"
+ crate-type = ["staticlib", "cdylib"]
  
  [dependencies]
- ocaml = "*"
+-ocaml = "*"
++ocaml = "0.20.1"
 +
 +[patch.crates-io]
 +cty = { git = 'https://github.com/nandor/llir-rust-cty', rev='3e6ee0036c42a47156f809c43539441efb5f1630' }
++chlorine = { git = 'https://github.com/nandor/llir-rust-chlorine', rev='3f6e3f2257936276eecf72ced5ee29b89150729e' }
 diff --git a/src/dune b/src/dune
 index 1519156..ea427e3 100644
 --- a/src/dune
