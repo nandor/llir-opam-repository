@@ -1,23 +1,73 @@
 diff --git a/lib/barrier.h b/lib/barrier.h
-index 4a9e6b1..a34392f 100644
+index 4a9e6b1..1a95235 100644
 --- a/lib/barrier.h
 +++ b/lib/barrier.h
-@@ -13,9 +13,15 @@
- #define xen_rmb() xen_barrier()
- #define xen_wmb() xen_barrier()
+@@ -9,31 +9,47 @@
+ #define xen_barrier() asm volatile ( "" : : : "memory")
+ 
+ #if defined(__i386__)
+-#define xen_mb()  asm volatile ( "lock; addl $0,0(%%esp)" : : : "memory" )
+-#define xen_rmb() xen_barrier()
+-#define xen_wmb() xen_barrier()
++#  define xen_mb()  asm volatile ( "lock; addl $0,0(%%esp)" : : : "memory" )
++#  define xen_rmb() xen_barrier()
++#  define xen_wmb() xen_barrier()
  #elif defined(__x86_64__)
 -#define xen_mb()  asm volatile ( "mfence" : : : "memory")
 -#define xen_rmb() xen_barrier()
 -#define xen_wmb() xen_barrier()
 +#  if defined(__llir__)
-+#  define xen_mb()  asm volatile ( "x86_m_fence" : : : "memory")
-+#  define xen_rmb() xen_barrier()
-+#  define xen_wmb() xen_barrier()
-+#else
-+#  define xen_mb()  asm volatile ( "mfence" : : : "memory")
-+#  define xen_rmb() xen_barrier()
-+#  define xen_wmb() xen_barrier()
-+#endif
++#    define xen_mb()  asm volatile ( "x86_m_fence" : : : "memory")
++#    define xen_rmb() xen_barrier()
++#    define xen_wmb() xen_barrier()
++#  else
++#    define xen_mb()  asm volatile ( "mfence" : : : "memory")
++#    define xen_rmb() xen_barrier()
++#    define xen_wmb() xen_barrier()
++#  endif
  #elif defined(__arm__)
- # ifndef _M_ARM
- #define xen_mb()   {}
+-# ifndef _M_ARM
+-#define xen_mb()   {}
+-#define xen_rmb()  {}
+-#define xen_wmb()  {}
+-# elif _M_ARM > 6
+-#define xen_mb()   asm volatile ("dmb" : : : "memory")
+-#define xen_rmb()  asm volatile ("dmb" : : : "memory")
+-#define xen_wmb()  asm volatile ("dmb" : : : "memory")
+-# else
+-#error This ARM variant needs testing
+-# endif /* ifdef _M_ARM */
++#  ifndef _M_ARM
++#    define xen_mb()   {}
++#    define xen_rmb()  {}
++#    define xen_wmb()  {}
++#  elif _M_ARM > 6
++#    if defined(__llir__)
++#      error "not implemented"
++#    else
++#      define xen_mb()   asm volatile ("dmb" : : : "memory")
++#      define xen_rmb()  asm volatile ("dmb" : : : "memory")
++#      define xen_wmb()  asm volatile ("dmb" : : : "memory")
++#    endif
++#  else
++#    error This ARM variant needs testing
++#  endif /* ifdef _M_ARM */
+ #elif defined(__aarch64__)
+-#define xen_mb()   asm volatile ("dmb sy" : : : "memory")
+-#define xen_rmb()  asm volatile ("dmb sy" : : : "memory")
+-#define xen_wmb()  asm volatile ("dmb sy" : : : "memory")
++#  if defined(__llir__)
++#    define xen_mb()   asm volatile ("aarch64_dmb" : : : "memory")
++#    define xen_rmb()  asm volatile ("aarch64_dmb" : : : "memory")
++#    define xen_wmb()  asm volatile ("aarch64_dmb" : : : "memory")
++#  else
++#    define xen_mb()   asm volatile ("dmb sy" : : : "memory")
++#    define xen_rmb()  asm volatile ("dmb sy" : : : "memory")
++#    define xen_wmb()  asm volatile ("dmb sy" : : : "memory")
++#  endif
+ #else
+-#error "Define barriers"
++#  error "Define barriers"
+ #endif
+ 
+ #endif /* _BARRIER_H_ */

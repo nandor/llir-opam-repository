@@ -41,7 +41,4 @@ url {
     "https://github.com/mirage/shared-memory-ring/releases/download/v3.1.0/shared-memory-ring-v3.1.0.tbz"
   checksum: "md5=dba58a2c1da945028df10d34332ca7fe"
 }
-patches: [ "llir.patch" ]
-extra-files: [
-  ["llir.patch" "md5=ebd64285fb9c7a384f3560fade080870"]
-]
+patches: "llir.patch"
