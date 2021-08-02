@@ -18,6 +18,7 @@ build: [
 ]
 install: [
   [ make "install" ]
+  [ make "install" ]
   # base
   [ "ln" "-s" "%{prefix}%/llvm/bin/llir-ar"       "%{bin}%/llir-ar" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llir-as"       "%{bin}%/llir-as" ]
