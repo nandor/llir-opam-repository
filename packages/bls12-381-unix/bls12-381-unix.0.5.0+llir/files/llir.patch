@@ -1,0 +1,11 @@
+diff --git a/src/unix/dune b/src/unix/dune
+index 2dbe9ca..3ab3993 100644
+--- a/src/unix/dune
++++ b/src/unix/dune
+@@ -14,5 +14,5 @@
+   (names rustc_bls12_381_ctypes_c_stubs)
+   (flags (-I%{env:OPAM_SWITCH_PREFIX=}/lib/tezos-rust-libs))
+  )
+- (c_library_flags (-L%{env:OPAM_SWITCH_PREFIX=}/lib/tezos-rust-libs -lrustc_bls12_381 -lpthread))
++ (c_library_flags (-L%{env:OPAM_SWITCH_PREFIX=}/lib/tezos-rust-libs -lrustc_bls12_381 -lpthread -lunwind))
+ )
