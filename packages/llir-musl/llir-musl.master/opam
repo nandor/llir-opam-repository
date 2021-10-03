@@ -8,6 +8,6 @@ bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
 depends: [
   "llir-musl-amd64" {= version} |
   "llir-musl-arm64" {= version} |
-  "llir-musl-amd64" {= version} |
+  "llir-musl-riscv" {= version} |
   "llir-musl-power" {= version}
 ]
