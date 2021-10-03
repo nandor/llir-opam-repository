@@ -19,6 +19,7 @@ build: [
     "x86_64-linux"
     "-prefix" prefix
     "-toolprefix" "x86_64-unknown-linux-"
+    "-no-runtime-lib"
   ]
   [make "-j%{jobs}%"]
 ]

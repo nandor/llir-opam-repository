@@ -31,7 +31,7 @@ build: [
 ]
 install: [
   [ make "install" ]
-  # none
+  # none-gnu
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-none-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ar" "%{prefix}%/bin/x86_64-unknown-none-ar" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-as" "%{prefix}%/bin/x86_64-unknown-none-as" ]
@@ -41,6 +41,16 @@ install: [
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-readelf" "%{prefix}%/bin/x86_64-unknown-none-readelf" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-strip" "%{prefix}%/bin/x86_64-unknown-none-strip" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-nm" "%{prefix}%/bin/x86_64-unknown-none-nm" ]
+  # none
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-ld" "%{prefix}%/bin/x86_64-unknown-none-ld" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-ar" "%{prefix}%/bin/x86_64-unknown-none-ar" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-as" "%{prefix}%/bin/x86_64-unknown-none-as" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-ranlib" "%{prefix}%/bin/x86_64-unknown-none-ranlib" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-objdump" "%{prefix}%/bin/x86_64-unknown-none-objdump" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-objcopy" "%{prefix}%/bin/x86_64-unknown-none-objcopy" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-readelf" "%{prefix}%/bin/x86_64-unknown-none-readelf" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-strip" "%{prefix}%/bin/x86_64-unknown-none-strip" ]
+  [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-nm" "%{prefix}%/bin/x86_64-unknown-none-nm" ]
   # linux
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ld" "%{prefix}%/bin/x86_64-unknown-linux-ld" ]
   [ "ln" "-s" "%{prefix}%/bin/x86_64-unknown-linux-gnu-ar" "%{prefix}%/bin/x86_64-unknown-linux-ar" ]
