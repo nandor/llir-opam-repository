@@ -1,5 +1,5 @@
 diff --git a/myocamlbuild.ml b/myocamlbuild.ml
-index 9f41491..e28dfd7 100644
+index 9f41491..5795e10 100644
 --- a/myocamlbuild.ml
 +++ b/myocamlbuild.ml
 @@ -1,6 +1,7 @@
@@ -19,3 +19,12 @@ index 9f41491..e28dfd7 100644
                  A("-I"); A ctypes_libdir;
                  A("-I"); A ocaml_libdir;
                  A"-o";
+@@ -58,7 +59,7 @@ dispatch begin
+ 
+     (* Linking sodium *)
+     flag ["c"; "compile"; "use_sodium"] &
+-      S[A"-ccopt"; A"--std=c99 -Wall -pedantic -Werror -Wno-pointer-sign"];
++      S[A"-ccopt"; A"--std=c99 -Wall -pedantic -Werror -Wno-pointer-sign -Wno-unused-command-line-argument"];
+     flag ["c"; "ocamlmklib"; "use_sodium"] & A"-lsodium";
+ 
+     (* Linking generated stubs *)
