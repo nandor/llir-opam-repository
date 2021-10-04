@@ -3,17 +3,20 @@ maintainer: "nand"
 homepage: "https://sourceware.org/libffi/"
 bug-reports: "https://github.com/nandor/llir-libffi/issues"
 license: "GPL-1.0-or-later"
+build: [
+  [ "sh" "-x" "autogen.sh"]
+  [ "sh" "-x" "configure" "--prefix=%{prefix}%" "--host=ppc64le-linux-gnu" ]
+  [ make "-j%{jobs}%" ]
+  [ make "install" ]
+]
+install: [
+  [ make "install" ]
+]
 depends: [
-  "libffi-i686" |
-  "libffi-amd64" |
-  "libffi-arm64" |
-  "libffi-power" |
-  "libffi-riscv" |
-  "libffi-native"
+  "arch-power"
+  "llir-musl"
 ]
 synopsis: "libffi compiled for LLIR"
 url {
   src: "git+https://github.com/nandor/llir-libffi#master"
 }
-flags: conf
-
