@@ -35,6 +35,7 @@ build: [
       "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
       "-DCOMPILER_RT_BUILD_XRAY_NO_PREINIT=OFF"
       "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+      "-DCOMPILER_RT_BUILD_CRT=ON"
       "-DCOMPILER_RT_EMULATOR='qemu-x86_64'" {with-test}
       "-DCOMPILER_RT_INCLUDE_TESTS=ON" {with-test}
       "-DCOMPILER_RT_TEST_COMPILER='%{prefix}%/bin/x86_64-unknown-linux-gcc'" {with-test}
