@@ -28,6 +28,7 @@ install: [
   [ "ln" "-s" "%{prefix}%/llvm/bin/llir-ranlib"   "%{bin}%/llir-ranlib" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llir-size"     "%{bin}%/llir-size" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llir-strip"    "%{bin}%/llir-strip" ]
+  [ "ln" "-s" "%{prefix}%/llvm/bin/llir-dump"     "%{bin}%/llir-dump" ]
   # i386
   [ "ln" "-s" "%{prefix}%/llvm/bin/llir-ar"       "%{bin}%/llir_i386-unknown-linux-musl-ar" ]
   [ "ln" "-s" "%{prefix}%/llvm/bin/llir-ld"       "%{bin}%/llir_i386-unknown-linux-musl-ld" ]
