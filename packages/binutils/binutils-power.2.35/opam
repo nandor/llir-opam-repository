@@ -24,6 +24,10 @@ build: [
       "--disable-intl"
       "CC=gcc"
       "CXX=g++"
+      "LD=ld"
+      "RANLIB=ranlib"
+      "AR=ar"
+      "OBJCOPY=objcopy"
   ]
   [
     make "-j%{jobs}%"
