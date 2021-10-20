@@ -23,6 +23,7 @@ build: [
     "-DCLANG_LINKS_TO_CREATE="
     "-DCLANG_RESOURCE_DIR=../lib/clang/12.0.0"
     "-DCLANG_DEFAULT_UNDINWLIB=libunwind"
+    "-DCLANG_DEFAULT_CXX_STDLIB=libc++"
     "-DDEFAULT_SYSROOT=%{prefix}%"
   ]
   [ make "-j" jobs "-C" "Release" ]
