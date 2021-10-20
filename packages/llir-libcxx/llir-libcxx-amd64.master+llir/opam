@@ -1,0 +1,34 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-llvm"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Chris Lattner" "Vikram Adve"]
+license: "apache"
+build: [
+  "cmake" "llvm" "-B" "Release"
+    "-DLLVM_ENABLE_PROJECTS='libcxx;libcxxabi'"
+    "-DCMAKE_C_COMPILER=llir_x86_64-unknown-linux-musl-gcc"
+    "-DCMAKE_CXX_COMPILER=llir_x86_64-unknown-linux-musl-g++"
+    "-DLLVM_ENABLE_LIBCXX=ON"
+    "-DHAVE_CXX_ATOMICS_WITHOUT_LIB=ON"
+    "-DHAVE_CXX_ATOMICS64_WITHOUT_LIB=ON"
+    "-DLIBCXX_CXX_ABI=libcxxabi"
+    "-DLIBCXX_HAS_MUSL_LIBC=ON"
+    "-DCMAKE_INSTALL_PREFIX=%{prefix}%"
+]
+install: [
+  [ make "-C" "Release" "-j" jobs "install-cxx" "install-cxxabi" ]
+]
+depends: [
+  "conf-cmake" {build}
+  "llir-llvm" {= "master"}
+  "llir-opt" {= "master"}
+  "llir-musl-amd64" {= "master+llir"}
+  "llir-libunwind" {= "master+llir"}
+]
+synopsis: "libcxx for LLIR"
+description: "This package install libcxx for LLIR"
+url {
+  src: "git+https://github.com/nandor/llir-llvm#master"
+}
+

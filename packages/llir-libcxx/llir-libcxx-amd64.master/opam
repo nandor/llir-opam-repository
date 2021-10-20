@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: "n@ndor.email"
+homepage: "https://github.com/nandor/llir-llvm"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+authors: ["Chris Lattner" "Vikram Adve"]
+license: "apache"
+build: [
+  # TODO
+]
+install: [
+  # TODO
+]
+depends: [
+  # TODO
+]
+synopsis: "libcxx for LLIR"
+description: "This package install libcxx for LLIR"
+url {
+  src: "git+https://github.com/nandor/llir-llvm#master"
+}
+
