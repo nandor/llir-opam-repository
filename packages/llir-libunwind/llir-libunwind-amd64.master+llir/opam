@@ -31,7 +31,7 @@ depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}
   "llir-opt" {= "master"}
-  "llir-musl-amd64" {= "master+llir"}
+  "llir-musl-amd64" {=version}
 ]
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"

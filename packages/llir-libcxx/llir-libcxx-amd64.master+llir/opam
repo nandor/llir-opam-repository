@@ -24,8 +24,8 @@ depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}
   "llir-opt" {= "master"}
-  "llir-musl-amd64" {= "master+llir"}
-  "llir-libunwind" {= "master+llir"}
+  "llir-musl-amd64" {=version}
+  "llir-libunwind" {=version}
 ]
 synopsis: "libcxx for LLIR"
 description: "This package install libcxx for LLIR"
