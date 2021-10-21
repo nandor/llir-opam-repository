@@ -6,7 +6,7 @@ authors: ["Chet Ramey"]
 license: "GPLv3"
 build: [
   ["./configure" "--prefix" prefix]
-  [ make "-j%{jobs}%" "SHLIB_LIBS=-ltermcap" "all" "shared" ]
+  [ make "-j%{jobs}%" "all" "shared" ]
 ]
 install: [
   [ make "install" ]
