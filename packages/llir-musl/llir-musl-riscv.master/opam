@@ -49,6 +49,7 @@ setenv: [
   [ AR = "riscv64-unknown-linux-gnu-ar" ]
   [ RANLIB = "riscv64-unknown-linux-gnu-ranlib" ]
   [ OBJCOPY = "riscv64-unknown-linux-gnu-objcopy" ]
+  [ NM = "riscv64-unknown-linux-gnu-nm" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

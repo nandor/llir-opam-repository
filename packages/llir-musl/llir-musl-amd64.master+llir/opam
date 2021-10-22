@@ -26,8 +26,7 @@ setenv: [
   [ AR = "llir_x86_64-unknown-linux-musl-ar" ]
   [ RANLIB = "llir_x86_64-unknown-linux-musl-ranlib" ]
   [ OBJCOPY = "llir_x86_64-unknown-linux-musl-objcopy" ]
-
-  [ NATIVE_CC = "x86_64-unknown-linux-musl-gcc" ]
+  [ NM = "llir_x86_64-unknown-linux-gnu-nm" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"

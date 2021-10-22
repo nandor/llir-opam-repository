@@ -51,6 +51,7 @@ setenv: [
   [ AR = "powerpc64le-unknown-linux-gnu-ar" ]
   [ RANLIB = "powerpc64le-unknown-linux-gnu-ranlib" ]
   [ OBJCOPY = "powerpc64le-unknown-linux-gnu-objcopy" ]
+  [ NM = "powerpc64le-unknown-linux-gnu-nm" ]
 ]
 synopsis: "LLIR port of the musl C standard library"
 description: "This package install the llir-musl C standard library"
