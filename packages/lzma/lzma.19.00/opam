@@ -1,0 +1,20 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://github.com/kobolabs/liblzma"
+bug-reports: "https://github.com/kobolabs/liblzma/issues"
+authors: ["Lasse Collin"]
+license: "LGPL"
+build: [
+  [ "./configure" "--prefix" prefix]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "liblzma compiled for LLIR"
+url {
+  src: "git+https://github.com/kobolabs/liblzma"
+}
