@@ -47,6 +47,7 @@ depends: [
 setenv: [
   [ CFLAGS = "-mlong-double-64" ]
   [ CC = "powerpc64le-unknown-linux-musl-clang" ]
+  [ CXX = "powerpc64le-unknown-linux-musl-clang++" ]
   [ LD = "powerpc64le-unknown-linux-gnu-ld" ]
   [ AR = "powerpc64le-unknown-linux-gnu-ar" ]
   [ RANLIB = "powerpc64le-unknown-linux-gnu-ranlib" ]

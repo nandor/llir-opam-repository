@@ -46,6 +46,7 @@ depends: [
 ]
 setenv: [
   [ CC = "aarch64-unknown-linux-musl-clang" ]
+  [ CXX = "aarch64-unknown-linux-musl-clang++" ]
   [ LD = "aarch64-unknown-linux-gnu-ld" ]
   [ AR = "aarch64-unknown-linux-gnu-ar" ]
   [ RANLIB = "aarch64-unknown-linux-gnu-ranlib" ]

@@ -23,6 +23,7 @@ depends: [
 setenv: [
   [ LD = "llir_aarch64-unknown-linux-musl-ld" ]
   [ CC = "llir_aarch64-unknown-linux-musl-gcc" ]
+  [ CXX = "llir_aarch64-unknown-linux-musl-g++" ]
   [ AR = "llir_aarch64-unknown-linux-musl-ar" ]
   [ RANLIB = "llir_aarch64-unknown-linux-musl-ranlib" ]
   [ OBJCOPY = "llir_aarch64-unknown-linux-musl-objcopy" ]

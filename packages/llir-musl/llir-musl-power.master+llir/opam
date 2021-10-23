@@ -25,6 +25,7 @@ setenv: [
   [ CFLAGS = "-mlong-double-64" ]
   [ LD = "llir_powerpc64le-unknown-linux-musl-ld" ]
   [ CC = "llir_powerpc64le-unknown-linux-musl-gcc" ]
+  [ CXX = "llir_powerpc64le-unknown-linux-musl-g++" ]
   [ AR = "llir_powerpc64le-unknown-linux-musl-ar" ]
   [ RANLIB = "llir_powerpc64le-unknown-linux-musl-ranlib" ]
   [ OBJCOPY = "llir_powerpc64le-unknown-linux-musl-objcopy" ]
