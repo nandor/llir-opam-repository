@@ -1,0 +1,22 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://docs.mongodb.com/manual/core/wiredtiger/"
+bug-reports: "https://github.com/wiredtiger/wiredtiger/issues"
+authors: ["MongoDB, Inc"]
+license: "GPLv2"
+build: [
+  [ "./configure" "--prefix" prefix ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "wiredtiger compiled for LLIR"
+url {
+  src: "https://github.com/wiredtiger/wiredtiger/releases/download/10.0.0/wiredtiger-10.0.0.tar.bz2"
+  checksum: "sha256=4830107ac744c0459ef99697652aa3e655c2122005a469a49d221e692fb834a5"
+}
+patches: "llir.patch"
