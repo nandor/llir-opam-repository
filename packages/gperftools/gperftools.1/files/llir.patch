@@ -1,0 +1,289 @@
+diff --git a/src/base/atomicops-internals-x86.cc b/src/base/atomicops-internals-x86.cc
+index 20073c2..b8e9eba 100644
+--- a/src/base/atomicops-internals-x86.cc
++++ b/src/base/atomicops-internals-x86.cc
+@@ -55,12 +55,18 @@
+        "xchg %%edi, %%ebx\n"   \
+        : "=a" (a), "=D" (b), "=c" (c), "=d" (d) : "a" (inp))
+ #elif defined (__x86_64__)
++#ifdef __llir__
++#define cpuid(a, b, c, d, inp) \
++  asm ("x86_cpuid.i32.i32.i32.i32 %0, %1, %2, %3, %4" \
++       : "=r" (a), "=r" (b), "=r" (c), "=r" (d) : "r" (inp))
++#else
+ #define cpuid(a, b, c, d, inp) \
+   asm ("mov %%rbx, %%rdi\n"    \
+        "cpuid\n"               \
+        "xchg %%rdi, %%rbx\n"   \
+        : "=a" (a), "=D" (b), "=c" (c), "=d" (d) : "a" (inp))
+ #endif
++#endif
+ 
+ #if defined(cpuid)        // initialize the struct only on x86
+ 
+diff --git a/src/base/atomicops-internals-x86.h b/src/base/atomicops-internals-x86.h
+index 94c7aac..2bce084 100644
+--- a/src/base/atomicops-internals-x86.h
++++ b/src/base/atomicops-internals-x86.h
+@@ -75,19 +75,33 @@ inline Atomic32 NoBarrier_CompareAndSwap(volatile Atomic32* ptr,
+                                          Atomic32 old_value,
+                                          Atomic32 new_value) {
+   Atomic32 prev;
++#ifdef __llir__
++  __asm__ __volatile__("x86_cmpxchg.i32 %0, %1, %2, %3"
++                       : "=r" (prev)
++                       : "r" (ptr), "r" (new_value), "r" (old_value)
++                       : "memory");
++#else
+   __asm__ __volatile__("lock; cmpxchgl %1,%2"
+                        : "=a" (prev)
+                        : "q" (new_value), "m" (*ptr), "0" (old_value)
+                        : "memory");
++#endif
+   return prev;
+ }
+ 
+ inline Atomic32 NoBarrier_AtomicExchange(volatile Atomic32* ptr,
+                                          Atomic32 new_value) {
++#ifdef __llir__
++  __asm__ __volatile__("x86_xchg.i32 %0, %1, %2"  // The lock prefix is implicit for xchg.
++                       : "=r" (new_value)
++                       : "r" (ptr), "r" (new_value)
++                       : "memory");
++#else
+   __asm__ __volatile__("xchgl %1,%0"  // The lock prefix is implicit for xchg.
+                        : "=r" (new_value)
+                        : "m" (*ptr), "0" (new_value)
+                        : "memory");
++#endif
+   return new_value;  // Now it's the previous value.
+ }
+ 
+@@ -166,19 +180,33 @@ inline Atomic64 NoBarrier_CompareAndSwap(volatile Atomic64* ptr,
+                                          Atomic64 old_value,
+                                          Atomic64 new_value) {
+   Atomic64 prev;
++#ifdef __llir__
++  __asm__ __volatile__("x86_cmpxchg.i64 %0, %1, %2, %3"
++                       : "=r" (prev)
++                       : "r" (ptr), "r" (new_value), "r" (old_value)
++                       : "memory");
++#else
+   __asm__ __volatile__("lock; cmpxchgq %1,%2"
+                        : "=a" (prev)
+                        : "q" (new_value), "m" (*ptr), "0" (old_value)
+                        : "memory");
++#endif
+   return prev;
+ }
+ 
+ inline Atomic64 NoBarrier_AtomicExchange(volatile Atomic64* ptr,
+                                          Atomic64 new_value) {
++#ifdef __llir__
++  __asm__ __volatile__("x86_xchg.i64 %0, %1, %2"  // The lock prefix is implicit for xchg.
++                       : "=r" (new_value)
++                       : "r" (ptr), "r" (new_value)
++                       : "memory");
++#else
+   __asm__ __volatile__("xchgq %1,%0"  // The lock prefix is implicit for xchg.
+                        : "=r" (new_value)
+                        : "m" (*ptr), "0" (new_value)
+                        : "memory");
++#endif
+   return new_value;  // Now it's the previous value.
+ }
+ 
+diff --git a/src/base/basictypes.h b/src/base/basictypes.h
+index ea87a6d..b2efed8 100644
+--- a/src/base/basictypes.h
++++ b/src/base/basictypes.h
+@@ -280,7 +280,7 @@ inline void bit_store(Dest *dest, const Source *source) {
+ //    where in memory a given section is.  All functions declared with
+ //    ATTRIBUTE_SECTION are guaranteed to be between START and STOP.
+ 
+-#if defined(HAVE___ATTRIBUTE__) && defined(__ELF__)
++#if defined(HAVE___ATTRIBUTE__) && defined(__ELF__) && !defined(__llir__)
+ # define ATTRIBUTE_SECTION(name) __attribute__ ((section (#name))) __attribute__((noinline))
+ 
+   // Weak section declaration to be used as a global declaration
+@@ -299,7 +299,7 @@ inline void bit_store(Dest *dest, const Source *source) {
+ # define ATTRIBUTE_SECTION_STOP(name) (reinterpret_cast<void*>(__stop_##name))
+ # define HAVE_ATTRIBUTE_SECTION_START 1
+ 
+-#elif defined(HAVE___ATTRIBUTE__) && defined(__MACH__)
++#elif defined(HAVE___ATTRIBUTE__) && defined(__MACH__) && !defined(__llir__)
+ # define ATTRIBUTE_SECTION(name) __attribute__ ((section ("__TEXT, " #name)))
+ 
+ #include <mach-o/getsect.h>
+diff --git a/src/base/linux_syscall_support.h b/src/base/linux_syscall_support.h
+index d6899b8..3dd4061 100644
+--- a/src/base/linux_syscall_support.h
++++ b/src/base/linux_syscall_support.h
+@@ -1289,6 +1289,129 @@ struct kernel_stat {
+       return res;
+     }
+   #elif defined(__x86_64__)
++  #ifdef __llir__
++    /* The x32 ABI has 32 bit longs, but the syscall interface is 64 bit.
++     * We need to explicitly cast to an unsigned 64 bit type to avoid implicit
++     * sign extension.  We can't cast pointers directly because those are
++     * 32 bits, and gcc will dump ugly warnings about casting from a pointer
++     * to an integer of a different size.
++     */
++    #undef  LSS_SYSCALL_ARG
++    #define LSS_SYSCALL_ARG(a) ((uint64_t)(uintptr_t)(a))
++    #undef  _LSS_RETURN
++    #define _LSS_RETURN(type, res, cast)                                      \
++      do {                                                                    \
++        if ((uint64_t)(res) >= (uint64_t)(-4095)) {                           \
++          LSS_ERRNO = -(res);                                                 \
++          res = -1;                                                           \
++        }                                                                     \
++        return (type)(cast)(res);                                             \
++      } while (0)
++    #undef  LSS_RETURN
++    #define LSS_RETURN(type, res) _LSS_RETURN(type, res, uintptr_t)
++
++    #undef  _LSS_BODY
++    #define _LSS_BODY(nr, type, name, cast, ...)                              \
++          long long __res;                                                    \
++          __asm__ __volatile__("syscall.i64 %0 " LSS_BODY_ASM##nr             \
++            : "=r" (__res)                                                    \
++            : "r" (__NR_##name) LSS_BODY_ARG##nr(__VA_ARGS__)                 \
++            : "memory");                   \
++          _LSS_RETURN(type, __res, cast)
++    #undef  LSS_BODY
++    #define LSS_BODY(nr, type, name, args...) \
++      _LSS_BODY(nr, type, name, uintptr_t, ## args)
++
++    #undef  LSS_BODY_ASM0
++    #undef  LSS_BODY_ASM1
++    #undef  LSS_BODY_ASM2
++    #undef  LSS_BODY_ASM3
++    #undef  LSS_BODY_ASM4
++    #undef  LSS_BODY_ASM5
++    #undef  LSS_BODY_ASM6
++    #define LSS_BODY_ASM0 ", %1"
++    #define LSS_BODY_ASM1 LSS_BODY_ASM0 ", %2"
++    #define LSS_BODY_ASM2 LSS_BODY_ASM1 ", %3"
++    #define LSS_BODY_ASM3 LSS_BODY_ASM2 ", %4"
++    #define LSS_BODY_ASM4 LSS_BODY_ASM3 ", %5"
++    #define LSS_BODY_ASM5 LSS_BODY_ASM4 ", %6"
++    #define LSS_BODY_ASM6 LSS_BODY_ASM5 ", %7"
++
++    #undef  LSS_BODY_ARG0
++    #undef  LSS_BODY_ARG1
++    #undef  LSS_BODY_ARG2
++    #undef  LSS_BODY_ARG3
++    #undef  LSS_BODY_ARG4
++    #undef  LSS_BODY_ARG5
++    #undef  LSS_BODY_ARG6
++    #define LSS_BODY_ARG0()
++    #define LSS_BODY_ARG1(arg1) \
++      LSS_BODY_ARG0(), "r" (arg1)
++    #define LSS_BODY_ARG2(arg1, arg2) \
++      LSS_BODY_ARG1(arg1), "r" (arg2)
++    #define LSS_BODY_ARG3(arg1, arg2, arg3) \
++      LSS_BODY_ARG2(arg1, arg2), "r" (arg3)
++    #define LSS_BODY_ARG4(arg1, arg2, arg3, arg4) \
++      LSS_BODY_ARG3(arg1, arg2, arg3), "r" (arg4)
++    #define LSS_BODY_ARG5(arg1, arg2, arg3, arg4, arg5) \
++      LSS_BODY_ARG4(arg1, arg2, arg3, arg4), "r" (arg5)
++    #define LSS_BODY_ARG6(arg1, arg2, arg3, arg4, arg5, arg6) \
++      LSS_BODY_ARG5(arg1, arg2, arg3, arg4, arg5), "r" (arg6)
++
++    #undef _syscall0
++    #define _syscall0(type,name)                                              \
++      type LSS_NAME(name)() {                                                 \
++        LSS_BODY(0, type, name);                                              \
++      }
++    #undef _syscall1
++    #define _syscall1(type,name,type1,arg1)                                   \
++      type LSS_NAME(name)(type1 arg1) {                                       \
++        LSS_BODY(1, type, name, LSS_SYSCALL_ARG(arg1));                       \
++      }
++    #undef _syscall2
++    #define _syscall2(type,name,type1,arg1,type2,arg2)                        \
++      type LSS_NAME(name)(type1 arg1, type2 arg2) {                           \
++        LSS_BODY(2, type, name, LSS_SYSCALL_ARG(arg1), LSS_SYSCALL_ARG(arg2));\
++      }
++    #undef _syscall3
++    #define _syscall3(type,name,type1,arg1,type2,arg2,type3,arg3)             \
++      type LSS_NAME(name)(type1 arg1, type2 arg2, type3 arg3) {               \
++        LSS_BODY(3, type, name, LSS_SYSCALL_ARG(arg1), LSS_SYSCALL_ARG(arg2), \
++                                LSS_SYSCALL_ARG(arg3));                       \
++      }
++    #undef _syscall4
++    #define _syscall4(type,name,type1,arg1,type2,arg2,type3,arg3,type4,arg4)  \
++      type LSS_NAME(name)(type1 arg1, type2 arg2, type3 arg3, type4 arg4) {   \
++        LSS_BODY(4, type, name, LSS_SYSCALL_ARG(arg1), LSS_SYSCALL_ARG(arg2), \
++                                LSS_SYSCALL_ARG(arg3), LSS_SYSCALL_ARG(arg4));\
++      }
++    #undef _syscall5
++    #define _syscall5(type,name,type1,arg1,type2,arg2,type3,arg3,type4,arg4,  \
++                      type5,arg5)                                             \
++      type LSS_NAME(name)(type1 arg1, type2 arg2, type3 arg3, type4 arg4,     \
++                          type5 arg5) {                                       \
++        LSS_BODY(5, type, name, LSS_SYSCALL_ARG(arg1), LSS_SYSCALL_ARG(arg2), \
++                                LSS_SYSCALL_ARG(arg3), LSS_SYSCALL_ARG(arg4), \
++                                LSS_SYSCALL_ARG(arg5));                       \
++      }
++    #undef _syscall6
++    #define _syscall6(type,name,type1,arg1,type2,arg2,type3,arg3,type4,arg4,  \
++                      type5,arg5,type6,arg6)                                  \
++      type LSS_NAME(name)(type1 arg1, type2 arg2, type3 arg3, type4 arg4,     \
++                          type5 arg5, type6 arg6) {                           \
++        LSS_BODY(6, type, name, LSS_SYSCALL_ARG(arg1), LSS_SYSCALL_ARG(arg2), \
++                                LSS_SYSCALL_ARG(arg3), LSS_SYSCALL_ARG(arg4), \
++                                LSS_SYSCALL_ARG(arg5), LSS_SYSCALL_ARG(arg6));\
++      }
++    LSS_INLINE int LSS_NAME(clone)(int (*fn)(void *), void *child_stack,
++                                   int flags, void *arg, int *parent_tidptr,
++                                   void *newtls, int *child_tidptr) {
++      abort();
++    }
++    LSS_INLINE void (*LSS_NAME(restore_rt)(void))(void) {
++      abort();
++    }
++  #else
+     /* There are no known problems with any of the _syscallX() macros
+      * currently shipping for x86_64, but we still need to be able to define
+      * our own version so that we can override the location of the errno
+@@ -1524,6 +1647,7 @@ struct kernel_stat {
+                            : "i"  (__NR_rt_sigreturn));
+       return (void (*)(void))(uintptr_t)res;
+     }
++  #endif
+   #elif defined(__arm__)
+     /* Most definitions of _syscallX() neglect to mark "memory" as being
+      * clobbered. This causes problems with compilers, that do a better job
+diff --git a/src/base/spinlock.cc b/src/base/spinlock.cc
+index d2a9e1c..a4e1441 100644
+--- a/src/base/spinlock.cc
++++ b/src/base/spinlock.cc
+@@ -66,8 +66,12 @@ static SpinLock_InitHelper init_helper;
+ 
+ inline void SpinlockPause(void) {
+ #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
++#ifdef __llir__
++  // TODO
++#else
+   __asm__ __volatile__("rep; nop" : : );
+ #endif
++#endif
+ }
+ 
+ }  // unnamed namespace
+diff --git a/src/tests/stacktrace_unittest.cc b/src/tests/stacktrace_unittest.cc
+index e55a632..19167b2 100644
+--- a/src/tests/stacktrace_unittest.cc
++++ b/src/tests/stacktrace_unittest.cc
+@@ -37,7 +37,7 @@
+ 
+ // On those architectures we can and should test if backtracing with
+ // ucontext and from signal handler works
+-#if __GNUC__ && __linux__ && (__x86_64__ || __aarch64__ || __riscv)
++#if __GNUC__ && __linux__ && (__x86_64__ || __aarch64__ || __riscv) && !defined(__llir__)
+ #include <signal.h>
+ #define TEST_UCONTEXT_BITS 1
+ #endif
