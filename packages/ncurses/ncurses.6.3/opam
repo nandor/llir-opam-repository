@@ -13,6 +13,7 @@ install: [
 ]
 depends: [
   "llir-musl"
+  "llir-libcxx"
 ]
 synopsis: "OpenSSL compiled for LLIR"
 url {
