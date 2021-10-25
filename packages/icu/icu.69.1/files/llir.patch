@@ -1,0 +1,53 @@
+diff --git a/source/tools/toolutil/pkg_genc.cpp b/source/tools/toolutil/pkg_genc.cpp
+index 17347ba..63d5524 100644
+--- a/source/tools/toolutil/pkg_genc.cpp
++++ b/source/tools/toolutil/pkg_genc.cpp
+@@ -129,6 +129,20 @@ static const struct AssemblyType {
+     /* hardware, so we use .balign 16 which always means 16 bytes. */
+     /* https://sourceware.org/binutils/docs/as/Pseudo-Ops.html */
+     {"gcc",
++#ifdef __llir__
++        ".globl %s\n"
++        "#ifdef __CET__\n"
++        "# include <cet.h>\n"
++        "#endif\n"
++        "\t.section .rodata\n"
++        "\t.p2align 4\n"
++        "#ifdef U_HIDE_DATA_SYMBOL\n"
++        "\t.hidden %s\n"
++        "#endif\n"
++        "%s:\n\n",
++
++        ".long ","",HEX_0X
++#else
+         ".globl %s\n"
+         "\t.section .note.GNU-stack,\"\",%%progbits\n"
+         "#ifdef __CET__\n"
+@@ -143,6 +157,7 @@ static const struct AssemblyType {
+         "%s:\n\n",
+ 
+         ".long ",".size %s, .-%s\n",HEX_0X
++#endif
+     },
+     {"gcc-darwin",
+         /*"\t.section __TEXT,__text,regular,pure_instructions\n"
+@@ -745,6 +760,11 @@ getOutFilename(
+ #ifdef CAN_GENERATE_OBJECTS
+ static void
+ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char *optMatchArch) {
++#ifdef __llir__
++    *pCPU = EM_X86_64;
++    *pBits = 64;
++    *pIsBigEndian = false;
++#else
+     union {
+         char        bytes[2048];
+ #ifdef U_ELF
+@@ -871,6 +891,7 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
+ #endif
+ 
+     T_FileStream_close(in);
++#endif
+ }
+ 
+ U_CAPI void U_EXPORT2

@@ -1,0 +1,23 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://icu.unicode.org/"
+bug-reports: "https://github.com/unicode-org/icu/issues"
+authors: ["Unicode, Inc"]
+license: "SPDX"
+build: [
+  [ "./source/runConfigureICU" "Linux" "--prefix" prefix]
+  [ make "-j" jobs ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+  "llir-libcxx"
+]
+synopsis: "ICU compiled for LLIR"
+url {
+  src: "https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz"
+  checksum: "sha256=4cba7b7acd1d3c42c44bb0c14be6637098c7faf2b330ce876bc5f3b915d09745"
+}
+patches: "llir.patch"
