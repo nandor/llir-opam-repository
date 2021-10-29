@@ -14,9 +14,11 @@ install: [
 ]
 depends: [
   "llir-libcxx"
+  "flex"
 ]
 synopsis: "Verilator compiled for LLIR"
 url {
   src: "https://github.com/verilator/verilator/archive/refs/tags/v4.214.tar.gz"
   checksum: "sha256=e14c7f6ffb00a6746ae2a8ea0424e90a1a30067e8ae4c96b8c42689ca1ca0b1f"
 }
+patches: "llir.patch"
