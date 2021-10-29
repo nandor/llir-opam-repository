@@ -9,9 +9,8 @@ build: [
     "./configure"
       "--enable-wrapper=clang"
       "--prefix=%{prefix}%"
-      "CC=aarch64-unknown-linux-gcc"
+      "CROSS_COMPILE=aarch64-unknown-linux-"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-aarch64.a"
-      "PARTIALLD=aarch64-unknown-linux-gnu-ld"
       "LDFLAGS=--ld-path=%{prefix}%/bin/aarch64-unknown-linux-gnu-ld"
   ]
   [ make "-j" jobs ]

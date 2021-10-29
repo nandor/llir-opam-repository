@@ -9,9 +9,8 @@ build: [
     "./configure"
       "--enable-wrapper=clang"
       "--prefix=%{prefix}%"
-      "CC=powerpc64le-unknown-linux-gcc"
+      "CROSS_COMPILE=powerpc64le-unknown-linux-gnu-"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-powerpc64le.a"
-      "PARTIALLD=powerpc64le-unknown-linux-gnu-ld"
       "LDFLAGS=--ld-path=%{prefix}%/bin/powerpc64le-unknown-linux-gnu-ld"
       "CFLAGS=-mlong-double-64"
   ]
