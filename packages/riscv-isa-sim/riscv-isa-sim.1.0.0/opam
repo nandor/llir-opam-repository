@@ -1,0 +1,22 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://github.com/riscv-software-src/riscv-isa-sim"
+bug-reports: "https://github.com/riscv-software-src/riscv-isa-sim/issues"
+authors: ["The Regents of the University of California"]
+license: "BSD"
+build: [
+  [ "./configure" "--prefix" prefix ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-libcxx"
+]
+synopsis: "Spike compiled for LLIR"
+url {
+  src: "https://github.com/riscv-software-src/riscv-isa-sim/archive/refs/tags/v1.0.0.tar.gz"
+  checksum: "sha256=7ad7f2bac701ab01a469a7ed07075ae1509e3a617da107ef364eebf21d3324a8"
+}
+patches: "llir.patch"
