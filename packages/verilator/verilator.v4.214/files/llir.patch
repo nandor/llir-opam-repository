@@ -1,5 +1,31 @@
+diff --git a/include/verilated.mk.in b/include/verilated.mk.in
+index 150196d0..235a8055 100644
+--- a/include/verilated.mk.in
++++ b/include/verilated.mk.in
+@@ -220,10 +220,10 @@ endif
+ #   1. Extract object files from .a
+ #   2. Create a new archive from extracted .o and given .o
+ %.a: | %.verilator_deplist.tmp
+-	$(info Archive $(AR) -rcs $@ $^)
++	$(info Archive $(AR) rcs $@ $^)
+ 	$(foreach L, $(filter-out %.a,$^), $(shell echo $L >>$@.verilator_deplist.tmp))
+ 	@if test $(words $(filter %.a,$^)) -eq 0; then \
+-		$(AR) -rcs $@ @$@.verilator_deplist.tmp; \
++		$(AR) rcs $@ @$@.verilator_deplist.tmp; \
+ 	else \
+ 		$(RM) -rf $@.tmpdir; \
+ 		for archive in $(filter %.a,$^); do \
+@@ -232,7 +232,7 @@ endif
+ 			$(AR) -x ../../$${archive}; \
+ 			cd ../..; \
+ 		done; \
+-		$(AR) -rcs $@ @$@.verilator_deplist.tmp $@.tmpdir/*/*.o; \
++		$(AR) rcs $@ @$@.verilator_deplist.tmp $@.tmpdir/*/*.o; \
+ 	fi \
+ 	; $(RM) -rf $@.verilator_deplist.tmp $@.tmpdir
+ 
 diff --git a/include/verilatedos.h b/include/verilatedos.h
-index 9a1f50a7..fff8459c 100644
+index 9a1f50a7..037743e9 100644
 --- a/include/verilatedos.h
 +++ b/include/verilatedos.h
 @@ -332,6 +332,7 @@ typedef signed __int32 ssize_t;  ///< signed size_t; returned from read()
@@ -10,3 +36,16 @@ index 9a1f50a7..fff8459c 100644
  # include <unistd.h>  // ssize_t
  typedef char vlsint8_t;  ///< 8-bit signed type
  typedef uint8_t vluint8_t;  ///< 8-bit unsigned type
+@@ -495,7 +496,11 @@ typedef unsigned long long vluint64_t;  ///< 64-bit unsigned type
+ # elif defined(__i386__) || defined(__x86_64__) || defined(VL_CPPCHECK)
+ // For more efficient busy waiting on SMT CPUs, let the processor know
+ // we're just waiting so it can let another thread run
+-#  define VL_CPU_RELAX() asm volatile("rep; nop" ::: "memory")
++#  if defined(__llir__)
++#    define VL_CPU_RELAX() asm volatile("x86_yield" ::: "memory")
++#  else
++#    define VL_CPU_RELAX() asm volatile("rep; nop" ::: "memory")
++#  endif
+ # elif defined(__ia64__)
+ #  define VL_CPU_RELAX() asm volatile("hint @pause" ::: "memory")
+ # elif defined(__aarch64__)
