@@ -1,0 +1,42 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://github.com/umd-memsys/DRAMSim2"
+bug-reports: "https://github.com/umd-memsys/DRAMSim2/issues"
+authors: ["University of Maryland "]
+license: "BSD"
+build: [
+  [ make "-j%{jobs}%" "libdramsim.a" "libdramsim.so" ]
+]
+install: [
+  [ "cp" "libdramsim.a" "%{prefix}%/lib/libdramsim.a" ]
+  [ "cp" "libdramsim.so" "%{prefix}%/lib/libdramsim.so" ]
+  [ "cp" "CommandQueue.h" "%{prefix}%/include/CommandQueue.h" ]
+  [ "cp" "CSVWriter.h" "%{prefix}%/include/CSVWriter.h" ]
+  [ "cp" "IniReader.h" "%{prefix}%/include/IniReader.h" ]
+  [ "cp" "MemoryController.h" "%{prefix}%/include/MemoryController.h" ]
+  [ "cp" "MemorySystem.h" "%{prefix}%/include/MemorySystem.h" ]
+  [ "cp" "MultiChannelMemorySystem.h" "%{prefix}%/include/MultiChannelMemorySystem.h" ]
+  [ "cp" "PrintMacros.h" "%{prefix}%/include/PrintMacros.h" ]
+  [ "cp" "SimulatorObject.h" "%{prefix}%/include/SimulatorObject.h" ]
+  [ "cp" "SystemConfiguration.h" "%{prefix}%/include/SystemConfiguration.h" ]
+  [ "cp" "Transaction.h" "%{prefix}%/include/Transaction.h" ]
+  [ "cp" "AddressMapping.h" "%{prefix}%/include/AddressMapping.h" ]
+  [ "cp" "Bank.h" "%{prefix}%/include/Bank.h" ]
+  [ "cp" "BankState.h" "%{prefix}%/include/BankState.h" ]
+  [ "cp" "BusPacket.h" "%{prefix}%/include/BusPacket.h" ]
+  [ "cp" "Callback.h" "%{prefix}%/include/Callback.h" ]
+  [ "cp" "ClockDomain.h" "%{prefix}%/include/ClockDomain.h" ]
+  [ "cp" "DRAMSim.h" "%{prefix}%/include/DRAMSim.h" ]
+  [ "cp" "Rank.h" "%{prefix}%/include/Rank.h" ]
+]
+depends: [
+  "llir-libcxx"
+]
+synopsis: "DRAMSim2 compiled for LLIR"
+url {
+  src: "https://github.com/umd-memsys/DRAMSim2/archive/refs/tags/v2.2.2.tar.gz"
+  checksum: "sha256=96d0257eafb41e38ffa4f13e3ef3759567bdde7fa3329403f324abd0ddf8d015"
+}
+patches: "llir.patch"
+
+
