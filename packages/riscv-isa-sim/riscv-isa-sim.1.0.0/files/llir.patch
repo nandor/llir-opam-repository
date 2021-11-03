@@ -11,3 +11,29 @@ index 43a28b2..ee92e6e 100644
  
  $(2)_junk += lib$(1).a
  
+diff --git a/fesvr/context.cc b/fesvr/context.cc
+index ca73813..95df7cd 100644
+--- a/fesvr/context.cc
++++ b/fesvr/context.cc
+@@ -80,7 +80,8 @@ context_t::~context_t()
+ 
+ void context_t::switch_to()
+ {
+-  assert(this != cur);
++  if (this == cur)
++    return;
+ #ifdef USE_UCONTEXT
+   context_t* prev = cur;
+   cur = this;
+diff --git a/fesvr/dtm.cc b/fesvr/dtm.cc
+index 5409321..9670faa 100644
+--- a/fesvr/dtm.cc
++++ b/fesvr/dtm.cc
+@@ -597,7 +597,6 @@ void dtm_t::start_host_thread()
+ 
+   target = context_t::current();
+   host.init(host_thread_main, this);
+-  host.switch_to();
+ }
+ 
+ dtm_t::dtm_t(int argc, char** argv)
