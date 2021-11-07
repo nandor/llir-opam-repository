@@ -1,0 +1,24 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://www.veripool.org/verilator/"
+bug-reports: "https://github.com/verilator/verilator/issues"
+authors: ["Veripool"]
+license: "LGPL"
+build: [
+  [ "autoconf" ]
+  [ "./configure" "--prefix" prefix ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-libcxx"
+  "flex"
+]
+synopsis: "Verilator compiled for LLIR"
+url {
+  src: "https://github.com/verilator/verilator/archive/refs/tags/v4.028.tar.gz"
+  checksum: "sha256=cb13e4f54920e6e35ef51a96476d0547d2a60fdc0c61198df4bcd4d29c246680"
+}
+patches: "llir.patch"

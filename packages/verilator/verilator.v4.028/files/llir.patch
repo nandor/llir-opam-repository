@@ -1,0 +1,42 @@
+diff --git a/include/verilated.mk.in b/include/verilated.mk.in
+index e64de5e9..3db92e00 100644
+--- a/include/verilated.mk.in
++++ b/include/verilated.mk.in
+@@ -171,7 +171,7 @@ else
+ endif
+ 
+ $(VM_PREFIX)__ALL.a: $(VK_OBJS)
+-	$(AR) -cr $@ $^
++	$(AR) cr $@ $^
+ 	$(RANLIB) $@
+ 
+ ######################################################################
+diff --git a/include/verilatedos.h b/include/verilatedos.h
+index 1db5ad3e..542c4d05 100644
+--- a/include/verilatedos.h
++++ b/include/verilatedos.h
+@@ -280,6 +280,7 @@ typedef signed   __int32        ssize_t;        ///< signed size_t; returned fro
+ # include <inttypes.h>  // Solaris
+ # include <stdint.h>  // Linux and most flavors
+ # include <sys/types.h>  // __WORDSIZE
++# include <sys/reg.h>
+ # include <unistd.h>  // ssize_t
+ typedef uint8_t                 vluint8_t;      ///< 32-bit unsigned type
+ typedef uint16_t                vluint16_t;     ///< 32-bit unsigned type
+@@ -426,9 +427,13 @@ typedef unsigned long long      vluint64_t;     ///< 64-bit unsigned type
+ #  include "Windows.h"
+ #  define VL_CPU_RELAX() YieldProcessor()
+ # elif defined(__i386__) || defined(__x86_64__)
+-/// For more efficient busy waiting on SMT CPUs, let the processor know
+-/// we're just waiting so it can let another thread run
+-#  define VL_CPU_RELAX() asm volatile("rep; nop" ::: "memory")
++// For more efficient busy waiting on SMT CPUs, let the processor know
++// we're just waiting so it can let another thread run
++#  if defined(__llir__)
++#    define VL_CPU_RELAX() asm volatile("x86_yield" ::: "memory")
++#  else
++#    define VL_CPU_RELAX() asm volatile("rep; nop" ::: "memory")
++#  endif
+ # elif defined(__ia64__)
+ #  define VL_CPU_RELAX() asm volatile("hint @pause" ::: "memory")
+ # elif defined(__aarch64__)
