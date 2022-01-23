@@ -1,16 +1,14 @@
 opam-version: "2.0"
-maintainer: "n@ndor.email"
-homepage: "https://github.com/nandor/llir-opam-repository"
-bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
-authors: ["Nandor Licker" "Timothy M. Jones"]
-depends: [
-  "arch-amd64" (arch = "x86_64") |
-  "arch-arm64" (arch = "arm64") |
-  "arch-power" (arch = "ppc64") |
-  "arch-riscv" (arch = "riscv64")
-]
-license: "MIT"
 synopsis: "LLIR Architecture Selector Package"
 description: "This package is used to select the native architecture"
-flags: conf
-
+maintainer: "n@ndor.email"
+authors: ["Nandor Licker" "Timothy M. Jones"]
+homepage: "https://github.com/nandor/llir-opam-repository"
+bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
+license: "MIT"
+depends: [
+  "arch-amd64" {arch = "x86_64"} |
+  "arch-arm64" {arch = "arm64"} |
+  "arch-power" {arch = "ppc64"} |
+  "arch-riscv" {arch = "riscv64"}
+]

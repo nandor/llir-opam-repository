@@ -4,6 +4,7 @@ homepage: "https://github.com/nandor/llir-opam-repository"
 bug-reports: "https://github.com/nandor/llir-opam-repository/issues"
 authors: ["Nandor Licker" "Timothy M. Jones"]
 depends: [
+  "llir-compiler-rt-i686" {= version} |
   "llir-compiler-rt-amd64" {= version} |
   "llir-compiler-rt-arm64" {= version} |
   "llir-compiler-rt-power" {= version} |

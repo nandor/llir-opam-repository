@@ -55,6 +55,7 @@ depends: [
   "llir-opt" {= "master"}
   "linux-headers-arm64" {= "master"}
   "binutils-arm64"
+  "arch-arm64"
 ]
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"

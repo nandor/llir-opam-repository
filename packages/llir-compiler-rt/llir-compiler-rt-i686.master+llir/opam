@@ -52,7 +52,8 @@ depends: [
   "llir-llvm" {= "master"}
   "llir-opt" {= "master"}
   "linux-headers-i686" {= "master"}
-  "binutils"
+  "binutils-i686"
+  "arch-i686"
 ]
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"

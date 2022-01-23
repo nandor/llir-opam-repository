@@ -53,6 +53,7 @@ depends: [
   "llir-opt" {= "master"}
   "linux-headers-power" {= "master"}
   "binutils-power"
+  "arch-power"
 ]
 synopsis: "compiler-rt for LLIR"
 description: "This package install compiler-rt for LLIR"
