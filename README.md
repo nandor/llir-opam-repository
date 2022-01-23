@@ -21,7 +21,7 @@ opam switch create llir \
   --repositories=llir=git+https://github.com/nandor/llir-opam-repository,default \
   --empty
 opam update
-opam install ocaml-variants.4.11.0.master+llir
+opam install ocaml-variants.4.11.0.master+llir arch-native
 ```
 
 ## References
