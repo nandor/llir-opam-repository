@@ -12,9 +12,7 @@ build: [
 install: [
   [ make "install" ]
 ]
-depends: [
-  "ocaml"
-]
+depends: [ "llir-musl" ]
 synopsis: "zlib compiled for LLIR"
 url {
   src: "https://zlib.net/zlib-1.2.11.tar.gz"
