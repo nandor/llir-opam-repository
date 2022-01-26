@@ -52,7 +52,6 @@ setenv: [
 depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}
-  "llir-opt" {= "master"}
   "linux-headers-riscv" {= "master"}
   "binutils-riscv64"
   "arch-riscv"

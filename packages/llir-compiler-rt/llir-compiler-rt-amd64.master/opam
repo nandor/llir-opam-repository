@@ -52,7 +52,6 @@ setenv: [
 depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}
-  "llir-opt" {= "master"}
   "linux-headers-amd64" {= "master"}
   "binutils-amd64"
   "arch-amd64"
