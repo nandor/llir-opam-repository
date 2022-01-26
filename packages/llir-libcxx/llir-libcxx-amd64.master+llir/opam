@@ -6,7 +6,7 @@ authors: ["Chris Lattner" "Vikram Adve"]
 license: "apache"
 build: [
   "cmake" "llvm" "-B" "Release"
-    "-DLLVM_ENABLE_PROJECTS='libcxx;libcxxabi'"
+    "-DLLVM_ENABLE_PROJECTS='libcxx;libcxxabi;libunwind'"
     "-DCMAKE_C_COMPILER=llir_x86_64-unknown-linux-musl-gcc"
     "-DCMAKE_CXX_COMPILER=llir_x86_64-unknown-linux-musl-g++"
     "-DCMAKE_INSTALL_PREFIX=%{prefix}%"
@@ -16,6 +16,8 @@ build: [
     "-DHAVE_CXX_ATOMICS64_WITHOUT_LIB=ON"
     "-DLIBCXX_CXX_ABI=libcxxabi"
     "-DLIBCXX_HAS_MUSL_LIBC=ON"
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
+    "-DLIBCXXABI_ENABLE_STATIC_UNWINDER=ON"
 ]
 install: [
   [ make "-C" "Release" "-j" jobs "install-cxx" "install-cxxabi" ]
