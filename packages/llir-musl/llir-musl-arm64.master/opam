@@ -7,7 +7,6 @@ license: "MIT"
 build: [
   [
     "./configure"
-      "--enable-wrapper=clang"
       "--prefix=%{prefix}%"
       "CROSS_COMPILE=aarch64-unknown-linux-"
       "LIBCC=%{prefix}%/llvm/lib/clang/12.0.0/lib/linux/libclang_rt.builtins-aarch64.a"
@@ -17,26 +16,6 @@ build: [
 ]
 install: [
   [ make "install" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/x86-unknown-linux-musl-gcc" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/x86_64-unknown-linux-musl-gcc" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/aarch64-unknown-linux-musl-gcc" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/riscv64-unknown-linux-musl-gcc" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/powerpc64le-unknown-linux-musl-gcc" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/x86-unknown-linux-musl-clang" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/x86_64-unknown-linux-musl-clang" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/aarch64-unknown-linux-musl-clang" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/riscv64-unknown-linux-musl-clang" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang"   "%{prefix}%/bin/powerpc64le-unknown-linux-musl-clang" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/x86-unknown-linux-musl-g++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/x86_64-unknown-linux-musl-g++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/aarch64-unknown-linux-musl-g++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/riscv64-unknown-linux-musl-g++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-g++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/x86-unknown-linux-musl-clang++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/x86_64-unknown-linux-musl-clang++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/aarch64-unknown-linux-musl-clang++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/riscv64-unknown-linux-musl-clang++" ]
-  [ "ln" "-s" "%{prefix}%/bin/musl-clang++" "%{prefix}%/bin/powerpc64le-unknown-linux-musl-clang++" ]
 ]
 depends: [
   "llir-llvm" {= "master"}
