@@ -1,0 +1,13 @@
+diff --git a/threads.c b/threads.c
+index 23cb200..9379b4b 100644
+--- a/threads.c
++++ b/threads.c
+@@ -77,8 +77,6 @@ extern int pthread_cond_destroy ()
+ 	   __attribute((weak));
+ extern int pthread_cond_wait ()
+ 	   __attribute((weak));
+-extern int pthread_equal ()
+-	   __attribute((weak));
+ extern pthread_t pthread_self ()
+ 	   __attribute((weak));
+ extern int pthread_key_create ()

@@ -19,6 +19,8 @@ install: [
 depends: [
   "llir-musl"
   "libffi"
+  "zlib"
+  "openssl"
 ]
 synopsis: "cpython compiled for LLIR"
 url {

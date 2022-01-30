@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: "tim@gfxmonk.net"
+homepage: "xmlsoft.org"
+bug-reports: "https://gitlab.gnome.org/GNOME/libxml2/-/issues"
+authors: ["Daniel Veillard"]
+license: "mit"
+build: [
+  ["./configure" "--prefix" prefix]
+  [ make "-j%{jobs}%" ]
+  [ make "test" ] {with-test}
+]
+install: [
+  [ make "install" ]
+]
+depends: [ "llir-musl" "python" ]
+synopsis: "libxml compiled for LLIR"
+url {
+  src: "http://xmlsoft.org/sources/old/libxml2-2.7.1.tar.gz"
+  checksum: "sha256=636d3f2c08ff69dd96182d49a3c75027d1bfe8e645e5a1d075a51fc9a9065bd9"
+}
+patches: "llir.patch"

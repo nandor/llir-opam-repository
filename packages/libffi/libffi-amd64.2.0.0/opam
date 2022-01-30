@@ -7,7 +7,6 @@ build: [
   [ "sh" "-x" "autogen.sh"]
   [ "sh" "-x" "configure" "--prefix=%{prefix}%" "--host=x86_64-linux-gnu" ]
   [ make "-j%{jobs}%" ]
-  [ make "install" ]
 ]
 install: [
   [ make "install" ]
