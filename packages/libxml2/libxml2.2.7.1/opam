@@ -12,7 +12,8 @@ build: [
 install: [
   [ make "install" ]
 ]
-depends: [ "llir-musl" "python" ]
+depends: [ "llir-musl" ]
+depopts: [ "python2" ]
 synopsis: "libxml compiled for LLIR"
 url {
   src: "http://xmlsoft.org/sources/old/libxml2-2.7.1.tar.gz"

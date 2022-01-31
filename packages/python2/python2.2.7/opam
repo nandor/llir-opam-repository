@@ -1,0 +1,29 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://www.python.org"
+bug-reports: "https://www.python.org"
+authors: ["Benjamin Peterson"]
+license: "BSD"
+build: [
+  [
+    "./configure"
+      "--with-system-ffi"
+      "--prefix=%{prefix}%"
+  ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+  "libffi"
+  "zlib"
+  "openssl"
+]
+synopsis: "cpython compiled for LLIR"
+url {
+  src: "https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz"
+  checksum: "sha256=da3080e3b488f648a3d7a4560ddee895284c3380b11d6de75edb986526b9a814"
+}
+patches: "llir.patch"
