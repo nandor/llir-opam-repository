@@ -3,7 +3,7 @@ maintainer: "n@ndor.email"
 license: "isc"
 build: [
   ["./autogen.sh"]
-  ["./configure" "--prefix" prefix]
+  ["./configure" "--prefix" prefix "--disable-asm"]
   [ make "-j%{jobs}%" ]
 ]
 install: [

@@ -329,16 +329,16 @@ index 0000000..4e6e8c9
 +extern const fenv_t	__fe_dfl_env;
 +#define	FE_DFL_ENV	(&__fe_dfl_env)
 +
-+#define	__fldcw(__cw)		__asm __volatile("x86_fldcw %0" : : "r" (&__cw))
-+#define	__fldenv(__env)		__asm __volatile("x86_fldenv %0" : : "r" (&__env))
++#define	__fldcw(__cw)		__asm __volatile("x86_f_ld_cw %0" : : "r" (&__cw))
++#define	__fldenv(__env)		__asm __volatile("x86_f_ld_env %0" : : "r" (&__env))
 +#define	__fldenvx(__env)	__builtin_trap()
-+#define	__fnclex()		__asm __volatile("x86_fnclex")
-+#define	__fnstenv(__env)	__asm __volatile("x86_fnstenv %0" : : "r" (__env))
-+#define	__fnstcw(__cw)		__asm __volatile("x86_fnstcw %0" : : "r" (__cw))
-+#define	__fnstsw(__sw)		__asm __volatile("x86_fnstsw %0" : : "r" (__sw))
++#define	__fnclex()		__asm __volatile("x86_fn_cl_ex")
++#define	__fnstenv(__env)	__asm __volatile("x86_fn_st_env %0" : : "r" (__env))
++#define	__fnstcw(__cw)		__asm __volatile("x86_fn_st_cw %0" : : "r" (__cw))
++#define	__fnstsw(__sw)		__asm __volatile("x86_fn_st_sw %0" : : "r" (__sw))
 +#define	__fwait()		__builtin_trap()
-+#define	__ldmxcsr(__csr)	__asm __volatile("x86_ldmxcsr %0" : : "r" (&__csr))
-+#define	__stmxcsr(__csr)	__asm __volatile("x86_stmxcsr %0" : : "r" (__csr))
++#define	__ldmxcsr(__csr)	__asm __volatile("x86_ldm_xcsr %0" : : "r" (&__csr))
++#define	__stmxcsr(__csr)	__asm __volatile("x86_stm_xcsr %0" : : "r" (__csr))
 +
 +__fenv_static __attribute__((always_inline)) inline int
 +feclearexcept(int __excepts)
@@ -1123,13 +1123,13 @@ index 0000000..c51a062
 +#if (defined(__GNUCLIKE_ASM) && defined(__CC_SUPPORTS___INLINE__)) || defined(_WIN32) \
 +    && !defined(__cplusplus)
 +
-+#define	__fldenv(addr)	__asm __volatile("x86_fldenv %0" : : "r" (addr))
-+#define	__fnstenv(addr)	__asm __volatile("x86_fnstenv %0" : "=r" (addr))
-+#define	__fldcw(addr)	__asm __volatile("x86_fldcw %0" : : "r" (addr))
-+#define	__fnstcw(addr)	__asm __volatile("x86_fnstcw %0" : "=r" (addr))
-+#define	__fnstsw(addr)	__asm __volatile("x86_fnstsw %0" : "=r" (addr))
-+#define	__ldmxcsr(addr)	__asm __volatile("x86_ldmxcsr %0" : : "r" (addr))
-+#define	__stmxcsr(addr)	__asm __volatile("x86_stmxcsr %0" : "=r" (addr))
++#define	__fldenv(addr)	__asm __volatile("x86_f_ld_env %0" : : "r" (addr))
++#define	__fnstenv(addr)	__asm __volatile("x86_fn_st_env %0" : "=r" (addr))
++#define	__fldcw(addr)	__asm __volatile("x86_f_ld_cw %0" : : "r" (addr))
++#define	__fnstcw(addr)	__asm __volatile("x86_fn_st_cw %0" : "=r" (addr))
++#define	__fnstsw(addr)	__asm __volatile("x86_fn_st_sw %0" : "=r" (addr))
++#define	__ldmxcsr(addr)	__asm __volatile("x86_ldm_xcsr %0" : : "r" (addr))
++#define	__stmxcsr(addr)	__asm __volatile("x86_stm_xcsr %0" : "=r" (addr))
 +
 +/*
 + * General notes about conflicting SSE vs FP status bits.

@@ -125,7 +125,7 @@ index d8658e0..82aa8c1 100644
  #include "config.h"
  #endif
 diff --git a/raw/libintvector.h b/raw/libintvector.h
-index 0b773bf..eb7c1f9 100644
+index 0b773bf..87afba4 100644
 --- a/raw/libintvector.h
 +++ b/raw/libintvector.h
 @@ -13,8 +13,12 @@
@@ -153,3 +153,12 @@ index 0b773bf..eb7c1f9 100644
  
  #define Lib_IntVector_Intrinsics_vec256_eq64(x0, x1) \
    (_mm256_cmpeq_epi64(x0, x1))
+@@ -420,7 +427,7 @@ typedef __m256i Lib_IntVector_Intrinsics_vec256;
+ 
+ 
+ #elif (defined(__aarch64__) || defined(_M_ARM64) || defined(__arm__) || defined(_M_ARM)) \
+-      && !defined(__ARM_32BIT_STATE)
++      && !defined(__ARM_32BIT_STATE) && !defined(__llir__)
+ #include <arm_neon.h>
+ 
+ typedef uint32x4_t Lib_IntVector_Intrinsics_vec128;

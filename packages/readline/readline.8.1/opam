@@ -17,6 +17,6 @@ depends: [
 ]
 synopsis: "readline compiled for LLIR"
 url {
-  src: "ftp://ftp.cwru.edu/pub/bash/readline-8.1.tar.gz"
+  src: "https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz"
   checksum: "md5=e9557dd5b1409f5d7b37ef717c64518e"
 }

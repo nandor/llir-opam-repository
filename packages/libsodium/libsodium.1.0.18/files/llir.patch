@@ -1,18 +1,85 @@
-diff --git a/src/libsodium/sodium/runtime.c b/src/libsodium/sodium/runtime.c
-index 2251da9a..0da45405 100644
---- a/src/libsodium/sodium/runtime.c
-+++ b/src/libsodium/sodium/runtime.c
-@@ -182,7 +182,12 @@ _cpuid(unsigned int cpu_info[4U], const unsigned int cpu_info_type)
-                            "=c"(cpu_info[2]), "=d"(cpu_info[3])
-                          : "0"(cpu_info_type), "2"(0U));
- # endif
--#else
-+#elif defined(__llir__)
-+    __asm__ __volatile__
-+        ( "x86_cpuid.i32.i32.i32.i32 %0, %1, %2, %3, %4, %5"
-+        : "=r"(cpu_info[0]), "=r"(cpu_info[1]), "=r"(cpu_info[2]), "=r"(cpu_info[3])
-+        : "r"(cpu_info_type), "r"(0U)
-+        );
-     (void) cpu_info_type;
-     cpu_info[0] = cpu_info[1] = cpu_info[2] = cpu_info[3] = 0;
- #endif
+diff --git a/configure.ac b/configure.ac
+index f280c414..3c210745 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -391,7 +391,7 @@ AS_IF([test "x$EMSCRIPTEN" = "x"], [
+ #include <mmintrin.h>
+ ]], [[ __m64 x = _mm_setzero_si64(); ]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_MMINTRIN_H], [1], [mmx is available])
++     AC_DEFINE([HAVE_MMINTRIN_H_], [1], [mmx is available])
+      AX_CHECK_COMPILE_FLAG([-mmmx], [CFLAGS_MMX="-mmmx"])],
+     [AC_MSG_RESULT(no)])
+   CFLAGS="$oldcflags"
+@@ -408,7 +408,7 @@ AS_IF([test "x$EMSCRIPTEN" = "x"], [
+ ]], [[ __m128d x = _mm_setzero_pd();
+        __m128i z = _mm_srli_epi64(_mm_setzero_si128(), 26); ]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_EMMINTRIN_H], [1], [sse2 is available])
++     AC_DEFINE([HAVE_EMMINTRIN_H_], [1], [sse2 is available])
+      AX_CHECK_COMPILE_FLAG([-msse2], [CFLAGS_SSE2="-msse2"])],
+     [AC_MSG_RESULT(no)])
+   CFLAGS="$oldcflags"
+@@ -422,7 +422,7 @@ AS_IF([test "x$EMSCRIPTEN" = "x"], [
+ ]], [[ __m128 x = _mm_addsub_ps(_mm_cvtpd_ps(_mm_setzero_pd()),
+                                 _mm_cvtpd_ps(_mm_setzero_pd())); ]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_PMMINTRIN_H], [1], [sse3 is available])
++     AC_DEFINE([HAVE_PMMINTRIN_H_], [1], [sse3 is available])
+      AX_CHECK_COMPILE_FLAG([-msse3], [CFLAGS_SSE3="-msse3"])],
+     [AC_MSG_RESULT(no)])
+   CFLAGS="$oldcflags"
+@@ -435,7 +435,7 @@ AS_IF([test "x$EMSCRIPTEN" = "x"], [
+ #include <tmmintrin.h>
+ ]], [[ __m64 x = _mm_abs_pi32(_m_from_int(0)); ]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_TMMINTRIN_H], [1], [ssse3 is available])
++     AC_DEFINE([HAVE_TMMINTRIN_H_], [1], [ssse3 is available])
+      AX_CHECK_COMPILE_FLAG([-mssse3], [CFLAGS_SSSE3="-mssse3"])],
+     [AC_MSG_RESULT(no)])
+   CFLAGS="$oldcflags"
+@@ -448,7 +448,7 @@ AS_IF([test "x$EMSCRIPTEN" = "x"], [
+ #include <smmintrin.h>
+ ]], [[ __m128i x = _mm_minpos_epu16(_mm_setzero_si128()); ]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_SMMINTRIN_H], [1], [sse4.1 is available])
++     AC_DEFINE([HAVE_SMMINTRIN_H_], [1], [sse4.1 is available])
+      AX_CHECK_COMPILE_FLAG([-msse4.1], [CFLAGS_SSE41="-msse4.1"])],
+     [AC_MSG_RESULT(no)])
+   CFLAGS="$oldcflags"
+@@ -461,7 +461,7 @@ AS_IF([test "x$EMSCRIPTEN" = "x"], [
+ #include <immintrin.h>
+ ]], [[ _mm256_zeroall(); ]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_AVXINTRIN_H], [1], [AVX is available])
++     AC_DEFINE([HAVE_AVXINTRIN_H_], [1], [AVX is available])
+      AX_CHECK_COMPILE_FLAG([-mavx], [CFLAGS_AVX="-mavx"])],
+     [AC_MSG_RESULT(no)])
+   CFLAGS="$oldcflags"
+@@ -478,7 +478,7 @@ __m256 y = _mm256_permutevar8x32_ps(x, _mm256_set1_epi32(42));
+ return _mm256_movemask_ps(_mm256_cmp_ps(x, y, _CMP_NEQ_OQ));
+ ]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_AVX2INTRIN_H], [1], [AVX2 is available])
++     AC_DEFINE([HAVE_AVX2INTRIN_H_], [1], [AVX2 is available])
+      AX_CHECK_COMPILE_FLAG([-mavx2], [CFLAGS_AVX2="-mavx2"])
+      AC_MSG_CHECKING(if _mm256_broadcastsi128_si256 is correctly defined)
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+@@ -517,7 +517,7 @@ __m512i x = _mm512_setzero_epi32();
+ __m512i y = _mm512_permutexvar_epi64(_mm512_setr_epi64(0, 1, 4, 5, 2, 3, 6, 7), x);
+ ]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_AVX512FINTRIN_H], [1], [AVX512F is available])
++     AC_DEFINE([HAVE_AVX512FINTRIN_H_], [1], [AVX512F is available])
+      AX_CHECK_COMPILE_FLAG([-mavx512f], [CFLAGS_AVX512F="-mavx512f"])],
+     [AC_MSG_RESULT(no)
+      AX_CHECK_COMPILE_FLAG([$CFLAGS -mno-avx512f],
+@@ -536,7 +536,7 @@ __m512i y = _mm512_permutexvar_epi64(_mm512_setr_epi64(0, 1, 4, 5, 2, 3, 6, 7),
+ ]], [[ __m128i x = _mm_aesimc_si128(_mm_setzero_si128());
+        __m128i y = _mm_clmulepi64_si128(_mm_setzero_si128(), _mm_setzero_si128(), 0);]])],
+     [AC_MSG_RESULT(yes)
+-     AC_DEFINE([HAVE_WMMINTRIN_H], [1], [aesni is available])
++     AC_DEFINE([HAVE_WMMINTRIN_H_], [1], [aesni is available])
+      AX_CHECK_COMPILE_FLAG([-maes], [CFLAGS_AESNI="-maes"])
+      AX_CHECK_COMPILE_FLAG([-mpclmul], [CFLAGS_PCLMUL="-mpclmul"])
+      ],
