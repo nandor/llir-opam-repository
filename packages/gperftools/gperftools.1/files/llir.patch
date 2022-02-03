@@ -30,7 +30,7 @@ index 94c7aac..2bce084 100644
                                           Atomic32 new_value) {
    Atomic32 prev;
 +#ifdef __llir__
-+  __asm__ __volatile__("x86_cmpxchg.i32 %0, %1, %2, %3"
++  __asm__ __volatile__("x86_cmp_xchg.i32 %0, %1, %2, %3"
 +                       : "=r" (prev)
 +                       : "r" (ptr), "r" (new_value), "r" (old_value)
 +                       : "memory");
@@ -64,7 +64,7 @@ index 94c7aac..2bce084 100644
                                           Atomic64 new_value) {
    Atomic64 prev;
 +#ifdef __llir__
-+  __asm__ __volatile__("x86_cmpxchg.i64 %0, %1, %2, %3"
++  __asm__ __volatile__("x86_cmp_xchg.i64 %0, %1, %2, %3"
 +                       : "=r" (prev)
 +                       : "r" (ptr), "r" (new_value), "r" (old_value)
 +                       : "memory");

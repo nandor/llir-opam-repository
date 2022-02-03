@@ -129,7 +129,7 @@ index 5b7c28d..83159f9 100644
 +#if defined(__llir__)
 +    {
 +        uint64_t t;
-+        __asm__ volatile("x86_rdtsc.i64 %0" : "=r"(t));
++        __asm__ volatile("x86_rd_tsc.i64 %0" : "=r"(t));
 +        return t;
 +    }
 +#else
