@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://github.com/nghttp2/nghttp2"
+bug-reports: "https://github.com/nghttp2/nghttp2/issues"
+license: "MIT"
+build: [
+  [ "./configure" "--prefix" prefix ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "python3"
+  "c-ares"
+]
+synopsis: "nghttp2 compiled for LLIR"
+url {
+  src: "https://github.com/nghttp2/nghttp2/releases/download/v1.46.0/nghttp2-1.46.0.tar.bz2"
+  checksum: "sha256=9a82978c870071b769f27d2b88191cb77fdc945a51c1d685c7f61a7e13fc4729"
+}

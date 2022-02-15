@@ -1,0 +1,16 @@
+diff --git a/test/gmock-1.11.0/gmock-gtest-all.cc b/test/gmock-1.11.0/gmock-gtest-all.cc
+index 6d86e6e..e679cb6 100644
+--- a/test/gmock-1.11.0/gmock-gtest-all.cc
++++ b/test/gmock-1.11.0/gmock-gtest-all.cc
+@@ -6815,7 +6815,11 @@ void UnitTest::AddTestPartResult(
+     ((defined(__clang__) || defined(__GNUC__)) && \
+      (defined(__x86_64__) || defined(__i386__)))
+       // with clang/gcc we can achieve the same effect on x86 by invoking int3
++    #if defined(__llir__)
++      __builtin_debugtrap();
++    #else
+       asm("int3");
++    #endif
+ #else
+       // Dereference nullptr through a volatile pointer to prevent the compiler
+       // from removing. We use this rather than abort() or __builtin_trap() for
