@@ -1,0 +1,20 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://apr.apache.org"
+bug-reports: "https://apr.apache.org"
+license: "Apache"
+build: [
+  [ "./configure" "--prefix=%{prefix}%" "--with-apr=%{prefix}%/bin/apr-1-config" ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "apr" {=version}
+]
+synopsis: "apr compiled for LLIR"
+url {
+  src: "https://dlcdn.apache.org//apr/apr-iconv-1.2.2.tar.gz"
+  checksum: "sha256=ce94c7722ede927ce1e5a368675ace17d96d60ff9b8918df216ee5c1298c6a5e"
+}

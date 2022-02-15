@@ -1,0 +1,20 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://https.apache.org"
+bug-reports: "https://https.apache.org"
+license: "BSD"
+build: [
+  [ "./configure" "--prefix" prefix ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "https compiled for LLIR"
+url {
+  src: "https://dlcdn.apache.org//httpd/httpd-2.4.52.tar.bz2"
+  checksum: "sha256=0127f7dc497e9983e9c51474bed75e45607f2f870a7675a86dc90af6d572f5c9"
+}
