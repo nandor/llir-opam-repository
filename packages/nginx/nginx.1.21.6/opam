@@ -1,0 +1,23 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://www.nginx.com/"
+bug-reports: "https://www.nginx.com/"
+license: "BSD"
+build: [
+  [ "./configure" "--prefix=%{prefix}%" "--with-openssl=YES" ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "openssl"
+  "pcre2"
+  "zlib"
+]
+synopsis: "nginx compiled for LLIR"
+url {
+  src: "http://nginx.org/download/nginx-1.21.6.tar.gz"
+  checksum: "sha256=66dc7081488811e9f925719e34d1b4504c2801c81dee2920e5452a86b11405ae"
+}
+patches: "llir.patch"

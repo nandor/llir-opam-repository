@@ -1,0 +1,55 @@
+diff --git a/auto/cc/clang b/auto/cc/clang
+index a962ee2..98c44b1 100644
+--- a/auto/cc/clang
++++ b/auto/cc/clang
+@@ -81,7 +81,7 @@ CFLAGS="$CFLAGS -Wconditional-uninitialized"
+ #CFLAGS="$CFLAGS -Wmissing-prototypes"
+ 
+ # we have a lot of unused function arguments
+-CFLAGS="$CFLAGS -Wno-unused-parameter"
++CFLAGS="$CFLAGS -Wno-unused-parameter -Wno-sign-compare"
+ 
+ # deprecated system OpenSSL library on OS X
+ if [ "$NGX_SYSTEM" = "Darwin" ]; then
+diff --git a/src/core/ngx_cpuinfo.c b/src/core/ngx_cpuinfo.c
+index 7205319..075f9be 100644
+--- a/src/core/ngx_cpuinfo.c
++++ b/src/core/ngx_cpuinfo.c
+@@ -51,12 +51,19 @@ ngx_cpuid(uint32_t i, uint32_t *buf)
+ {
+     uint32_t  eax, ebx, ecx, edx;
+ 
++#if defined(__llir__)
++    __asm__ (
++        "x86_cpuid.i32.i32.i32.i32 %0, %1, %2, %3, %4"
++    : "=r"(eax), "=r"(ebx), "=r"(ecx), "=r"(edx)
++    : "r"(i)
++    );
++#else
+     __asm__ (
+ 
+         "cpuid"
+ 
+     : "=a" (eax), "=b" (ebx), "=c" (ecx), "=d" (edx) : "a" (i) );
+-
++#endif
+     buf[0] = eax;
+     buf[1] = ebx;
+     buf[2] = edx;
+diff --git a/src/os/unix/ngx_atomic.h b/src/os/unix/ngx_atomic.h
+index fcab2d6..b5f1b9c 100644
+--- a/src/os/unix/ngx_atomic.h
++++ b/src/os/unix/ngx_atomic.h
+@@ -65,7 +65,11 @@ typedef volatile ngx_atomic_uint_t  ngx_atomic_t;
+ #define ngx_memory_barrier()        __sync_synchronize()
+ 
+ #if ( __i386__ || __i386 || __amd64__ || __amd64 )
+-#define ngx_cpu_pause()             __asm__ ("pause")
++#  if defined(__llir__)
++#    define ngx_cpu_pause()             __asm__ ("x86_pause")
++#  else
++#    define ngx_cpu_pause()             __asm__ ("pause")
++#  endif
+ #else
+ #define ngx_cpu_pause()
+ #endif
