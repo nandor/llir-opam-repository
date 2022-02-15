@@ -12,6 +12,7 @@ install: [
 ]
 depends: [
   "apr" {=version}
+  "expat"
 ]
 synopsis: "apr compiled for LLIR"
 url {

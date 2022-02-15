@@ -1,0 +1,20 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://github.com/libexpat/libexpat"
+bug-reports: "https://github.com/libexpat/libexpat/issues"
+license: "Apache"
+build: [
+  [ "./configure" "--prefix=%{prefix}%" ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "expat XML parser compiled for LLIR"
+url {
+  src: "https://github.com/libexpat/libexpat/releases/download/R_2_4_4/expat-2.4.4.tar.bz2"
+  checksum: "sha256=14c58c2a0b5b8b31836514dfab41bd191836db7aa7b84ae5c47bc0327a20d64a"
+}
