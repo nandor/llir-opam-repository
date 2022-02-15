@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "https://www.pcre.org/"
+bug-reports: "https://github.com/PhilipHazel/pcre2/issues"
+authors: ["PhilipHazel"]
+license: "BSD"
+build: [
+  [ "./configure" "--prefix" prefix ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "pcre compiled for LLIR"
+url {
+  src: "https://sourceforge.net/projects/pcre/files/pcre/8.45/pcre-8.45.tar.gz"
+  checksum: "sha256=4e6ce03e0336e8b4a3d6c2b70b1c5e18590a5673a98186da90d4f33c23defc09"
+}

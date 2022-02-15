@@ -12,6 +12,10 @@ install: [
 ]
 depends: [
   "llir-musl"
+  "apr"
+  "apr-util"
+  "apr-iconv"
+  "pcre1"
 ]
 synopsis: "https compiled for LLIR"
 url {
