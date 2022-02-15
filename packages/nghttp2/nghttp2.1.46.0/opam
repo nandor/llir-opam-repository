@@ -4,7 +4,7 @@ homepage: "https://github.com/nghttp2/nghttp2"
 bug-reports: "https://github.com/nghttp2/nghttp2/issues"
 license: "MIT"
 build: [
-  [ "./configure" "--prefix" prefix ]
+  [ "./configure" "--prefix" prefix "--enable-app" ]
   [ make "-j%{jobs}%" ]
 ]
 install: [
@@ -13,6 +13,9 @@ install: [
 depends: [
   "python3"
   "c-ares"
+  "icu"
+  "libxml2"
+  "conf-pkg-config" {build}
 ]
 synopsis: "nghttp2 compiled for LLIR"
 url {

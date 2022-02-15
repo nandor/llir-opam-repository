@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: ""
+homepage: "http://software.schmorp.de/pkg/libev.html"
+bug-reports: "http://software.schmorp.de/pkg/libev.html"
+license: "BSD"
+build: [
+  [ "./configure" "--prefix" prefix ]
+  [ make "-j%{jobs}%" ]
+]
+install: [
+  [ make "install" ]
+]
+depends: [
+  "llir-musl"
+]
+synopsis: "libev compiled for LLIR"
+url {
+  src: "http://dist.schmorp.de/libev/libev-4.33.tar.gz"
+  checksum: "sha256=507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea"
+}
+patches: "llir.patch"
