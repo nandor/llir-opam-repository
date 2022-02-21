@@ -7,6 +7,7 @@ license: "apache"
 build: [
   [
     "cmake" "llvm" "-B" "Release"
+      "-DCMAKE_BUILD_TYPE=Release"
       "-DLLVM_ENABLE_PROJECTS='libcxx;libcxxabi;libunwind'"
       "-DCMAKE_C_COMPILER=x86_64-unknown-linux-musl-gcc"
       "-DCMAKE_CXX_COMPILER=x86_64-unknown-linux-musl-g++"
