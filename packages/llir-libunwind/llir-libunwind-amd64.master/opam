@@ -21,6 +21,7 @@ build: [
       "-DLIBUNWIND_ENABLE_STATIC=ON"
       "-DLIBUNWIND_INSTALL_LIBRARY=ON"
       "-DLIBUNWIND_ENABLE_ASSERTIONS=OFF"
+      "-DLIBUNWIND_USE_COMPILER_RT=ON"
   ]
   [ make "-j" jobs "-C" "libunwind/Release" ]
 ]

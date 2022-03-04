@@ -21,6 +21,7 @@ build: [
       "-DLIBUNWIND_ENABLE_STATIC=ON"
       "-DLIBUNWIND_INSTALL_LIBRARY=ON"
       "-DLIBUNWIND_ENABLE_ASSERTIONS=OFF"
+      "-DLIBUNWIND_USE_COMPILER_RT=ON"
   ]
   [ make "-j" jobs "-C" "libunwind/Release" ]
 ]
@@ -30,7 +31,6 @@ install: [
 depends: [
   "conf-cmake" {build}
   "llir-llvm" {= "master"}
-  "llir-opt" {= "master"}
   "llir-musl-amd64" {=version}
 ]
 synopsis: "compiler-rt for LLIR"
